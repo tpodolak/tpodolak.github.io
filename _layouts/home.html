@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 {% if paginator %}
   {% assign posts = paginator.posts %}
 {% else %}
@@ -5,7 +9,7 @@
 {% endif %}
 
 {% for post in posts %}
- {{ post.output }}
+  {{post.output}}
 {% endfor %}
 
 {% include paginator.html %}
