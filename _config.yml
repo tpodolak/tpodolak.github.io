@@ -24,11 +24,14 @@ defaults:
       path: ""
       type: posts
     values:
+      layout: single
+      author_profile: true
       read_time: true
       comments: true
+      share: true
+      related: true
 
 title: .NET BLOG
-repository: tpodolak/tpodolak.github.io
 email: tom.podolak@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
@@ -47,15 +50,18 @@ plugins:
   - jekyll-feed
   - jekyll-include-cache
 
+repository: "tpodolak/tpodolak.github.io"
 comments:
   provider: "giscus"
   giscus:
-    repo_id              : MDEwOlJlcG9zaXRvcnkyNTY4MzExODk=
-    category_name        : Announcements
-    category_id          : DIC_kwDOD07u1c4CTRaf
-    discussion_term      : pathname
-    reactions_enabled    : '1'
-    theme                : # "light" (default), "dark", "dark_dimmed", "transparent_dark", "preferred_color_scheme"
+    repo                 : "tpodolak/tpodolak.github.io"
+    repo_id              : "MDEwOlJlcG9zaXRvcnkyNTY4MzExODk="
+    category_name        : "Announcements"
+    category_id          : "DIC_kwDOD07u1c4CTRaf"
+    discussion_term      : "pathname"
+    reactions_enabled    : "1"
+    theme                : "light"
+    crossorigin          : "anonymous"
 
 # Exclude from processing.
 # The following items will not be processed, by default.
