@@ -25,11 +25,23 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      show_date: true
       read_time: true
       comments: true
       share: true
       related: true
+      classes: wide
+      author_profile: false
+    # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      show_date: true
+      author_profile: false
+      classes: wide
+
 
 title: .NET BLOG
 search: true
@@ -85,6 +97,10 @@ comments:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+include:
+  - .htaccess
+  - _pages
+
 footer:
   links:
     - label: "Twitter"
