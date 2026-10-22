@@ -1,0 +1,103 @@
+---
+title: "Logstash - reading logs from RabbitMQ"
+pubDate: 2016-11-17
+slug: "elastic-stack-reading-logs-queue"
+categories: 
+  - "elasticstack"
+tags: 
+  - "elasticsearch"
+  - "kibana"
+  - "logstash"
+---
+
+### 1\. Introduction
+
+In my previous post, I've shown how to configure _Logstash_ to parse logs from files. This is pretty useful however if your application is deployed on multiple servers, you usually log to some kind of central log storage - in my case to queue, _RabbitMQ_ to be more specific. In this post, I will show how to configure _Logstash_ so it reads the logs from that queue.
+
+### 2\. Preparing queue
+
+Before we move to _Logstash_ configuration, first of all, we have to prepare _RabbitMQ_ test instance. If you don't have _RabbitMQ_ yet, go to [this](https://www.rabbitmq.com/download.html) website and install the queue. Once installation is done, go to the installation folder (_C:\\Program Files\\RabbitMQ Server\\rabbitmq\_server-3.6.5\\sbin in my case_) and run in console
+
+```
+rabbitmq-plugins.bat enable rabbitmq_management
+
+```
+
+This command will prepare _RabbitMQ_ management website, so it will be easier for us to see what is going on in given queue. In the next step, we have to prepare the queue, the logs will be sent to. You can do it via the website we've just enabled (_http://localhost:15672/_) or via _RabbitMQ_ admin console. As I prefer to automate things as much as possible I will do it via command line. What is quite unusual when it comes _RabbitMQ CLI_ is the fact that it is a python script you have to download and run locally (this is not an executable). The script can be found on management site under this [address](http://localhost:15672/cli/rabbitmqadmin). Once the script is downloaded (in my case it is saved as _rabbitmqadmin.py_) you can start preparing necessary elements: exchange, queue and the binding.
+
+```
+python rabbitmqadmin.py declare exchange name=logger type=topic -u username -p password
+
+```
+
+```
+python rabbitmqadmin.py declare queue  name=MyAppLogginQueue auto_delete=false durable=true -u username -p password
+
+```
+
+```
+python rabbitmqadmin.py  declare binding source=logger destination=MyAppLogginQueue routing_key=MyApp -u username -p password
+
+```
+
+As you can see I've created exchange called _logger_ which is bound to _MyAppLogginQueue_ queue using _MyApp_ route. This means that every message with topic _MyApp_ sent to _logger_ exchange will be pushed to _MyAppLogginQueue_ .
+
+### 3\. Preparing Logstash
+
+_Logstash_ configuration will be modified version of my [previous](http://tpodolak.com/blog/2016/11/03/logstash-parsing-multiline-log-entries/) config. I will just add another input source. Here is a basic usage
+
+```
+input {	
+	rabbitmq {
+        host => "localhost"
+        queue => "MyAppLogginQueue"
+        heartbeat => 30
+        durable => true
+        password => "password"
+        user => "username"
+    }
+}
+
+```
+
+As you can see we will be consuming messages from _MyAppLogginQueue_ which is deployed on _localhost_. For _password_ and _user_ properties use your own credentials. That is basically it, so now it is time to see if everything is working.
+
+### 4\. Testing coniguration
+
+In order to test the configuration you have to run the _Elasticsearch_, _Kibana_ and use new config for _Logstash_. I've shown how to do it in one of my [recent post](http://tpodolak.com/blog/2016/11/02/getting-started-elastic-stack/) . For sending messages to the queue I will just use _RabbitMQ_ management website _API_. The _API_ exposes
+
+```
+api/exchanges/%2F/{exchange_name}/publish
+
+```
+
+endpoint accepting _POST_ verbs which can be used for publishing messages to given exchange. In my case _POST_ body will look as follows
+
+```
+{
+  "vhost": "/",
+  "name": "logger",
+  "properties": {
+    "delivery_mode": 2,
+    "headers": {}
+  },
+  "routing_key": "MyApp",
+  "delivery_mode": "2",
+  "payload": "TimeStamp=2016-11-01 00:13:01.1669 CorrelationId=77530786-8e6b-45c2-bbc1-31837d911c14 Level=INFO Message=Request completed with status code: 200",
+  "headers": {},
+  "props": {},
+  "payload_encoding": "string"
+}
+
+```
+
+and I will be sending it to
+
+```
+http://localhost:15672/api/exchanges/%2F/logger/publish
+
+```
+
+Note that I will be sending messages to the exchange, not to the queue itself. The exchange's responsibility is to route the message to all bound queues. Here is how it looks in practice [![ezgif-com-gif-maker](images/ezgif.com-gif-maker.gif)](http://tpodolak.com/blog/wp-content/uploads/2016/11/elastic-stack-reading-logs-queue/ezgif.com-gif-maker.gif) As you can see our configuration is valid and messages are shown on _Kibana's_ dashboard almost in real time.
+
+Full _Logstash_ config can be found [here](https://github.com/tpodolak/Blog/tree/master/ElasticStackReadingFromRabbitMQ)
