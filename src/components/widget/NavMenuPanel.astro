@@ -5,10 +5,9 @@ import { url } from "../../utils/url-utils";
 
 interface Props {
 	links: NavBarLink[];
-	socialLinks: NavBarSocialLink[];
 }
 
-const { links, socialLinks } = Astro.props;
+const { links } = Astro.props;
 ---
 <div id="nav-menu-panel" class:list={["float-panel float-panel-closed absolute transition-all fixed right-4 px-2 py-2"]}>
     {links.map((link) => (
@@ -29,20 +28,6 @@ const { links, socialLinks } = Astro.props;
                   class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1"
             >
             </Icon>}
-        </a>
-    ))}
-    {socialLinks.length > 0 && <div class="my-1 border-t border-black/10 dark:border-white/15"></div>}
-    {socialLinks.map((link) => (
-        <a href={link.external ? link.url : url(link.url)} class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
-            hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition
-        "
-           target={link.external ? "_blank" : null}
-           rel={link.external ? "noopener noreferrer" : null}
-        >
-            <div class="transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
-                {link.name}
-            </div>
-            <Icon name={link.icon} class="transition text-[1.125rem] text-[var(--primary)] -translate-x-0.5"></Icon>
         </a>
     ))}
 </div>

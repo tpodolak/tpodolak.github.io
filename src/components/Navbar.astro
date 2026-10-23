@@ -19,6 +19,9 @@ let links: NavBarLink[] = navBarConfig.links.map(
 		return item;
 	},
 );
+
+let socialLinks = navBarConfig.socialLinks;
+
 ---
 <div id="navbar" class="z-50 onload-animation">
     <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div> <!-- used for onload animation -->
@@ -32,18 +35,21 @@ let links: NavBarLink[] = navBarConfig.links.map(
                     {siteConfig.title}
                 </div>
             </a>
-            <nav class="hidden md:flex" aria-label="Primary navigation">
-                {links.map((l) => {
-                    return <a aria-label={l.name} href={l.external ? l.url : url(l.url)} target={l.external ? "_blank" : null}
-                              rel={l.external ? "noopener noreferrer" : null}
-                              class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95"
+            <nav class="flex items-center justify-center" aria-label="Social links">
+                {socialLinks.map((link) => (
+                    <a
+                        aria-label={link.name}
+                        href={link.external ? link.url : url(link.url)}
+                        target={link.external ? "_blank" : null}
+                        rel={link.external ? "noopener noreferrer" : null}
+                        class="btn-plain scale-animation rounded-lg h-9 w-9 active:scale-90"
                     >
-                        <div class="flex items-center">
-                            {l.name}
-                            {l.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.875rem] transition -translate-y-[1px] ml-1 text-black/[0.2] dark:text-white/[0.2]"></Icon>}
-                        </div>
-                    </a>;
-                })}
+                        <Icon
+                            name={link.icon}
+                            class="text-[1.125rem]"
+                        />
+                    </a>
+                ))}
             </nav>
             <div class="flex justify-self-end col-start-3">
                 <!--<SearchPanel client:load>-->
@@ -54,22 +60,21 @@ let links: NavBarLink[] = navBarConfig.links.map(
                         </button>
                 )}
                 <LightDarkSwitch client:only="svelte"></LightDarkSwitch>
+
+                <!-- Nav Menu dekstop -->
+                <button aria-label="Menu" name="Nav Menu" class="!hidden md:!flex btn-plain scale-animation rounded-lg h-11 w-11 items-center justify-center active:scale-90" id="nav-more-switch">
+                    <Icon name="material-symbols:more-horiz" class="text-[1.5rem]"
+                    />
+                </button>
+
+                <!-- Nav Menu mobile -->
                 <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch">
                     <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
                 </button>
+
             </div>
         </div>
-		<nav class="hidden md:flex h-10 justify-center items-center border-t border-black/5 dark:border-white/10" aria-label="Social links">
-			{navBarConfig.socialLinks.map((link) => (
-				<a aria-label={link.name} href={link.external ? link.url : url(link.url)}
-					target={link.external ? "_blank" : null} rel={link.external ? "noopener noreferrer" : null}
-					class="btn-plain scale-animation rounded-lg h-9 w-9 active:scale-90"
-				>
-					<Icon name={link.icon} class="text-[1.125rem]" />
-				</a>
-			))}
-		</nav>
-        <NavMenuPanel links={links} socialLinks={navBarConfig.socialLinks}></NavMenuPanel>
+        <NavMenuPanel links={links}></NavMenuPanel>
         <DisplaySettings client:only="svelte"></DisplaySettings>
     </div>
 </div>
@@ -103,15 +108,22 @@ function loadButtonScript() {
         };
     }
 
-    let menuBtn = document.getElementById("nav-menu-switch");
-    if (menuBtn) {
-        menuBtn.onclick = function () {
+    const menuButtons = [
+        document.getElementById("nav-more-switch"),
+        document.getElementById("nav-menu-switch"),
+    ].filter(Boolean);
+
+    menuButtons.forEach(button => {
+        if(!button){
+            return;
+        }
+        button.onclick = function () {
             let menuPanel = document.getElementById("nav-menu-panel");
             if (menuPanel) {
                 menuPanel.classList.toggle("float-panel-closed");
             }
         };
-    }
+    })
 }
 
 loadButtonScript();
