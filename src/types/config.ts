@@ -56,8 +56,13 @@ export type NavBarLink = {
 	external?: boolean;
 };
 
+export type NavBarSocialLink = NavBarLink & {
+	icon: string;
+};
+
 export type NavBarConfig = {
 	links: (NavBarLink | LinkPreset)[];
+	socialLinks: NavBarSocialLink[];
 };
 
 export type ProfileConfig = {

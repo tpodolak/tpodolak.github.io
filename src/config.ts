@@ -40,9 +40,31 @@ export const siteConfig: SiteConfig = {
 };
 
 export const navBarConfig: NavBarConfig = {
-	links: [
-		LinkPreset.Archive,
-		LinkPreset.About
+	links: [LinkPreset.Archive],
+	socialLinks: [
+		{
+			name: "Twitter",
+			icon: "fa6-brands:twitter",
+			url: "https://twitter.com/tpodolak1",
+			external: true,
+		},
+		{
+			name: "GitHub",
+			icon: "fa6-brands:github",
+			url: "https://github.com/tpodolak",
+			external: true,
+		},
+		{
+			name: "LinkedIn",
+			icon: "fa6-brands:linkedin",
+			url: "https://www.linkedin.com/pub/tomasz-podolak/3b/7a5/672",
+			external: true,
+		},
+		{
+			name: "RSS",
+			icon: "fa6-solid:rss",
+			url: "/rss.xml",
+		},
 	],
 };
 
