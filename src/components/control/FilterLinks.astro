@@ -1,0 +1,48 @@
+---
+interface Props {
+	keys: string; // comma-separated query params to match, e.g. "tag"
+}
+const { keys } = Astro.props;
+---
+<filter-links data-keys={keys}><slot /></filter-links>
+
+<style is:global>
+	filter-links {
+		display: contents;
+	}
+
+    /* tag chips: the <a class="btn-regular"> is the visible element */
+    filter-links a.btn-regular[data-active] {
+		box-shadow: inset 0 0 0 2px var(--primary);
+		color: var(--primary);
+	}
+
+	/* category rows: the visible element is the <button> inside the <a> */
+	filter-links a[data-active] > button {
+		background: var(--btn-plain-bg-hover) !important;
+		color: var(--primary) !important;
+		padding-left: 0.75rem;
+	}
+
+</style>
+
+<script>
+	class FilterLinks extends HTMLElement {
+		connectedCallback() {
+			const keys = (this.dataset.keys ?? "").split(",");
+			const current = new URLSearchParams(window.location.search);
+
+			this.querySelectorAll<HTMLAnchorElement>("a").forEach((a) => {
+				const link = new URL(a.href, window.location.origin).searchParams;
+				const active = keys.some(
+					(k) => link.has(k) && current.getAll(k).includes(link.get(k) ?? ""),
+				);
+				a.toggleAttribute("data-active", active);
+			});
+		}
+	}
+
+	if (!customElements.get("filter-links")) {
+		customElements.define("filter-links", FilterLinks);
+	}
+</script>

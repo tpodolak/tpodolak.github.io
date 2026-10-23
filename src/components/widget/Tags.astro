@@ -5,6 +5,7 @@ import { i18n } from "../../i18n/translation";
 import { getTagList } from "../../utils/content-utils";
 import { getTagUrl } from "../../utils/url-utils";
 import ButtonTag from "../control/ButtonTag.astro";
+import FilterLinks from "../control/FilterLinks.astro";
 import WidgetLayout from "./WidgetLayout.astro";
 
 const tags = await getTagList();
@@ -21,11 +22,13 @@ const className = Astro.props.class;
 const style = Astro.props.style;
 ---
 <WidgetLayout name={i18n(I18nKey.tags)} id="tags" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} class={className} style={style}>
-    <div class="flex gap-2 flex-wrap">
-        {tags.map(t => (
-            <ButtonTag href={getTagUrl(t.name)} label={`View all posts with the ${t.name.trim()} tag`}>
-                {t.name.trim()}
-            </ButtonTag>
-        ))}
-    </div>
+    <FilterLinks keys="tag">
+        <div class="flex gap-2 flex-wrap">
+            {tags.map(t => (
+                <ButtonTag href={getTagUrl(t.name)} label={`View all posts with the ${t.name.trim()} tag`}>
+                    {t.name.trim()}
+                </ButtonTag>
+            ))}
+        </div>
+    </FilterLinks>
 </WidgetLayout>

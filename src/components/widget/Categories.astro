@@ -3,6 +3,7 @@ import I18nKey from "../../i18n/i18nKey";
 import { i18n } from "../../i18n/translation";
 import { getCategoryList } from "../../utils/content-utils";
 import ButtonLink from "../control/ButtonLink.astro";
+import FilterLinks from "../control/FilterLinks.astro";
 import WidgetLayout from "./WidgetLayout.astro";
 
 const categories = await getCategoryList();
@@ -23,6 +24,7 @@ const style = Astro.props.style;
 <WidgetLayout name={i18n(I18nKey.categories)} id="categories" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT}
                 class={className} style={style}
 >
+<FilterLinks keys="category,uncategorized">
     {categories.map((c) =>
         <ButtonLink
             url={c.url}
@@ -32,4 +34,5 @@ const style = Astro.props.style;
             {c.name.trim()}
         </ButtonLink>
     )}
+</FilterLinks>
 </WidgetLayout>
