@@ -1,5 +1,5 @@
 ---
-title: "ASP.NET Core - make sure <i>IOptions&lt;T&gt;</i> is initialized"
+title: "ASP.NET Core - make sure IOptions<T> is initialized"
 published: 2018-01-29T08:00:06.000Z
 categories: 
   - "asp-net-core"

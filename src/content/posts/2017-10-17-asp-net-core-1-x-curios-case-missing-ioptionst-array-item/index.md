@@ -1,5 +1,5 @@
 ---
-title: "ASP.NET Core 1.x -  curios case of missing IOptions&lt;T&gt; array item"
+title: "ASP.NET Core 1.x - curios case of missing IOptions<T> array item"
 published: 2017-10-17T08:00:08.000Z
 categories: 
   - "asp-net-core"
