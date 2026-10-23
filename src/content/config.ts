@@ -1,6 +1,16 @@
+import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
 const postsCollection = defineCollection({
+    loader: glob({
+		pattern: "**/*.md",
+		base: "./src/content/posts",
+		generateId: ({ entry }) =>
+			entry
+				.replace(/\/index\.md$/, "") // 2020-06-22-my-post/index.md -> 2020-06-22-my-post
+				.replace(/\.md$/, "")
+				.replace(/^\d{4}-\d{2}-\d{2}-/, ""), // -> my-post
+	}),
 	schema: z.object({
 		title: z.string(),
 		published: z.date(),
