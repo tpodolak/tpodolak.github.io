@@ -29,7 +29,7 @@ const redirects = JSON.parse(readFileSync("./src/redirects.json", "utf8"));
 // https://astro.build/config
 export default defineConfig({
     redirects: redirects,
-	site: "https://fuwari.vercel.app/",
+	site: "https://tpodolak.com/",
 	base: "/",
 	trailingSlash: "always",
 	integrations: [
