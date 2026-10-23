@@ -1,7 +1,6 @@
 ---
 title: "Style"
 published: 2011-11-27T17:41:00.000Z
-slug: "style"
 categories: 
   - "silverlight"
   - "styles"

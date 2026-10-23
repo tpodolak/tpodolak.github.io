@@ -1,7 +1,6 @@
 ---
 title: "VS Code - forcing partial IntelliSense support for Cake scripts"
 published: 2017-04-12T22:39:44.000Z
-slug: "vs-code-forcing-partial-intellisense-support-cake-scripts"
 categories: 
   - "cake"
   - "vscode"

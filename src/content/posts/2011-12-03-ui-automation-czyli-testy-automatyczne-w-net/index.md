@@ -1,7 +1,6 @@
 ---
 title: "UI Automation - czyli testy automatyczne w .NET"
 published: 2011-12-03T15:10:00.000Z
-slug: "ui-automation-czyli-testy-automatyczne-w-net"
 categories: 
   - "uiautomation"
 tags: 

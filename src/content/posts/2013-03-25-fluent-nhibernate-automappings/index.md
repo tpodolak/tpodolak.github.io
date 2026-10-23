@@ -1,7 +1,6 @@
 ---
 title: "Fluent Nhibernate - automappings"
 published: 2013-03-25T18:38:00.000Z
-slug: "fluent-nhibernate-automappings"
 categories: 
   - "automapper"
   - "automappings"

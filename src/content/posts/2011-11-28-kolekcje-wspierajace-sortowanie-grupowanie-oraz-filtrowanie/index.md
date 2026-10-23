@@ -1,7 +1,6 @@
 ---
 title: "Kolekcje wspierające sortowanie, grupowanie oraz filtrowanie"
 published: 2011-11-28T20:13:00.000Z
-slug: "kolekcje-wspierajace-sortowanie-grupowanie-oraz-filtrowanie"
 categories: 
   - "listcollectionview"
   - "pagedcollectionview"

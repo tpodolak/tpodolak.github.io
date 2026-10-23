@@ -1,7 +1,6 @@
 ---
 title: "Introduce substitute refactoring comes to NSubstitute.Analyzers"
 published: 2020-04-09T08:00:03.000Z
-slug: "introduce-substitute-refactoring-comes-nsubstitute-analyzers"
 categories: 
   - "nsubstitute"
 tags: 

@@ -1,7 +1,6 @@
 ---
 title: "INotifyPropertyChanged oraz Expresssion Trees"
 published: 2011-11-27T10:24:00.000Z
-slug: "inotifypropertychanged-oraz-expresssion-trees"
 categories: 
   - "expressiontree"
   - "inotifypropertychanged"

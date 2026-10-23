@@ -1,7 +1,6 @@
 ---
 title: "NHibarnate - using event listeners to set entity modification date"
 published: 2013-08-24T23:04:00.000Z
-slug: "nhibarnate-using-event-listeners-to-set-entity-modification-date"
 categories: 
   - "c"
   - "eventlisteners"

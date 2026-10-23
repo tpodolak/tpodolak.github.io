@@ -1,7 +1,6 @@
 ---
 title: "Prism - Komendy"
 published: 2011-11-29T19:33:00.000Z
-slug: "prism-komendy"
 categories: 
   - "compositecommand"
   - "delegatecommand"

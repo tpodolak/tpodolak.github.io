@@ -1,7 +1,6 @@
 ---
 title: "Cake - Data at the root level is invalid"
 published: 2016-09-08T20:55:01.000Z
-slug: "cake-data-root-level-invalid"
 categories: 
   - "cake"
 tags: 

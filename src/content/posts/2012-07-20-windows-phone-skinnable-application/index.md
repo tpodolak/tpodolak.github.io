@@ -1,7 +1,6 @@
 ---
 title: "Windows Phone - skinnable application"
 published: 2012-07-20T08:38:00.000Z
-slug: "windows-phone-skinnable-application"
 categories: 
   - "c"
   - "silverlight"

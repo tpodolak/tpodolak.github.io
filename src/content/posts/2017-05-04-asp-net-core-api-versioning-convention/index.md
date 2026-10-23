@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core - API versioning by convention"
 published: 2017-05-04T13:02:47.000Z
-slug: "asp-net-core-api-versioning-convention"
 categories: 
   - "asp-net-core"
 tags: 

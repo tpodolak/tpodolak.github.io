@@ -1,7 +1,6 @@
 ---
 title: "Argument validation with attributes and Ninject interceptor"
 published: 2012-10-21T15:13:00.000Z
-slug: "argument-validation-with-attributes-and-ninject-interceptor"
 categories: 
   - "net"
   - "attributes"

@@ -1,7 +1,6 @@
 ---
 title: "Interactivity oraz Interaction"
 published: 2011-11-29T21:01:00.000Z
-slug: "interactivity-oraz-interaction"
 categories: 
   - "behavior"
   - "interaction"

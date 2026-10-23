@@ -1,7 +1,6 @@
 ---
 title: "NLog.Web.AspNetCore - make sure you add error message for logging exception"
 published: 2017-07-09T10:10:34.000Z
-slug: "nlog-web-aspnetcore-make-sure-add-error-message-logging-exception"
 categories: 
   - "asp-net-core"
   - "nlog"

@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core - passing command-line arguments to Startup class"
 published: 2018-01-16T09:00:24.000Z
-slug: "asp-net-core-passing-command-line-arguments-startup-class"
 categories: 
   - "asp-net-core"
 tags: 

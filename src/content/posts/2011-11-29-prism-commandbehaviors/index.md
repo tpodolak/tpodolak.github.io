@@ -1,7 +1,6 @@
 ---
 title: "Prism - CommandBehaviors"
 published: 2011-11-29T20:20:00.000Z
-slug: "prism-commandbehaviors"
 categories: 
   - "commandbehaviors"
   - "prism"

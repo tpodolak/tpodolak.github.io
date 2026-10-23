@@ -1,7 +1,6 @@
 ---
 title: "NHibernate - generating WHERE IN … OR … queries"
 published: 2014-08-18T10:08:00.000Z
-slug: "nhibernate-generating-where-in-or-queries"
 categories: 
   - "net"
   - "c"

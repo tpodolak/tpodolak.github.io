@@ -1,7 +1,6 @@
 ---
 title: "Routed Events - nowy rodzaj zdarzeń w WPF-ie"
 published: 2011-11-28T18:20:00.000Z
-slug: "routed-events-nowy-rodzaj-zdarzen-w-wpf-ie"
 categories: 
   - "bubbling"
   - "events"

@@ -1,7 +1,6 @@
 ---
 title: "TPL - exception handling and UnobservedTaskException issue"
 published: 2015-08-10T19:12:00.000Z
-slug: "tpl-exception-handling-and-unobservedtaskexception-issue"
 categories: 
   - "net-4-0"
   - "net-4-5"

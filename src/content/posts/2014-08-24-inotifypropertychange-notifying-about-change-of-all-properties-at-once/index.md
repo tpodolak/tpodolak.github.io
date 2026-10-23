@@ -1,7 +1,6 @@
 ---
 title: "INotifyPropertyChange - notifying about change of all properties at once"
 published: 2014-08-24T09:40:00.000Z
-slug: "inotifypropertychange-notifying-about-change-of-all-properties-at-once"
 categories: 
   - "inotifypropertychanged"
   - "mvvm"

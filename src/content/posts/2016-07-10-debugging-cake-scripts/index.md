@@ -1,7 +1,6 @@
 ---
 title: "Debugging cake scripts"
 published: 2016-07-10T09:03:08.000Z
-slug: "debugging-cake-scripts"
 categories: 
   - "cake"
 tags: 

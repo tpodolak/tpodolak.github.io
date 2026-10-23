@@ -1,7 +1,6 @@
 ---
 title: "Definiowanie własnego operatora rzutowania"
 published: 2012-02-26T21:54:00.000Z
-slug: "definiowanie-wlasnego-operatora-rzutowania"
 categories: 
   - "c"
   - "explict"

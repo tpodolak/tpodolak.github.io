@@ -1,7 +1,6 @@
 ---
 title: "C# - testing internal classes"
 published: 2015-07-26T09:23:00.000Z
-slug: "c-testing-internal-classes"
 categories: 
   - "net"
   - "c"

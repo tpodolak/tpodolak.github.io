@@ -1,7 +1,6 @@
 ---
 title: "<i>Dotnet CLI</i> - running tests from multiple assemblies"
 published: 2017-06-07T19:33:16.000Z
-slug: "dotnet-cli-running-tests-from-multiple-assemblies"
 categories: 
   - "dotnet-cli"
 tags: 

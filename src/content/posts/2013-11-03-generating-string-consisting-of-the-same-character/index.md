@@ -1,7 +1,6 @@
 ---
 title: "Generating string consisting of the same character"
 published: 2013-11-03T14:45:00.000Z
-slug: "generating-string-consisting-of-the-same-character"
 categories: 
   - "string"
 tags: 

@@ -1,7 +1,6 @@
 ---
 title: "NSubstitute - returning value from IEnumerable"
 published: 2017-06-12T11:35:02.000Z
-slug: "nsubstitute-returning-ienumerable"
 categories: 
   - "nsubstitute"
 tags: 

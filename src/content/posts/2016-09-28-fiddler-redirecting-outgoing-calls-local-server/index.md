@@ -1,7 +1,6 @@
 ---
 title: "Fiddler - request redirection"
 published: 2016-09-28T20:25:12.000Z
-slug: "fiddler-redirecting-outgoing-calls-local-server"
 categories: 
   - "fiddler"
 tags: 

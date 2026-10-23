@@ -1,7 +1,6 @@
 ---
 title: "Fixing empty SQL server list in \"Entity Data Model Wizard\""
 published: 2014-11-10T15:23:00.000Z
-slug: "fixing-empty-sql-server-list-in-entity-data-model-wizard"
 categories: 
   - "ef"
   - "entity-framework"

@@ -1,7 +1,6 @@
 ---
 title: "Silverlight - koncepcja logowania z użyciem MembershipProviders oraz WCF RIA cz.2"
 published: 2011-12-25T13:17:00.000Z
-slug: "silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-2"
 categories: 
   - "authentication"
   - "authorization"

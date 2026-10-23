@@ -1,7 +1,6 @@
 ---
 title: "Extjs 4.1.1 - how to fix row resize phenomena"
 published: 2012-09-15T23:17:00.000Z
-slug: "extjs-4-1-1-how-to-fix-row-resize-phenomena"
 categories: 
   - "ext-panel-grid"
   - "extjs-4-1-1"

@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET MVC javascript debugging using WebStorm"
 published: 2012-09-17T08:26:00.000Z
-slug: "asp-net-mvc-javascript-debugging-using-webstorm"
 categories: 
   - "asp-net-mvc"
   - "chrom"

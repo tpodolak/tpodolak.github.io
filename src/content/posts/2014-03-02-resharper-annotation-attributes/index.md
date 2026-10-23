@@ -1,7 +1,6 @@
 ---
 title: "Resharper - annotation attributes"
 published: 2014-03-02T16:39:00.000Z
-slug: "resharper-annotation-attributes"
 categories: 
   - "attributes"
   - "c"

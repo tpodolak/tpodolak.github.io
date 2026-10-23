@@ -1,7 +1,6 @@
 ---
 title: "Extjs - Changing style of items in dropdownlist"
 published: 2013-03-19T18:58:00.000Z
-slug: "extjs-changing-style-of-items-in-dropdownlist"
 categories: 
   - "extjs-4-1-1"
   - "template"

@@ -1,7 +1,6 @@
 ---
 title: "Resharper -  \"Go to Everything\""
 published: 2014-04-17T19:50:00.000Z
-slug: "resharper-go-to-everything"
 categories: 
   - "c"
   - "r"

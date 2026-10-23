@@ -1,7 +1,6 @@
 ---
 title: "StringBuilder - removing trailing characters"
 published: 2013-03-17T00:03:00.000Z
-slug: "stringbuilder-removing-trailing-characters"
 categories: 
   - "net"
   - "c"

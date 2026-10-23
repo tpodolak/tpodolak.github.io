@@ -1,7 +1,6 @@
 ---
 title: "C# - dynamic type can be useful"
 published: 2015-05-16T09:29:00.000Z
-slug: "c-dynamic-type-can-be-useful"
 categories: 
   - "c"
   - "dynamic"

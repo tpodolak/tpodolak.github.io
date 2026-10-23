@@ -1,7 +1,6 @@
 ---
 title: "Performance improvements in NSubstitute.Analyzers 1.0.11"
 published: 2019-10-21T12:57:05.000Z
-slug: "performance-improvements-nsubstitute-analyzers-1-0-11"
 categories: 
   - "nsubstitute"
 tags: 

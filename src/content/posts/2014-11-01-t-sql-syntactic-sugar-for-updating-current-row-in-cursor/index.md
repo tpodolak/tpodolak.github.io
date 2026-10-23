@@ -1,7 +1,6 @@
 ---
 title: "T-SQL - syntactic sugar for updating current row in cursor"
 published: 2014-11-01T20:05:00.000Z
-slug: "t-sql-syntactic-sugar-for-updating-current-row-in-cursor"
 categories: 
   - "sql"
   - "t-sql"

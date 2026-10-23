@@ -1,7 +1,6 @@
 ---
 title: "NLog - tracking flow of requests using MappedDiagnosticsLogicalContext"
 published: 2016-07-05T20:38:53.000Z
-slug: "nlog-tracking-flow-of-requests-using-mappeddiagnosticslogicalcontext"
 categories: 
   - "net-4-5"
   - "nlog"

@@ -1,7 +1,6 @@
 ---
 title: "Extjs - vertical header in grid and locked columns"
 published: 2013-11-10T21:09:00.000Z
-slug: "extjs-vertical-header-in-grid-and-locked-columns"
 categories: 
   - "ext-panel-grid"
   - "extjs-4-2"

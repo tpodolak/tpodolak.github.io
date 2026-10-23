@@ -1,7 +1,6 @@
 ---
 title: "Tworzenie bootstrappera aplikacji przy użyciu CaliburnMicro"
 published: 2012-05-07T19:24:00.000Z
-slug: "tworzenie-bootstrappera-aplikacji-przy-uzyciu-caliburnmicro"
 categories: 
   - "caliburnmicro"
   - "mvvm"

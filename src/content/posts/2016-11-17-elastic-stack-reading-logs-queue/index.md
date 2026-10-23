@@ -1,7 +1,6 @@
 ---
 title: "Logstash - reading logs from RabbitMQ"
 published: 2016-11-17T13:53:07.000Z
-slug: "elastic-stack-reading-logs-queue"
 categories: 
   - "elasticstack"
 tags: 

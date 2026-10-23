@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET MVC - okna modalne z wykorzystaniem Kendo UI"
 published: 2012-02-04T22:39:00.000Z
-slug: "asp-net-mvc-okna-modalne-z-wykorzystaniem-kendo-ui"
 categories: 
   - "asp-net-mvc"
   - "modalwindow"

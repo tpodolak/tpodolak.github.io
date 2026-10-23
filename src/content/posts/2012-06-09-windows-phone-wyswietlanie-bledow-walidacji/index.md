@@ -1,7 +1,6 @@
 ---
 title: "Windows Phone - wyświetlanie błędów walidacji"
 published: 2012-06-09T22:55:00.000Z
-slug: "windows-phone-wyswietlanie-bledow-walidacji"
 categories: 
   - "datatemplate"
   - "validation"

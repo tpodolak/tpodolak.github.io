@@ -1,7 +1,6 @@
 ---
 title: "Gulp - exluding type definitions files from TypeScript linting"
 published: 2015-06-13T16:35:00.000Z
-slug: "gulp-exluding-type-definitions-files-from-typescript-linting"
 categories: 
   - "gulp"
   - "tslint"

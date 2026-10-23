@@ -1,7 +1,6 @@
 ---
 title: "Implementing INotifyPropertyChanged without lambda expressions and \"magic\" strings"
 published: 2014-01-19T20:31:00.000Z
-slug: "implementing-inotifypropertychanged-without-lambda-expressions-and-magic-strings"
 categories: 
   - "net-4-5"
   - "c"

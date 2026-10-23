@@ -1,7 +1,6 @@
 ---
 title: "Resharper - custom snippet"
 published: 2013-01-05T10:28:00.000Z
-slug: "resharper-custom-snippet"
 categories: 
   - "net"
   - "c"

@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core –  request serialization issues after migration from classic WebApi"
 published: 2017-08-21T10:00:49.000Z
-slug: "asp-net-core-request-serialization-issues-migration-classic-webapi"
 categories: 
   - "asp-net-core"
 tags: 

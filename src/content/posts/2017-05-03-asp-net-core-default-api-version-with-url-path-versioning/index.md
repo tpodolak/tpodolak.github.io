@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core - default API version with url path versioning"
 published: 2017-05-03T20:50:32.000Z
-slug: "asp-net-core-default-api-version-with-url-path-versioning"
 categories: 
   - "asp-net-core"
 tags: 

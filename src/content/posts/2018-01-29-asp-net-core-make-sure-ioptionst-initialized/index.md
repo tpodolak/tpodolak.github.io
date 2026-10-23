@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core - make sure <i>IOptions&lt;T&gt;</i> is initialized"
 published: 2018-01-29T08:00:06.000Z
-slug: "asp-net-core-make-sure-ioptionst-initialized"
 categories: 
   - "asp-net-core"
 tags: 

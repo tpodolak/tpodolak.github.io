@@ -1,7 +1,6 @@
 ---
 title: "Extjs - vertical header in grid"
 published: 2013-06-30T10:55:00.000Z
-slug: "extjs-vertical-header-in-grid"
 categories: 
   - "ext-panel-grid"
   - "extjs-4-1-1"

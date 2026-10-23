@@ -1,7 +1,6 @@
 ---
 title: "How to check if one function calls another function"
 published: 2013-12-01T18:12:00.000Z
-slug: "how-to-check-if-one-function-calls-another-function"
 categories: 
   - "c"
   - "crawler"

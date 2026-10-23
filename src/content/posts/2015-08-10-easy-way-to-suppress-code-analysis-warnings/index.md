@@ -1,7 +1,6 @@
 ---
 title: "Easy way to suppress code analysis warnings"
 published: 2015-08-10T19:12:00.000Z
-slug: "easy-way-to-suppress-code-analysis-warnings"
 categories: 
   - "net"
   - "c"

@@ -1,7 +1,6 @@
 ---
 title: "Logstash - parsing multiline log entries"
 published: 2016-11-03T20:26:28.000Z
-slug: "logstash-parsing-multiline-log-entries"
 categories: 
   - "elasticstack"
 tags: 

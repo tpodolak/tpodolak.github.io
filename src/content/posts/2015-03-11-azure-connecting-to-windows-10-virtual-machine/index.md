@@ -1,7 +1,6 @@
 ---
 title: "Azure - connecting to Windows 10 virtual machine"
 published: 2015-03-11T19:15:00.000Z
-slug: "azure-connecting-to-windows-10-virtual-machine"
 categories: 
   - "azure"
   - "windows-10"

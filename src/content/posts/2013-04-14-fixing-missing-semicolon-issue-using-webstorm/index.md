@@ -1,7 +1,6 @@
 ---
 title: "Fixing missing semicolon issue using WebStorm"
 published: 2013-04-14T11:44:00.000Z
-slug: "fixing-missing-semicolon-issue-using-webstorm"
 categories: 
   - "javascript"
   - "jslint"

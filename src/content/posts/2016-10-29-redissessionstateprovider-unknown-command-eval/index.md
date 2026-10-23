@@ -1,7 +1,6 @@
 ---
 title: "RedisSessionStateProvider - unknown command 'EVAL'"
 published: 2016-10-29T18:33:27.000Z
-slug: "redissessionstateprovider-unknown-command-eval"
 categories: 
   - "net"
   - "asp-net-mvc"

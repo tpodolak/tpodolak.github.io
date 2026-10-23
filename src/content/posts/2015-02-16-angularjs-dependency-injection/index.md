@@ -1,7 +1,6 @@
 ---
 title: "AngularJS - dependency injection"
 published: 2015-02-16T19:39:00.000Z
-slug: "angularjs-dependency-injection"
 categories: 
   - "angularjs"
   - "gulp"

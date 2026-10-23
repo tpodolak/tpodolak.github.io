@@ -1,7 +1,6 @@
 ---
 title: "FluentNhibernate - mapowanie kolumn typu time"
 published: 2012-03-13T21:36:00.000Z
-slug: "fluentnhibernate-mapowanie-kolumn-typu-time"
 categories: 
   - "fluentnhibernate"
   - "mssql"

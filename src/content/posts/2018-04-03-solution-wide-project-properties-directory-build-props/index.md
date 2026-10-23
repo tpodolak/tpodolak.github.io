@@ -1,7 +1,6 @@
 ---
 title: "Solution-wide project properties with Directory.Build.props"
 published: 2018-04-03T08:00:14.000Z
-slug: "solution-wide-project-properties-directory-build-props"
 categories: 
   - "net"
 tags: 

@@ -1,7 +1,6 @@
 ---
 title: "Boxstarter - breaking infinite reboot loop"
 published: 2016-12-19T23:20:40.000Z
-slug: "boxstarter-breaking-infinite-reboot-loop"
 categories: 
   - "boxstarter"
   - "powershell"

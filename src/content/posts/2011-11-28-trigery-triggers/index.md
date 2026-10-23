@@ -1,7 +1,6 @@
 ---
 title: "Trigery - Triggers"
 published: 2011-11-28T17:20:00.000Z
-slug: "trigery-triggers"
 categories: 
   - "datatrigger"
   - "trigery"

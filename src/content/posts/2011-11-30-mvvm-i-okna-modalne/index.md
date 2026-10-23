@@ -1,7 +1,6 @@
 ---
 title: "MVVM i okna modalne"
 published: 2011-11-30T17:10:00.000Z
-slug: "mvvm-i-okna-modalne"
 categories: 
   - "modalwindow"
   - "mvvm"

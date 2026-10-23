@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core –  custom ILogger&lt;T&gt; and Nlog callsite layout renderer issue"
 published: 2018-03-01T08:00:34.000Z
-slug: "asp-net-core-custom-iloggert-nlog-callsite-layout-renderer-issue"
 categories: 
   - "asp-net-core"
 tags: 

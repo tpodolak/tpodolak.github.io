@@ -1,7 +1,6 @@
 ---
 title: "Extjs - drag-and-drop between tables"
 published: 2013-05-22T22:08:00.000Z
-slug: "extjs-drag-and-drop-between-tables"
 categories: 
   - "drag-and-drop"
   - "extjs-4-1-1"

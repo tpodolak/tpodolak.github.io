@@ -1,7 +1,6 @@
 ---
 title: "Extjs 4.1 - zmiana stylu konkretnej komórki w gridzie"
 published: 2012-07-13T20:42:00.000Z
-slug: "extjs-4-1-zmiana-stylu-konkretnej-komorki-w-gridzie"
 categories: 
   - "extjs-4-1-1"
   - "grid"

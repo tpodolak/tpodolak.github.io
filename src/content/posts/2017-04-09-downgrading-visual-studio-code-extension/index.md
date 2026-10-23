@@ -1,7 +1,6 @@
 ---
 title: "Downgrading Visual Studio Code extension"
 published: 2017-04-09T17:56:34.000Z
-slug: "downgrading-visual-studio-code-extension"
 categories: 
   - "vscode"
 tags: 

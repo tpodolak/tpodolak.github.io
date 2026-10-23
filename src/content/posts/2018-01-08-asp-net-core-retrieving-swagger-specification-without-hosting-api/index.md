@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core - retrieving swagger specification without hosting API"
 published: 2018-01-08T08:00:19.000Z
-slug: "asp-net-core-retrieving-swagger-specification-without-hosting-api"
 categories: 
   - "asp-net-core"
 tags: 

@@ -1,7 +1,6 @@
 ---
 title: "Coded UI Test - tworzenie testów UI przy pomocy Visual Studio Ultimate"
 published: 2011-12-04T00:54:00.000Z
-slug: "coded-ui-test-tworzenie-testow-ui-przy-pomocy-visual-studio-ultimate"
 tags: 
   - "coded-ui-test"
 ---

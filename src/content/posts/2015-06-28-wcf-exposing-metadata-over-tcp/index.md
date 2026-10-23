@@ -1,7 +1,6 @@
 ---
 title: "WCF - exposing metadata over TCP"
 published: 2015-06-28T15:10:00.000Z
-slug: "wcf-exposing-metadata-over-tcp"
 categories: 
   - "c"
   - "wcf"

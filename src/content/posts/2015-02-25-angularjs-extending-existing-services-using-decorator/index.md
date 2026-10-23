@@ -1,7 +1,6 @@
 ---
 title: "AngularJS - extending existing services using decorator"
 published: 2015-02-25T23:24:00.000Z
-slug: "angularjs-extending-existing-services-using-decorator"
 categories: 
   - "angularjs"
   - "decorator"

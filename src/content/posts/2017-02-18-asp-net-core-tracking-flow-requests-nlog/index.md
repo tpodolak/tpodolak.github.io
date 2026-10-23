@@ -1,7 +1,6 @@
 ---
 title: "ASP.NET Core - tracking flow of requests with NLog"
 published: 2017-02-18T14:11:18.000Z
-slug: "asp-net-core-tracking-flow-requests-nlog"
 categories: 
   - "asp-net-core"
   - "nlog"

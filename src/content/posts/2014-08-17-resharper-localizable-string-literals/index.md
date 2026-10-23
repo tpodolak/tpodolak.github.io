@@ -1,7 +1,6 @@
 ---
 title: "Resharper - localizable string literals"
 published: 2014-08-17T13:17:00.000Z
-slug: "resharper-localizable-string-literals"
 categories: 
   - "globalization"
   - "localization"
