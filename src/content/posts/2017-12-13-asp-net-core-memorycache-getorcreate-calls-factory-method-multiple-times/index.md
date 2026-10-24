@@ -7,7 +7,7 @@ tags:
   - "asp-net-core"
 ---
 
-Recently I've been trying to locate a performance issue in our application. Stress tests have shown an excessive usage of memory combined with too many external server requests. As usual in such cases, I've run the profiler and after a bit of searching, I've noticed that issue is connected with our caching mechanism. The problematic part was a factory delegate (responsible for populating cache, if the cache for given key is empty) which was called multiple times when concurrent requests were sent. That was a bit surprising to me as we basically were using a very naïve wrapper over _ASP.NET Core MemoryCache_.
+Recently I've been trying to locate a performance issue in our application. Stress tests have shown an excessive usage of memory combined with too many external server requests. As usual in such cases, I've run the profiler and after a bit of searching, I've noticed that issue is connected with our caching mechanism. The problematic part was a factory delegate (responsible for populating cache, if the cache for given key is empty) which was called multiple times when concurrent requests were sent. That was a bit surprising to me as we basically were using a very naïve wrapper over `ASP.NET Core MemoryCache`.
 
 ```csharp
 public class CacheService : ICacheService
@@ -60,7 +60,7 @@ public void GetOrAdd_CallsFactoryMethodOnce()
 - Lock per key
 - Lock per type
 
-After discussion we decided to go with third option, mainly because we didn't want to over-complicate the design, plus we wanted to allow concurrent factory method calls for different types of objects. Once _CacheService_ was updated with following code
+After discussion we decided to go with third option, mainly because we didn't want to over-complicate the design, plus we wanted to allow concurrent factory method calls for different types of objects. Once `CacheService` was updated with following code
 
 ```csharp
 public class CacheService: ICacheService
@@ -102,6 +102,4 @@ public class CacheService: ICacheService
 
 ```
 
-we stoped experiencing excessive memory usage.
-
-Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCoreMemoryCacheIsPopulatedMultipleTimes)
+we stoped experiencing excessive memory usage. Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCoreMemoryCacheIsPopulatedMultipleTimes)

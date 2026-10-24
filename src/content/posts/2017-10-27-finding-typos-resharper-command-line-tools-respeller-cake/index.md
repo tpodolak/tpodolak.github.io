@@ -11,56 +11,61 @@ tags:
 
 ### 1\. Introduction
 
-I tend to do a lot of typos when I write a code and I mean a lot. This is quite annoying for me so I decided to somehow automate the process of finding the spelling errors during the build. My first thought was to use some kind of Roslyn analyzer, however, I failed to find any working one. This is why I decided to give a try to [ReSharper Command Line Tools](https://www.jetbrains.com/help/resharper/ReSharper_Command_Line_Tools.html) (also known as _CLIT_) combined with _ReSpeller_ plugin. For those who don't know, _ReSharper Command Line Tools_ is set of tools which allow you to use _ReSharper_ inspections without _Visual Studio_
+I tend to do a lot of typos when I write a code and I mean a lot. This is quite annoying for me so I decided to somehow automate the process of finding the spelling errors during the build. My first thought was to use some kind of Roslyn analyzer, however, I failed to find any working one. This is why I decided to give a try to [ReSharper Command Line Tools](https://www.jetbrains.com/help/resharper/ReSharper`Command`Line`Tools.html) (also known as `CLIT`) combined with `ReSpeller` plugin. For those who don't know, `ReSharper Command Line Tools` is set of tools which allow you to use `ReSharper` inspections without `Visual Studio`
 
 ### 2\. First attempt
 
 This was supposed to be a rather straightforward task because according to [documentation](https://www.jetbrains.com/help/resharper/InspectCode.html) command line inspections support extensions out of the box. The example presented in the help page was supposed to be the perfect one for me
 
-```bat
+```bat frame="none"
 InspectCode.exe --project=Documents -o="OutputFile.xml" --no-swea -x=EtherealCode.ReSpeller "SolutionFile.sln"
 
 ```
 
-Unfortunately, it turned out that extensions support is broken for [some time](https://youtrack.jetbrains.com/issue/RSRP-436208#comment=27-1078217) and it wasn't working for me either (tested on _Command Line Tools_ version _2017.2_).
+Unfortunately, it turned out that extensions support is broken for [some time](https://youtrack.jetbrains.com/issue/RSRP-436208#comment=27-1078217) and it wasn't working for me either (tested on `Command Line Tools` version `2017.2`).
 
 ### 3\. The workaround
 
-Even though extension support is not working as expected I was able to make it work with some workaround. The workaround itself is a combination of helpful tips taken from this [YouTrack](https://youtrack.jetbrains.com/issue/RSRP-436208#comment=27-1078217) issue. Long story short, we have to manually install the plugin and then force _ReSharper_ to use it. Assuming that you have command line tools installed this can be achieved in following way. First of all we have to get our hands on _ReSpeller_ plugin. We can install it using _NuGet_ but before you do it, remember to add additional feed to _nuget.config_ file.
+Even though extension support is not working as expected I was able to make it work with some workaround. The workaround itself is a combination of helpful tips taken from this [YouTrack](https://youtrack.jetbrains.com/issue/RSRP-436208#comment=27-1078217) issue. Long story short, we have to manually install the plugin and then force `ReSharper` to use it. Assuming that you have command line tools installed this can be achieved in following way. First of all we have to get our hands on `ReSpeller` plugin. We can install it using `NuGet` but before you do it, remember to add additional feed to `nuget.config` file.
 
-```bash
+```bash frame="none"
 nuget sources add -name JetBrains-Feed -source https://resharper-plugins.jetbrains.com/api/v2/curated-feeds/Wave_v9.0/
 
 ```
+The feed url can be found in the `ReSharper's` option page and for version 2017.2 it is 
 
-The feed url can be found in the _ReSharper's_ option page and for version 2017.2 it is [![](images/ReSharperNuGetFeed.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/finding-typos-with-resharper-command-line-tools-respeller-and-cake/ReSharperNuGetFeed.png) Having our _NuGet_ sources updated we can retrieve the package using following command
+[![](images/ReSharperNuGetFeed.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/finding-typos-with-resharper-command-line-tools-respeller-and-cake/ReSharperNuGetFeed.png)
 
-```bash
+Having our `NuGet` sources updated we can retrieve the package using following command
+
+```bash frame="none"
 nuget install "EtherealCode.ReSpeller" -Version "4.6.9.2"
 
 ```
 
-The next step is to copy _ReSpeller's_ _DLLs_ from following folders
+The next step is to copy `ReSpeller's` `DLLs` from following folders
 
-```text
+```text frame="none"
 etherealcode.respeller.4.6.9.2\EtherealCode.ReSpeller\lib\net45\
 etherealcode.respeller.4.6.9.2\Extended.Wpf.Toolkit\lib\net40\
 etherealcode.respeller.4.6.9.2\NHunspell\lib\net\
 
 ```
 
-directly to _CLIT_ tools folder - _JetBrains.ReSharper.CommandLineTools\\tools_. What is more, _ReSpeller_ comes together with dictionary files which also have to be copied to the tools folder. This time, however, we have to copy entire _etherealcode.respeller.4.6.9.2\\EtherealCode.ReSpeller\\lib\\net45\\dic_ directory, not only its content. The very last thing is to make _ReSharper_ aware of the plugin, in order to do that we have to find _EtherealCode.ReSpeller.JetMetadata.sstg_ file. The file itself doesn’t come together with the package but it is generated by _ReSharper_ during plugin installation. So the easiest way of getting that file is to install _ReSpeller_ as a _ReSharper_ plugin in _Visual Studio_ and then copy the _sstg_ file to tools folder. After all that work now if you run
+directly to `CLIT` tools folder - `JetBrains.ReSharper.CommandLineTools\\tools`. What is more, `ReSpeller` comes together with dictionary files which also have to be copied to the tools folder. This time, however, we have to copy entire `etherealcode.respeller.4.6.9.2\\EtherealCode.ReSpeller\\lib\\net45\\dic` directory, not only its content. The very last thing is to make `ReSharper` aware of the plugin, in order to do that we have to find `EtherealCode.ReSpeller.JetMetadata.sstg` file. The file itself doesn’t come together with the package but it is generated by `ReSharper` during plugin installation. So the easiest way of getting that file is to install `ReSpeller` as a `ReSharper` plugin in `Visual Studio` and then copy the `sstg` file to tools folder. After all that work now if you run
 
-```bat
+```bat frame="none"
 InspectCode.exe --project=Documents -o="OutputFile.xml" --no-swea -x=EtherealCode.ReSpeller "SolutionFile.sln"
 
 ```
 
-(note lack of _\-x_ switch) you will see spellcheck inspections in output file. [![](images/OutputXml.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/finding-typos-with-resharper-command-line-tools-respeller-and-cake/OutputXml.png)
+(note lack of `\-x` switch) you will see spellcheck inspections in output file. 
+
+[![](images/OutputXml.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/finding-typos-with-resharper-command-line-tools-respeller-and-cake/OutputXml.png)
 
 ### 4\. Cake integration
 
-Doing all that stuff manually is error-prone and time-consuming and of course, I wanted to have the spellcheck up and running on the CI server, that is why I've also automated all above steps with _Cake_ build script. The core concept is to use _ReSpeller_ and _ReSharper Command Line Tools_ as so-called "Cake tools" to run the inspections and _Cake.Issues_ and _Cake.Issues.InspectCode_ plugins for analyzing the output file. Adding tools and add-ins is straightforward we just have to add following lines on top of the build file.
+Doing all that stuff manually is error-prone and time-consuming and of course, I wanted to have the spellcheck up and running on the CI server, that is why I've also automated all above steps with `Cake` build script. The core concept is to use `ReSpeller` and `ReSharper Command Line Tools` as so-called "Cake tools" to run the inspections and `Cake.Issues` and `Cake.Issues.InspectCode` plugins for analyzing the output file. Adding tools and add-ins is straightforward we just have to add following lines on top of the build file.
 
 ```csharp
 #tool "nuget:?package=EtherealCode.ReSpeller&version=4.6.9.2"
@@ -70,9 +75,17 @@ Doing all that stuff manually is error-prone and time-consuming and of course, I
 
 ```
 
-We also have to add _nuget.config_ file to our build directory in order to point _Cake_ to _ReSharper_ feed (you could also modify the global _nuget.config_ but I don’t want a build process to change the behavior of entire system)
+We also have to add `nuget.config` file to our build directory in order to point `Cake` to `ReSharper` feed (you could also modify the global `nuget.config` but I don’t want a build process to change the behavior of entire system)
+```xml
+<configuration>
+    <packageSources>
+      <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+      <add key="resharper-plugins" value="https://resharper-plugins.jetbrains.com/api/v2/curated-feeds/Wave_v9.0/" protocolVersion="2" />
+    </packageSources>
+</configuration>
+```
 
-Before calling _InspectCode.exe_ we have to make sure that all of the files and folders exist
+Before calling `InspectCode.exe` we have to make sure that all of the files and folders exist
 
 ```csharp
 var destinationPath = "tools/jetbrains.resharper.commandlinetools.2017.2.2/JetBrains.ReSharper.CommandLineTools/tools";
@@ -143,13 +156,15 @@ Task("Run-SpellCheck")
 
 ```
 
-As you can see I start _InspectCode.exe_ process with a bunch of parameters. Once the process returns successful exit code I can go ahead and process the results thanks to _ReadIssues_ and _InspectCodeIssuesFromFilePath_ methods provided by the add-ins. Because of the fact that _ReSharper_ can produce a ton of inspections I only care about the ones which are typos. Simple and very naïve _LINQ_ query can do it for me
+As you can see I start `InspectCode.exe` process with a bunch of parameters. Once the process returns successful exit code I can go ahead and process the results thanks to `ReadIssues` and `InspectCodeIssuesFromFilePath` methods provided by the add-ins. Because of the fact that `ReSharper` can produce a ton of inspections I only care about the ones which are typos. Simple and very naïve `LINQ` query can do it for me
 
-```javascript
+```csharp
 var spellingIssues = issues.Where(issue => issue.Rule.Contains("Typo")).ToList();
 
 ```
 
-If any typos were found I just throw exception with a listing of all the issues. Note that I aggregate all the issues into one big message because if you have lots of typos (just like I do) rendering them can take some time [![](images/Errors.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/finding-typos-with-resharper-command-line-tools-respeller-and-cake/Errors.png)
+If any typos were found I just throw exception with a listing of all the issues. Note that I aggregate all the issues into one big message because if you have lots of typos (just like I do) rendering them can take some time
+
+[![](images/Errors.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/finding-typos-with-resharper-command-line-tools-respeller-and-cake/Errors.png)
 
 The source code for slightly enhanced version of that script can be found [here](https://github.com/tpodolak/Blog/tree/master/R%23CLIInspections)

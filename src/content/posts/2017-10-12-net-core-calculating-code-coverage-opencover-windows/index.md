@@ -9,29 +9,36 @@ tags:
 
 ### 1\. Introduction.
 
-I've been struggling for some time to make _OpenCover_ work with _.NET Core_ projects, so I've decided to document a working example. This is basically an aggregation of hints and answers I found on the _Web_ (especially in [here](https://github.com/OpenCover/opencover/issues/601))
+I've been struggling for some time to make `OpenCover` work with `.NET Core` projects, so I've decided to document a working example. This is basically an aggregation of hints and answers I found on the `Web` (especially in [here](https://github.com/OpenCover/opencover/issues/601))
 
 ### 2\. Working example.
 
-If you run an _OpenCover_ with the same arguments you were running it for a classic framework, you will end up with something like this [![](images/MissingPdbs.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/net-core-calculating-code-coverage-on-windows/MissingPdbs.png) As you can see the coverage was not calculated and _OpenCover_ is complaining about a missing _PDBs_. In order to fix that we have to do two things. First of all, we have to build the project with a full _PDBs_
+If you run an `OpenCover` with the same arguments you were running it for a classic framework, you will end up with something like this 
 
-```bash
+[![](images/MissingPdbs.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/net-core-calculating-code-coverage-on-windows/MissingPdbs.png)
+
+As you can see the coverage was not calculated and `OpenCover` is complaining about a missing `PDBs`. In order to fix that we have to do two things. First of all, we have to build the project with a full `PDBs`
+
+```bash frame="none"
 dotnet build "PathToYourSolution.sln" /p:DebugType=Full
 
 ```
 
-And then run _OpenCover_ with and _\-oldStyle_ switch
+And then run `OpenCover` with and `-oldStyle` switch
 
-```bat
+```bat frame="none"
+
 OpenCover.Console.exe -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test \"PathToTestProject.csproj\" --configuration Debug --no-build" -filter:"+[*]* -[*.Tests*]*" -oldStyle -register:user -output:"OpenCover.xml"
 
 ```
 
-From now on, _OpenCover_ recognizes _PDB_ files and the code coverage is calculated correctly [![](images/OkPdbs.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/net-core-calculating-code-coverage-on-windows/OkPdbs.png)
+From now on, `OpenCover` recognizes `PDB` files and the code coverage is calculated correctly
+
+[![](images/OkPdbs.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/net-core-calculating-code-coverage-on-windows/OkPdbs.png)
 
 ### 3\. Cake script.
 
-As we use a _Cake_ as our build automation tool I've also prepared a sample script for generating a code coverage. The core part of the script looks as follows
+As we use a `Cake` as our build automation tool I've also prepared a sample script for generating a code coverage. The core part of the script looks as follows
 
 ```javascript
 // rest of the code omitted for brevity
@@ -90,6 +97,8 @@ Task("Run-Tests")
 
 ```
 
-Notice that script is able to merge code coverage results from multiple test projects thanks to _MergeOutput_ flag passed to _OpenCover_.
+Notice that script is able to merge code coverage results from multiple test projects thanks to `MergeOutput` flag passed to `OpenCover`.
 
-[![](images/Report.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/net-core-calculating-code-coverage-on-windows/Report.png) Full sources of that script (along with a _dotnet vstest_ alternative approach) can be found [here](https://github.com/tpodolak/Blog/tree/master/NETCoreCodeCoverage/Build).
+[![](images/Report.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/net-core-calculating-code-coverage-on-windows/Report.png)
+
+Full sources of that script (along with a `dotnet vstest` alternative approach) can be found [here](https://github.com/tpodolak/Blog/tree/master/NETCoreCodeCoverage/Build).
