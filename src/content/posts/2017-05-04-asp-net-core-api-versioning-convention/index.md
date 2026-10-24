@@ -10,49 +10,47 @@ tags:
 
 ### 1\. Introduction
 
-If you were looking for information about _API_ versioning support for _ASP.NET Core_ you've probably come across [Microsoft.AspNetCore.Mvc.Versioning](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.Versioning) library. The library itself allows you to set up versioning in a couple of different ways, for instance, via [attributes](https://github.com/Microsoft/aspnet-api-versioning/wiki/How-to-Version-Your-Service) or via [manual convention setup](https://github.com/Microsoft/aspnet-api-versioning/wiki/API-Version-Conventions). All of this options are really nice but unfortunately, they have one significant drawback, namely, you have to set them up manually. As I tend to forget about this kind of things I wanted to automate that process as much as possible. Thankfully _ASP.NET Core_ has a very nice feature called _ApplicationModelConventions_ which allows you to add some metadata(like routing information, _API_ versioning ) to your controller, actions etc.
+If you were looking for information about `API` versioning support for `ASP.NET Core` you've probably come across [Microsoft.AspNetCore.Mvc.Versioning](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.Versioning) library. The library itself allows you to set up versioning in a couple of different ways, for instance, via [attributes](https://github.com/Microsoft/aspnet-api-versioning/wiki/How-to-Version-Your-Service) or via [manual convention setup](https://github.com/Microsoft/aspnet-api-versioning/wiki/API-Version-Conventions). All of this options are really nice but unfortunately, they have one significant drawback, namely, you have to set them up manually. As I tend to forget about this kind of things I wanted to automate that process as much as possible. Thankfully `ASP.NET Core` has a very nice feature called `ApplicationModelConventions` which allows you to add some metadata(like routing information, `API` versioning ) to your controller, actions etc.
 
 ### 2\. Convention
 
-I've decided to implement versioning by routing which means the _API_ will be accessible via this template
+I've decided to implement versioning by routing which means the `API` will be accessible via this template
 
 ```csharp
 "v{version:apiVersion}/[controller]"
 
 ```
 
-The template itself doesn’t give you much, as you also have to add information to the controllers which version of _API_ they support. In my case, I decided to go with a version by namespace convention, which means that supported version will be deduced from namespace in which given controller resides. So, in fact, there will be two conventions, one for applying routing and a second one for applying versioning
+The template itself doesn’t give you much, as you also have to add information to the controllers which version of `API` they support. In my case, I decided to go with a version by namespace convention, which means that supported version will be deduced from namespace in which given controller resides. So, in fact, there will be two conventions, one for applying routing and a second one for applying versioning
 
 ### 3\. Creating conventions.
 
-In order to write an _ASP.NET Core_ convention, we have to implement _IApplicationModelConvention_ interface. This interface has a single method _Apply_ which takes _ApplicationModel_ class as an argument. This class gives us access to all of our controllers, actions and other parts of the application. So if we want to apply a routing with versioning for all of the controllers, we can do it in following way
+In order to write an `ASP.NET Core` convention, we have to implement `IApplicationModelConvention` interface. This interface has a single method `Apply` which takes `ApplicationModel` class as an argument. This class gives us access to all of our controllers, actions and other parts of the application. So if we want to apply a routing with versioning for all of the controllers, we can do it in following way
 
 ```csharp
-
-    public void Apply(ApplicationModel application)
+public void Apply(ApplicationModel application)
+{
+    foreach (var applicationController in application.Controllers)
     {
-        foreach (var applicationController in application.Controllers)
+        foreach (var applicationControllerSelector in applicationController.Selectors)
         {
-            foreach (var applicationControllerSelector in applicationController.Selectors)
+            if (applicationControllerSelector.AttributeRouteModel != null)
             {
-                if (applicationControllerSelector.AttributeRouteModel != null)
+                var versionedConstraintRouteModel = new AttributeRouteModel
                 {
-                    var versionedConstraintRouteModel = new AttributeRouteModel
-                    {
-                        Template = _versionConstraintTemplate
-                    };
+                    Template = _versionConstraintTemplate
+                };
 
-                    applicationControllerSelector.AttributeRouteModel =
-                            AttributeRouteModel.CombineAttributeRouteModel(versionedConstraintRouteModel,
-                                applicationControllerSelector.AttributeRouteModel);
-                }
-                else
+                applicationControllerSelector.AttributeRouteModel =
+                        AttributeRouteModel.CombineAttributeRouteModel(versionedConstraintRouteModel,
+                            applicationControllerSelector.AttributeRouteModel);
+            }
+            else
+            {
+                applicationControllerSelector.AttributeRouteModel = new AttributeRouteModel
                 {
-                    applicationControllerSelector.AttributeRouteModel = new AttributeRouteModel
-                    {
-                        Template = _versionedControllerTemplate
-                    };
-                }
+                    Template = _versionedControllerTemplate
+                };
             }
         }
     }
@@ -60,7 +58,7 @@ In order to write an _ASP.NET Core_ convention, we have to implement _IApplicati
 
 ```
 
-As you can see we iterate through all of the _Selectors_ and then apply new route model to them. If selector already had a route attribute applied we combine two attributes together. Once our convention is applied our actions will be accessible with following routing prefix
+As you can see we iterate through all of the `Selectors` and then apply new route model to them. If selector already had a route attribute applied we combine two attributes together. Once our convention is applied our actions will be accessible with following routing prefix
 
 ```csharp
 "v{version:apiVersion}/[controller]" 
@@ -70,7 +68,7 @@ As you can see we iterate through all of the _Selectors_ and then apply new rout
 or via
 
 ```csharp
-"v{version:apiVersion}/previous_route_for_controller"
+"v{version:apiVersion}/previous`route`for_controller"
 
 ```
 
@@ -113,7 +111,7 @@ builder.ApplyTo(controllerModel);
 
 ```
 
-I am able to inform the framework which version of _API_ given controller supports.
+I am able to inform the framework which version of `API` given controller supports.
 
 ### 4\. Adding convention to application
 
@@ -141,7 +139,7 @@ services.AddMvc(options =>
 
 ```
 
-Note that I removed _ApiVersionConvention_ and _ImplicitControllerVersionConvention_ with simple extension method _Remove<T>_
+Note that I removed `ApiVersionConvention` and `ImplicitControllerVersionConvention` with simple extension method `Remove<T>`
 
 ```csharp
 public static class CollectionExtensions
