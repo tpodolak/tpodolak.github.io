@@ -13,7 +13,7 @@ tags:
 
 Recently in the company I work for, we've been trying to improve Javascript code quality. After hooking up JSlint into our build script, it turned out that the most common issue with our code is missing semicolon at the end of statements. Fixing all warnings manually would be very boring task, that is why I started searching for alternative solution. Fortunatelly once again, WebStorm came for the rescue. As you probably know WebStorm has it's own code inspection tool which indicates problems with code. However except that, this tool can also fix these problems automatically. Here is a little demonstration. Let us start with simple code.
 
-```
+```javascript
 Ext.define('GeneralLearning.controllers.ImageCachingController',{
     extend:'Ext.app.Controller',
     viewInstance:null,

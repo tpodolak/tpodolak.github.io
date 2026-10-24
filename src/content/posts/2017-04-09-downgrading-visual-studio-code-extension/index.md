@@ -15,7 +15,7 @@ For time to time when you update Visual Studio Code's extension you realize that
 
 Let's assume that I would like to downgrade _C#_ plugin from newest version (_1.8.1_ at the moment) to _1.7.0_. First of all, we have to uninstall current extension. As there as some issues of doing that via command line, just do it from _VSCode_ by clicking on uninstall button in extension screen. [![Initial](images/Initial.png)](//tpodolak.com/blog/wp-content/uploads/2017/04/downgrading-visual-studio-code-extension/Initial.png) In the next step we have to download proper extension's version using _vsassets_ _api_. The url pattern looks as follows
 
-```
+```text
 https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${extension_name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage
 
 ```
@@ -28,14 +28,14 @@ In my case, the variables looks as follow
 
 and entire url can be rewritten as
 
-```
+```text
 https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/csharp/1.7.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage
 
 ```
 
 Having the link prepared we can paste it into browser address bar and download the extension. Once the file is downloaded, run _VSCode_, hit _CTRL+SHIFT+P_, type _vsix_ in command line and choose
 
-```
+```text
 Extensions: Install from VSIX...
 
 ```

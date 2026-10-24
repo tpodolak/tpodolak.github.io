@@ -17,7 +17,7 @@ tags:
 
 If you dive into _Boxstarter_ source code you will notice that script responsible for checking if reboot is necessary uses [Get-PendingReboot](https://github.com/mwrock/boxstarter/blob/master/Boxstarter.Bootstrapper/Get-PendingReboot.ps1) cmdlet. By default _Boxstarter_ doesn’t export it, so if you want to see what it does you have to add following line in your _Boxstarer_ script
 
-```
+```powershell
 Import-Module (Join-Path $Boxstarter.BaseDir Boxstarter.Bootstrapper\Get-PendingReboot.ps1) -global -DisableNameChecking
 
 ```
@@ -28,7 +28,7 @@ Calling the _Get-PendingReboot_ cmdlet will give you an information about mandat
 
 The obvious solution is to remove that value from the registry key manually. However this approach didn’t work for me, basically because the registry value somehow was added at the beginning of execution of my script. That is why, I've decided to modify my script and add a function which clears undesirable pending file renames of my choice.
 
-```
+```powershell
 function Clear-Known-Pending-Renames($ignoredRenames){
     $regKey = "HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\"
     $regProperty = "PendingFileRenameOperations"

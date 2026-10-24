@@ -10,7 +10,7 @@ tags:
 
 I've been using _NLog_ for quite some time already, and it was a natural choice to use it in the _ASP.NET Core_ projects as well. I've configured the logger using [this](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-\(csproj---vs2017\)) tutorial and everything seemed to be working fine. Unfortunately, after some time we've noticed that for some reasons some of the errors are not logged. We've taken a deeper look at our code base and we've found couple logs being written as follows
 
-```
+```csharp
 _logger.LogError(exception.HResult, exception, string.Empty); 
 _logger.LogCritical(exception.HResult, exception, string.Empty);
 
@@ -18,7 +18,7 @@ _logger.LogCritical(exception.HResult, exception, string.Empty);
 
 This piece of code works perfectly fine with _ASP.NET Core_ console logger but it seems it doesn’t for _NLog_. We double checked that with following piece of code
 
-```
+```csharp
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
@@ -49,7 +49,7 @@ public class ValuesController : Controller
 
 And as you can see in the picture below, no errors have been reported [![](images/NoErrorsLogged.png)](//tpodolak.com/blog/wp-content/uploads/2017/07/auto-draft/NoErrorsLogged.png) Changing the error message to any message (even the one containing only white spaces)
 
-```
+```csharp
  _logger.LogError(exception.HResult, exception, " "); 
  _logger.LogCritical(exception.HResult, exception, " " ); 
 

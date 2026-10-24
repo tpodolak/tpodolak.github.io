@@ -16,7 +16,7 @@ In my current project, we use _Microsoft.Extensions.Logging.ILogger<T>_ default 
 
 The custom implementation itself is very similar to the original one, we came up with something like that
 
-```
+```csharp
 public class Logger : ILogger
 {
     private readonly ILogger _logger;
@@ -53,7 +53,7 @@ public class Logger : ILogger
 
 and we replaced the default logger with this code
 
-```
+```csharp
 services.Replace(new ServiceDescriptor(typeof(ILogger<>), typeof(Logger.Logger<>), ServiceLifetime.Singleton));
 
 ```
@@ -64,7 +64,7 @@ As you can see we basically wanted to add information from custom exceptions to 
 
 Once we run the application all of the providers were working fine and were producing expected output apart from _NLog_ provider. Originally _NLog_ provider for the following code
 
-```
+```csharp
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
@@ -91,7 +91,7 @@ public class ValuesController : Controller
 
 was producing this output
 
-```
+```text
 TimeStamp=2018-02-28 20:14:37.2711 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=TRACE Message=Get method called trace 
 TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=WARN Message=Get method called warning 
 TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=ERROR Message=Get method called error 
@@ -101,7 +101,7 @@ TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsit
 
 However, after introducing new implementation of _ILogger<T>_, it started appending wrong caller member name
 
-```
+```text
 TimeStamp=2018-02-28 20:17:27.4044 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=TRACE Message=Get method called trace additional stuff in here 
 TimeStamp=2018-02-28 20:17:27.5117 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=WARN Message=Get method called warning additional stuff in here 
 TimeStamp=2018-02-28 20:17:27.5117 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=ERROR Message=Get method called error additional stuff in here 
@@ -115,7 +115,7 @@ After some digging, it turned out that the issue lies in the (indirect)configura
 
 In order to restore previous behavior you have to add custom logger assembly to the hidden assembly collection. You can do it via
 
-```
+```csharp
 LogManager.AddHiddenAssembly(typeof(Logger.Logger<>).Assembly);
 
 ```

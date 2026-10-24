@@ -28,14 +28,14 @@ DelegateCommands z Prisma używamy w taki sam sposób w jaki używaliśmy komend
 
 CompositeCommands są to obiekty, które przechowują kolekcją obiektów typu DelegateCommand. Tworzenie CompositeCommand jest bardzo proste. Po pierwsze musimy stworzyć obiekt typu CompositeCommand
 
-```
+```csharp
 public CompositeCommand SomeCompositeCommand = new CompositeCommand();
 
 ```
 
 następnie rejestrujemy w tym obiekcie obiekt implementujący interfejs ICommand, czyli w naszym przypadku jakiś obiekt typu DelegateCommand. Robimy to w następujący sposób:
 
-```
+```csharp
 DelegateCommand DistributeCommand = new DelegateCommand(DistributeCards);
 SomeCompositeCommand.RegisterCommand(DistributeCommand);
 
@@ -43,23 +43,22 @@ SomeCompositeCommand.RegisterCommand(DistributeCommand);
 
 w razie potrzeby możemy usunąć komendę z kolekcji komend przy pomocy następującej składni:
 
-```
+```csharp
 SomeCompositeCommand.UnregisterCommand(DistributeCommand);
 
 ```
 
 Mając już stworzony obiekt typu CompositeCommand oraz zarejestrowane w nim obiekty DelegateCommand możemy zastosować bindowanie.
 
-```
-Rodzaj
-
+```xml
+<Button Command="{Binding SomeCompositeCommand}" Grid.Column="1">Rodzaj</Button>
 ```
 
 Od teraz, w chwili naciśnięcia przycisku, najpierw sprawdzane jest czy dana CompositeCommand może zostać wykonana. CompositeCommand może zostać wykonana tylko wtedy, gdy wszystkie komendy do niej podpięte mogą zostać wykonane. Jeżeli warunek ten zostanie spełniony następuje wywoływanie po kolei wszystkich metod execute z komend podpiętych do danej CompositCommand. CompositeCommand znajduje zastosowanie w przypadku gdy pozwalamy użytkownikowi na edycję wielu elementów jednocześnie i potrzebujemy w prosty sposób przeprowadzić walidację na poszczególnych widokach. [![Komendy](images/CompositeCommand.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/11/prism-komendy/CompositeCommand.jpg) CompositeCommand może również wykorzystana np. do zapisania tylko aktywnego widoku. Dzięki temu, że DelegateCommand implementuje interfejs IActiveAware, CompositeCommand wie, który widok jest aktualnie zaznaczony i zapisze tylko wybrany widok.
 
 Interfejs IActiveAware wygląda w następujący sposób
 
-```
+```csharp
 public interface IActiveAware
 {    
     bool IsActive { get; set; }
@@ -73,7 +72,7 @@ public interface IActiveAware
 
 W celu wykorzystania tego interfejsu przez CompositeCommand należy skorzystać z drugiego dostępnego konstruktora tej klasy
 
-```
+```csharp
 CompositeCommand SomeCompositeCommand = new CompositeCommand(true);
 
 ```

@@ -11,7 +11,7 @@ tags:
 
 In my previous [post](http://tpodolak.com/blog/2016/11/02/getting-started-elastic-stack/) I've shown how to configure _Logstash_ so that, it would be able to parse the logs in custom format. Configuration presented in that post had one significant drawback - it wasn't able to parse multiline log entries. This is a rather common scenario, especially when you log exceptions with a stack trace. Log entry, in that case may look as follows
 
-```
+```text
 TimeStamp=2016-11-01 02:08:02.9086 CorrelationId=69dd69bb-3457-4440-8f77-88b1fd39255a Level=ERROR Message=System.InvalidOperationException: Operation is not valid due to the current state of the object.
    at AspNetMvcLoggingWithCorrelationId.Controllers.HomeController.d__2.MoveNext() in E:\Tomek\Programowanie\BlogSrc\AspNetMvcLoggingWithCorrelationId\AspNetMvcLoggingWithCorrelationId\Controllers\HomeController.cs:line 24
 --- End of stack trace from previous location where exception was thrown ---
@@ -35,7 +35,7 @@ TimeStamp=2016-11-01 02:08:02.9086 CorrelationId=69dd69bb-3457-4440-8f77-88b1fd3
 
 Parsing these kind of messages using current configuration will result in grok parsing error [![grokfailure](images/GrokFailure.png)](http://tpodolak.com/blog/wp-content/uploads/2016/11/elastic-stack-parsing-multiline-log-entries/GrokFailure.png) and we won't be able to search against predefined fields. Fortunately _Logstash_ allows you to configure something called _input codecs_ which basically allows you to transform input data into some other form. One of those codes is _multiline codec_, which is responsible for "merging" multiline logs into one entry. Here is example of codec configuration
 
-```
+```text
 codec => multiline {
                        pattern => "^TimeStamp=%{TIMESTAMP_ISO8601}"
                        negate => true
@@ -46,7 +46,7 @@ codec => multiline {
 
 The code above says that any line not starting with a "TimeStamp=timestamp value" should be merged with the previous line. Multiline coded can be added to a variety of inputs. Here is how you can apply it to _file_ input
 
-```
+```text
 input {
     file {
         path => ["E:/Tomek/Programowanie/BlogSrc/ElasticStackParsingMultilineEntries/logs/*.log"]

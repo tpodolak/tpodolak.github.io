@@ -17,7 +17,7 @@ I've been using _Cake_ for quite some time now, and I really like this tool, how
 
 The proper way of providing the code completion for _Cake_ scripts would probably be a plugin to _Omnisharp-Roslyn_, as _Cake_ script is basically a valid c# snippet. Unfortunately, at this moment _Omnisharp-Roslyn_ doesn’t have plugin infrastructure [ready](https://github.com/OmniSharp/omnisharp-roslyn/issues/208), that is why I decided to go with a bit different path. As you might or might not be aware, _VS Code_ already supports _csx_ files, so if you add an empty _project.json_ file (by empty I mean file with empty _JSON_ object) to your build directory and change extension of your scripts to _csx_, you will immediately get a _C#_ syntax highlighting and some _IntelliSense_ support. Sadly this will not provide code completion for _Cake_ method aliases. The reason why it fails on that is the fact that the _Cake_ alias is _ICakeContext_ extension method
 
-```
+```csharp
 [CakeMethodAlias]
 public static T Argument(this ICakeContext context, string name)
 
@@ -25,7 +25,7 @@ public static T Argument(this ICakeContext context, string name)
 
 but you use it as it was written as
 
-```
+```csharp
 [CakeMethodAlias]
 public static T Argument(string name)
 
@@ -95,7 +95,7 @@ There is no point of doing more detailed description in here so if you want to t
 
 Before we start "hacking" _VS Code_ to have _IntelliSense_, we have to prepare metadata libraries which will contain all necessary _Cake_ alias overloads. In order to do that grab the application from [NuGet](https://www.nuget.org/packages/Cake.Intellisense/) and generate _Cake.Common_ and _Cake.Core_ metadata libraries. The simplest way of doing it is to run these commands
 
-```
+```bat
 Cake.Intellisense.exe --Package Cake.Common --PackageVersion 0.19.2 --TargetFramework .NETFramework,Version=v4.5 --OutputFolder C:\Output
 	
 Cake.Intellisense.exe --Package Cake.Core --PackageVersion 0.19.2 --TargetFramework .NETFramework,Version=v4.5 --OutputFolder C:\Output
@@ -118,7 +118,7 @@ Having our metadata libraries prepared now we can adjust our build scripts to ha
 - Copy metadata libraries into your _Build_ directory.
 - Create _imports.csx_ file. This is the file which contains all original namespace imports. It may look as follows
     
-    ```
+    ```csharp
     #load "./metadataImports.csx"
     using Cake.Core;
     using Cake.Core.IO;
@@ -128,7 +128,7 @@ Having our metadata libraries prepared now we can adjust our build scripts to ha
     
 - Create _metadataimports.csx_ file. This is the file which contains metadata namespaces imports and loads _Cake_ and metadata references.
     
-    ```
+    ```csharp
     #r "./tools/Cake/Cake.Core.dll"
     #r "./tools/Cake/Cake.Common.dll"
     #r "./tools/Cake.Metadata/Cake.Core.Metadata.dll"
@@ -142,7 +142,7 @@ Having our metadata libraries prepared now we can adjust our build scripts to ha
     Each original _Cake_ alias class has corresponding metadata class with Metadata suffix, for instance _Cake.Common.ArgumentAliases -> Cake.Common.ArgumentAliasesMetadata_ _Cake.Common.EnvironmentAliases -> Cake.Common.EnvironmentAliasesMetadata_
 - Load _imports.csx_ to your _build.csx_ file via
     
-    ```
+    ```csharp
     #load "./imports.csx"
     
     ```
@@ -150,7 +150,7 @@ Having our metadata libraries prepared now we can adjust our build scripts to ha
 - Run _VS Code_ install _[ms-vscode.csharp 1.7.0](//tpodolak.com/blog/2017/04/09/downgrading-visual-studio-code-extension/)_, open _Build_ directory and write your build script with _IntelliSense_ support [![](images/ButIXBW.gif "source: imgur.com")](http://imgur.com/ButIXBW)
 - Before running the script remember to comment out
     
-    ```
+    ```csharp
     #load "./metadataImports.csx"
     
     ```
@@ -158,7 +158,7 @@ Having our metadata libraries prepared now we can adjust our build scripts to ha
     from _imports.csx_ file
 - Run the build
     
-    ```
+    ```powershell
     build.ps1 -script build.csx -target Your-Target
     
     ```

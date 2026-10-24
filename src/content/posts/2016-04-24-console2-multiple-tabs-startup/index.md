@@ -11,7 +11,7 @@ I've been using _Console2_ for quite some time and as for now it is my favorite 
 
 I can start _Console2_ with all these tabs opened on startup using following command.
 
-```
+```bat
 PATH_TO_CONSOLE\Console.exe -t Git -t Cmd -t Powershell
 
 ```

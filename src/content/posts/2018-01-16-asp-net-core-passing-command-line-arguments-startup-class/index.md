@@ -15,7 +15,7 @@ I usually pass configuration to my web API via JSON files, but recently I needed
 
 For the newest version of _ASP.NET Core_, the solution is pretty straightforward as _IConfiguration_ is injected by default to the _Startup_ class. All we have to do is to add _CommandLineConfigurationSource_ to _IConfigurationBuilder_ when configuring _IWebHost_. _CommandLineConfigurationSource_ is part of the _Microsoft.Extensions.Configuration.CommandLine_ package and can be easily used by _AddCommandLine_ extension method
 
-```
+```csharp
 public class Program
 {
     public static void Main(string[] args)
@@ -45,7 +45,7 @@ public class Program
 
 Now we can access our command-line arguments just like any other configuration
 
-```
+```csharp
 public class Startup
 {
     private readonly IConfiguration _configuration;
@@ -84,7 +84,7 @@ public class Startup
 
 The solution for _ASP.NET Core 1.x_ requires a bit more work but it is possible to achieve the same result. We still will be using _CommandLineConfigurationSource_ from _Microsoft.Extensions.Configuration.CommandLine_ package, however this time we have to manually create _IConfiguration_ object and register it in the container before the _Startup_ class is created. This is possible because the _WebHostBuilder_ exposes _ConfigureServices_ method.
 
-```
+```csharp
 public class Program
 {
     public static void Main(string[] args)
@@ -106,7 +106,7 @@ public class Program
 
 Having our service registered now we can easily access _IConfiguration_ object in our application
 
-```
+```csharp
 public class Startup
 {
     // This method gets called by the runtime. Use this method to add services to the container.

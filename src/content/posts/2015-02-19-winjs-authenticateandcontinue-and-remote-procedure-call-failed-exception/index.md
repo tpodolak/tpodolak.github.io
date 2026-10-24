@@ -14,7 +14,7 @@ tags:
 
 A while ago I started playing around a bit with _JavaScript_ on _Windows Phone_. I wanted to create very simple app using AngularJS but of course I also had to use some _WinJS_ features (for integration with device ). One of the things I needed to implement was authentication/authorization using _OAuth_. According to _WinJS_ [documentation](https://msdn.microsoft.com/pl-pl/library/dn608114.aspx) it should be pretty straightforward - just use _Windows.Security.Authentication.Web.WebAuthenticationBroker.authenticateAndContinue_ method with appropriate URLs. Of course I wanted authentication/authorization to be called before navigating to any screen, so I slightly modified default _WinJS_ template and my code looked like that
 
-```
+```javascript
 // rest of code omitted for brevity
 var activation = Windows.ApplicationModel.Activation,
     app = WinJS.Application,
@@ -52,14 +52,14 @@ Unfortunately all I got was this strange exception [![remote procedure call fail
 
 The exception itself originated somewhere from _WinJS_ framework so I wasn't able to debug it at all. It took me a while to figure this out but after all it turned out, that all you have to do, to make it work is to "schedule" call of _AuthenticateAndContinue_ method using _WinJS.Utilities.Scheduler_
 
-```
+```javascript
 WinJS.Utilities.Scheduler.schedule(function(){ //your code in here});
 
 ```
 
 After this change entire code listing looks like that
 
-```
+```javascript
 // rest of code omitted for brevity
 var activation = Windows.ApplicationModel.Activation,
    app = WinJS.Application,

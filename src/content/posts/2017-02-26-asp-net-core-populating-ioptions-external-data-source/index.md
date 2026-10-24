@@ -15,7 +15,7 @@ In _ASP.NET Core_ _web.config_ is no longer a proper place for storing applicati
 
 Let's assume that our _appsettings.json_ file looks as follows.
 
-```
+```json
 {
     "Logging": {
         "IncludeScopes": false,
@@ -35,7 +35,7 @@ Let's assume that our _appsettings.json_ file looks as follows.
 
 Thanks to _ConfigurationBuilder_ we can parse this config and later on materialize sections or entire file into strongly typed configuration classes. Let's say we want to parse _AvailabilitySearchOptions_ node to following class
 
-```
+```csharp
 public class AvailabilitySearchOptions
 {
     public int FlexDaysIn { get; set; }
@@ -51,7 +51,7 @@ public class AvailabilitySearchOptions
 
 We can achieve that with following steps. First of all, we need to read entire configuration
 
-```
+```csharp
 public IConfigurationRoot Configuration { get; }
 
 public Startup(IHostingEnvironment env)
@@ -68,7 +68,7 @@ public Startup(IHostingEnvironment env)
 
 And in the next step we have to register _IOptions<AvailabilitySearchOptions>_ in the container using _services.Configure<TOptions>(IConfiguration section)_ method
 
-```
+```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
 {
@@ -81,7 +81,7 @@ public void ConfigureServices(IServiceCollection services)
 
 Note _Configuration.GetSection("AvailabilitySearchOptions")_ passed as argument to _services.Configure_ method. From now on we can access _AvailabilitySearchOptions_ settings via _IOptions<AvailabilitySearchOptions>_ interface, which you can easily inject into your classes.
 
-```
+```csharp
 [Route("api/[controller]")]
 public class OptionsController : Controller
 {
@@ -104,7 +104,7 @@ public class OptionsController : Controller
 
 From time to time, reading configuration just from JSON file might not be enough and for instance you would like to add additional configuration read from some external data source. Fortunately you don't have to resign from the _IOptions<T>_ class as it is possible to read additional data for literally any other source thanks to _IConfigureOptions<T>_ class. All we have to do is to create a setup class which implements _IConfigureOptions<T>_ interface
 
-```
+```csharp
 public class AvailabilitySearchOptionsSetupService : IConfigureOptions
 {
     private readonly ILogger logger;
@@ -127,7 +127,7 @@ public class AvailabilitySearchOptionsSetupService : IConfigureOptions
 
 And then registering this class in our container
 
-```
+```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
 {

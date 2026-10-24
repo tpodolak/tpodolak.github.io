@@ -17,7 +17,7 @@ tags:
 
 Although _ECMAScript6_ has not been officially released yet, we can play around with new language features today. There are tools such as _Traceur_ or _Babel_ which are able to convert _ECMAScript6_ into _ECMASciprt5_, thus we are able to run the code in every browser. So let's try to run the snippet below, which leverages [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)using those tools
 
-```
+```javascript
 (function () {
     var obj = {
         firstProp: 1,
@@ -45,7 +45,7 @@ Although _ECMAScript6_ has not been officially released yet, we can play around 
 
 I'll start from _Traceur_ first. First of all we have to install it, so run in console (I am using gulp as my build system)
 
-```
+```bash
 npm install gulp-traceur --save-dev
 
 ```
@@ -58,7 +58,7 @@ Then we have to write simple gulp task which:
 - concatenates the result into single file
 - generates source maps (for debugging proposes)
 
-```
+```javascript
 var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
 var traceur = require('gulp-traceur');
@@ -79,14 +79,14 @@ return gulp.src('app/*.js')
 
 Having our result file ready, now we can add a script tag in html pointing to _app.all.js_. However at this point in the runtime we will get an error.
 
-```
+```text
 $traceurRuntime is not defined
 
 ```
 
 [![ECMAScript6 today](images/runtimeerror.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/runtimeerror.png) Quick look at the generated _app.all.js_ file reveals the problem
 
-```
+```javascript
 "use strict";
 (function() {
   var $__1,
@@ -118,7 +118,7 @@ $traceurRuntime is not defined
 
 Transpiled code has references to _$traceurRuntime_ objects, so in order to make our code work, we have to add additional script tag pointing to _traceur-runtime.js_. You can easily get the sources with _bower_, just run in console
 
-```
+```bash
 npm install bower --save-dev
 bower install  traceur-runtime
 
@@ -130,12 +130,12 @@ Now everything should work and in console we'll get expected result [![ECMAScrip
 
 Let's modify our gulp build script to use _Babel_ instead of _Traceur_
 
-```
+```bash
 npm install gulp-babel --save-dev
 
 ```
 
-```
+```javascript
 var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
 var babel= require('gulp-babel');
@@ -156,7 +156,7 @@ return gulp.src('app/*.js')
 
 And basically that all, we are ready to go. _Babel_ doesn't require any runtime dependencies, generated code is simple
 
-```
+```javascript
 'use strict';
 
 (function () {

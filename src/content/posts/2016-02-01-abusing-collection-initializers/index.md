@@ -11,7 +11,7 @@ tags:
 
 Most of .NET developers are familiar with collection initializers syntax. Long story short, this language feature allows you to replace this ugly syntax
 
-```
+```javascript
 var numbers = new List();
 numbers.Add(1);
 numbers.Add(2);
@@ -22,14 +22,14 @@ numbers.Add(4);
 
 with much shorter and cleaner one
 
-```
+```javascript
 var numbers = new List { 1, 2, 3, 4 };
 
 ```
 
 The more interesting thing is the fact that you can leverage this syntax not only for build-in collections but also for your custom classes. In order to do that your class must implement _IEnumerable_ interface and expose public _Add_ method. Let's assume that we have some real case scenario and we have class which looks like that
 
-```
+```csharp
 public class StatusMessages : IEnumerable
 {
     private List messages = new List();
@@ -70,7 +70,7 @@ public class StatusMessage
 
 This is a simple wrapper over the List. At this moment we can't use collection initializer when constructing objects of this classs. However by adding method _Add_
 
-```
+```csharp
 public class StatusMessages : IEnumerable
 {
     // rest of the code omitted for brevity
@@ -85,7 +85,7 @@ public class StatusMessages : IEnumerable
 
 we can create a new instance of that class just like we would do with _List_
 
-```
+```javascript
 var messagesAddInitializer = new StatusMessages
             {
                 new StatusMessage("y"),
@@ -96,7 +96,7 @@ var messagesAddInitializer = new StatusMessages
 
 What is more, it is possible to have multiple overloads of _Add_ method in our class, so for instance if we add
 
-```
+```csharp
 public class StatusMessages : IEnumerable
 {
     // rest of the code omitted for brevity
@@ -111,7 +111,7 @@ public class StatusMessages : IEnumerable
 
 we are able to use this syntax
 
-```
+```javascript
 var messagesAddStringInitializer = new StatusMessages
             {
                 "y",
@@ -122,7 +122,7 @@ var messagesAddStringInitializer = new StatusMessages
 
 In addition it is even possible to use a mix of _Add_ overloads
 
-```
+```javascript
 var messagesAddAndTextInitializers = new StatusMessages
             {
                 new StatusMessage("y"),
@@ -133,7 +133,7 @@ var messagesAddAndTextInitializers = new StatusMessages
 
 _Add_ method can also have multiple arguments
 
-```
+```csharp
 public class StatusMessages : IEnumerable
 {
     // rest of the code omitted for brevity
@@ -153,7 +153,7 @@ public class StatusMessages : IEnumerable
 
 in that case we are able to use this syntax
 
-```
+```javascript
 var messagesMultipleArgumentsInitializers = new StatusMessages
             {
                 { 1, "x" },
@@ -164,7 +164,7 @@ var messagesMultipleArgumentsInitializers = new StatusMessages
 
 The last thing I would like to point out is that _Add_ function doesn't have to be an instance method, we can easily implement it as an extension method and still leverage the collection initializer syntax.
 
-```
+```csharp
 namespace AbusingCollectionInitializers
 {
     public static class StatusMessagesExtensions
@@ -180,7 +180,7 @@ namespace AbusingCollectionInitializers
 
 Now with proper namespace import we can write this code
 
-```
+```csharp
 using AbusingCollectionInitializers;
 // rest of the code omitted for brevity
 var messagesExtensionInitializers = new StatusMessages { 1,2,3 };

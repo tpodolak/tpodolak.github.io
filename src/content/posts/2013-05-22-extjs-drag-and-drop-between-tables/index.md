@@ -18,55 +18,54 @@ This class has two important methods. The first one is _getTargetFromEvent_ whic
   
 Having covered the basics, let's try to implement drag-drop operation. Let's start from creating simple container with two tables.
 
-```
+```javascript
 Ext.define('GeneralLearning.views.DragAndDropView', {
     extend:'Ext.container.Container',
     renderTpl:Ext.create('Ext.Template',
-     '',
-        '',
-             '',
-                '',
-                '',
-             '',
-            '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-        'ab12491625',
-        '',
-             '',
-                '',
-                '',
-             '',
-             '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-        'ab12491625',
-    '')
+     '<div id="table_container">',
+        '<table id="leftTable" style="margin: 20px 20px">',
+             '<tr>',
+                '<th>a</th>',
+                '<th>b</th>',
+             '</tr>',
+            '<tr>',
+                '<td>1</td>',
+                '<td>2</td>',
+            '</tr>',
+            '<tr>',
+                '<td>4</td>',
+                '<td>9</td>',
+            '</tr>',
+            '<tr>',
+                '<td>16</td>',
+                '<td>25</td>',
+            '</tr>',
+        '</table>',
+        '<table id="rightTable" style="margin: 20px 20px">',
+             '<tr>',
+                '<th>a</th>',
+                '<th>b</th>',
+             '</tr>',
+             '<tr>',
+                '<td>1</td>',
+                '<td>2</td>',
+            '</tr>',
+            '<tr>',
+                '<td>4</td>',
+                '<td>9</td>',
+            '</tr>',
+            '<tr>',
+                '<td>16</td>',
+                '<td>25</td>',
+            '</tr>',
+        '</table>',
+    '</div>')
 })
-
 ```
 
 In the next step we will create DragZone and DropZone.
 
-```
+```javascript
  createDragDropZones:function () {
         var me = this,
             rightTable = me.el.select('#rightTable').first(),
@@ -115,7 +114,7 @@ In the next step we will create DragZone and DropZone.
 
 As You cas see _DragZone_ was created on the right table. I want to be able to drag only _td_ elements, that is why function _getDragData_ returns null, if drag operation was originated from other HTML element. Extjs will take care of showing approperiate animation, if drag-drop is available. I also overrode _getRepairXY_ method, which is responsible for providing _X_ and _Y_ coordinates for animation, which is fired in case of invalid drop off. The code responsible for handling drop operation is a little bit more complicated. After creating a _DropZone_ from left table, I ovverode _getTargetFromEvent_ method, so as to drop could be performed only to _td_ elements of table. What is more, using _onNodeEnter_ and _onNodeOut_ methods I changed target elements of the drop, to show user where given element will be placed. Actual drop is performed in _onNodeDrop_ method, in my case I just replace HTML node form original one to dropped. Here is a result: [![drag-and-drop](images/dragdrop.gif)](http://tpodolak.com/blog/wp-content/uploads/2013/05/extjs-drag-and-drop-between-tables/dragdrop.gif) Entire code listing looks like that:
 
-```
+```css
  #table_container table { border: 1px solid black;float:left;width:400px;}
  #table_container td, #table_container th   { border: 1px solid black;}
  
@@ -126,48 +125,48 @@ As You cas see _DragZone_ was created on the right table. I want to be able to d
 
 ```
 
-```
+```javascript
 Ext.define('GeneralLearning.views.DragAndDropView', {
     extend:'Ext.container.Container',
     renderTpl:Ext.create('Ext.Template',
-     '',
-        '',
-             '',
-                '',
-                '',
-             '',
-            '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-        'ab12491625',
-        '',
-             '',
-                '',
-                '',
-             '',
-             '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-            '',
-                '',
-                '',
-            '',
-        'ab12491625',
-    ''),
+     '<div id="table_container">',
+        '<table id="leftTable" style="margin: 20px 20px">',
+             '<tr>',
+                '<th>a</th>',
+                '<th>b</th>',
+             '</tr>',
+            '<tr>',
+                '<td>1</td>',
+                '<td>2</td>',
+            '</tr>',
+            '<tr>',
+                '<td>4</td>',
+                '<td>9</td>',
+            '</tr>',
+            '<tr>',
+                '<td>16</td>',
+                '<td>25</td>',
+            '</tr>',
+        '</table>',
+        '<table id="rightTable" style="margin: 20px 20px">',
+             '<tr>',
+                '<th>a</th>',
+                '<th>b</th>',
+             '</tr>',
+             '<tr>',
+                '<td>1</td>',
+                '<td>2</td>',
+            '</tr>',
+            '<tr>',
+                '<td>4</td>',
+                '<td>9</td>',
+            '</tr>',
+            '<tr>',
+                '<td>16</td>',
+                '<td>25</td>',
+            '</tr>',
+        '</table>',
+    '</div>'),
 
     initComponent:function () {
         var me = this;
@@ -218,7 +217,6 @@ Ext.define('GeneralLearning.views.DragAndDropView', {
         })
     }
 })
-
 ```
 
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/ExtjsDragDrop)

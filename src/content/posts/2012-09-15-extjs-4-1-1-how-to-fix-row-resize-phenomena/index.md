@@ -13,12 +13,12 @@ tags:
 
 Recently I've encountered annoying problem with extjs grid. After hiding columns with long wrapped text, height of rows was dramatically increased. Here are some screens presenting this particular situation. Grid with all columns shown; [![problembeforeshow](images/problembeforeshow.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-how-to-fix-row-resize-phenomena/problembeforeshow.jpg) and grid with one column hidden [![row resize](images/problemaftershow.png)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-how-to-fix-row-resize-phenomena/problemaftershow.png) The code responsible for rendering this grid is shown below
 
-```
+```css
 .x-grid-cell-inner { white-space: normal; }
 
 ```
 
-```
+```javascript
 Ext.onReady(function () {
         Ext.QuickTips.init();
         var store = Ext.create('Ext.data.Store', {
@@ -74,7 +74,7 @@ Ext.onReady(function () {
 
 After some digging, it turned out that Extjs hides columns by setting their width to 0px. In order to solve this problem and preverse text wrap in cells, I implemented small workaround. Let's start from creating CSS class which disables word wrapping in grid cells.
 
-```
+```css
 .noWrap .x-grid-cell-inner {white-space: nowrap;}
 
 ```
@@ -86,7 +86,7 @@ Next, we have to start listening for two events
 
 In handlers of these events, we have to modify _tdCls_ property of hidden column - add _noWrap_ class, if column is hidden and delete this class otherwise.
 
-```
+```javascript
 grid.headerCt.on({
             columnhide: function (headerCt, column) {
                 column.tdCls = "noWrap";
@@ -103,7 +103,7 @@ grid.headerCt.on({
 
 From now hiding and showing columns works fine [![fixedAfterHide](images/fixedAfterHide.png)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-how-to-fix-row-resize-phenomena/fixedAfterHide.png) Entire code listing is presented below
 
-```
+```javascript
 Ext.onReady(function () {
         Ext.QuickTips.init();
         var store = Ext.create('Ext.data.Store', {

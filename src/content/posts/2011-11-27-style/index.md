@@ -13,7 +13,7 @@ tags:
 
 Style jest to mechanizm wprowadzony w WPF-ie, a następnie w Silverlighcie, dzięki któremu w łatwy sposób można ujednolicić wygląd elementów naszej aplikacji. Style z reguły definiowane są w zasobach. Mogą to być zarówno zasoby całej aplikacji, danego okna lub nawet wybranej kontrolki. Przykładowy styl może wyglądać w następujący sposób:
 
-```
+```xml
 
     <Setter Property="Button.FontSize" Value="22" />
     <Setter Property="Button.Background" Value="Orange" />
@@ -28,7 +28,7 @@ Każdy styl jest rozpoznawany dzięki unikalnemu kluczowi - parametr x:Key. Moż
 
 Dla przykłady - następujący styl:
 
-```
+```xml
 
     <Setter Property="Button.FontSize" Value="22" />
 
@@ -36,7 +36,7 @@ Dla przykłady - następujący styl:
 
 ustawi rozmiar czcionki na buttonie na 22 pkt. Jako, że nie została ustawiona właściwość TargetType dla stylu, musimy podawać pełną nazwę właściwości(czyli nazwę klasy oraz nazwę właściwości). Oczywiście możemy również ustawiać bardziej skomplikowane właściwości
 
-```
+```xml
 
     <Setter Property="RenderTransform">
         <Setter.Value>
@@ -50,7 +50,7 @@ W przypadku gdybyśmy pisali w Silverlighcie właściwość TargetType ustawia s
 
 Właściwość TargetType określa nam dla jakiego typu obiektów(kontrolek) dany typ jest przeznaczony. Styl z pierwszego przykładu można zapisać następująco:
 
-```
+```xml
 
     <Setter Property="FontSize" Value="22" />
 
@@ -62,7 +62,7 @@ Dziedziczenie styli
 
 Style mogą być dziedziczone. Oznacza to tyle, że styl pochodny będzie rozszerzał styl bazowy. W przypadku gdy styl bazowy ma zdefiniowany TargetType, styl dziedziczący nie może go zmienić. W celu zdefiniowania dziedziczenia używa się właściwości BasedOn. Przykładowe dziedziczenie styli pokazano poniżej
 
-```
+```xml
 
     <Setter Property="FontSize" Value="12" />
     <Setter Property="Background" Value="Orange" />

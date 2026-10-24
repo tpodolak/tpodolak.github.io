@@ -15,7 +15,7 @@ Last week while I was working on one of the features for my current project, I n
 
 Just like everyone else, we store our application settings in _JSON_ file. The settings are pretty straightforward, just a bunch of properties with some nested objects
 
-```
+```json
 {
     "PaymentMethods": [
         {
@@ -42,7 +42,7 @@ Just like everyone else, we store our application settings in _JSON_ file. The s
 
 which are bound to the _AppSetting_ class thanks to these couple of lines of code
 
-```
+```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
 {            
@@ -55,7 +55,7 @@ public void ConfigureServices(IServiceCollection services)
 
 where _AppSettings_ class looks as follows
 
-```
+```csharp
 public class AppSettings
 {
     public List PaymentMethods { get; set; }
@@ -72,7 +72,7 @@ public class PaymentMethod
 
 As you can see nothing too fancy in here, standard _ASP.NET Core_ approach for handling configuration files. However, if you access the _PaymentMethods_ property of _IOptions<AppSettings>_
 
-```
+```csharp
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
@@ -99,7 +99,7 @@ you will see that instead of four elements we ended up having 3 items [![](image
 
 If you look closely at the appsettings.json file you will notice that a "Visa" item configuration is a bit different than the ones which are parsed just fine. Namely _null_ is assigned to _excludedCurrencies_ property, whereas in other items an empty array or no property at all is used. So the first fix is just to use the same approach as in the other items
 
-```
+```json
 {
     "Name": "Visa",
     "ExcludedCurrencies": []

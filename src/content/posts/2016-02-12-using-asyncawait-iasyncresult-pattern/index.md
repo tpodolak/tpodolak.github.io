@@ -11,7 +11,7 @@ tags:
 
 Even though in my current project we use .NET 4.5 we still have lots of references to internal libraries targeting .NET 4.0. Usually it is not a problem, however some of these libraries follow [Asynchronous Programming Model](https://msdn.microsoft.com/pl-pl/library/jj152938\(v=vs.110\).aspx) pattern. This approach makes the code quite ugly because we end up with lots of nested callbacks.
 
-```
+```csharp
 // rest of the code omitted for brevity
 private static void GetHostEntryIAsyncResultPattern()
 {
@@ -33,14 +33,14 @@ private static void GetHostEntryIAsyncResultPattern()
 
 Fortunately thanks to
 
-```
+```csharp
 Task.Factory.FromAsync
 
 ```
 
 method it is possible to quite easily make Begin/End methods work with async/await pattern. All you have to do is to pass Begin/End methods as an arguments to [Task.Factory.FromAsync](https://msdn.microsoft.com/en-us/library/system.threading.tasks.taskfactory.fromasync\(v=vs.110\).aspx) and you are good to go. The original code after refactoring looks like that
 
-```
+```javascript
 // rest of the code omitted for brevity
 var dnsService = new DnsService();
 var googleHostResult = await Task.Factory.FromAsync((callback, stateObject) => dnsService.BeginGetHostEntry(GoogleHost, callback, stateObject), dnsService.EndGetHostEntry, null);

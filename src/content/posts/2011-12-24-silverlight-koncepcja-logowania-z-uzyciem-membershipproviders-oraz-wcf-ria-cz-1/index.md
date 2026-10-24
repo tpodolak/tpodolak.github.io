@@ -42,7 +42,7 @@ Mając stworzony szkielet aplikacji możemy zabrać się za napisanie własnego 
 
 Nasza właśnie dodana klasa powinna wyglądać mniej więcej w taki sposób
 
-```
+```csharp
 namespace MainModule.Web
 {
     using System;
@@ -64,7 +64,7 @@ namespace MainModule.Web
 
 W następnym kroku zaimplementujmy w klasie CustomAuthenticationService interfejs IAuthentication where T: IUser. Interfejs ten wygląda w następujący sposób:
 
-```
+```csharp
 public interface IAuthentication where T: IUser
 {
     T GetUser();
@@ -77,7 +77,7 @@ public interface IAuthentication where T: IUser
 
 Widzimy zatem, że zanim go zaimplementujemy musimy posiadać obiekt implementujący inny interfejs - IUser. Przystąpmy zatem do stworzenia naszej klasy modelującej użytkownika - nazwijmy ją UserDTO.Stwórzmy nowy projekt typu "Class library". W projekcie tym stwórzmy klasę UserDTO, która będzie dziedziczyła po klasie UserBase znajdującej się w przestrzeni nazw System.ServiceModel.DomainServices.Server.ApplicationServices
 
-```
+```csharp
 public class UserDTO : UserBase
 {
     public string Email { get; set; }
@@ -88,7 +88,7 @@ public class UserDTO : UserBase
 
 Mając gotową klasę reprezentującą użytkownika zaimplementujmy w końcu w klasie CustomAuthenticationService interfejs IAuthentication. Po implementacji interfejsu nasz serwis wygląda w następujący sposób:
 
-```
+```csharp
 [EnableClientAccess()]
 public class CustomAuthenticationService: DomainService, IAuthentication
 {
@@ -123,7 +123,7 @@ następnie dorzucamy do kolekcji providerów SqlMembershipProvider
 
 We wpisach tych dorzuciliśmy możliwość autentykacji poprzez providery, ustawiliśmy SqlMembershipProvider jako domyślny provider, oraz dorzuciliśmy go do listy wszystkich providerów. W celu sprawdzenia czy nasza konfiguracja jest poprawna możemy posłużyć się mechanizmem dostarczonym nam przez Visual Studio. Klikamy "Projekt", a następnie ASP.NET Configuration [![ASPConfiguration](images/ASPConfiguration.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-1/ASPConfiguration.jpg) Zostaniemy przeniesieni do domyślnej przeglądarki internetowej, a naszym oczom ukaże się następująca strona. [![AdminTool](images/AdminTool.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-1/AdminTool.jpg) Z poziomu tej stronki możemy dodawać użytkowników, przydzielać im role itp, dzięki czemu możemy szybko sprawdzić czy podstawowe funkcje naszego providera działają, oraz czy nasza konfiguracja została przeprowadzona prawidłowo. Wracając natomiast do naszego systemu logowania, pozostało nam jedynie odpowiednio zmodyfikować funkcję odpowiedzialną za logowanie.Robimy to w następujący sposób:
 
-```
+```csharp
 protected  UserDTO ValidateCredentials(string name, string password, string customData, out string userData)
 {
     UserDTO user = null;
@@ -170,7 +170,7 @@ public UserDTO Login(string userName, string password, bool isPersistent, string
 
 W funkcji ValidateCredentials odbywa się sprawdzanie czy użytkownik podał właściwe hasło oraz login. Do walidacji wykorzystujemy dodany wcześniej SqlMembershipProvider - właściwość Membership.Provider zawsze zwraca obiekt domyślnie zdefiniowanego providera. W przypadku gdy walidacja się powiedzie tworzymy obiekt użytkownika, a następnie tworzymy i szyfrujemy FormsAuthenticationTicket oraz tworzymy ciasteczko (cookie), które przesyłamy w responsie wysyłanym przez serwer do klienta. Mechanizm logowania jest już prawie gotowy. Musimy jedynie zaimplementować jeszcze pozostałe funkcje interfejsu IAuthentication.Nie ma raczej w nich nic trudnego
 
-```
+```csharp
 
 public UserDTO Logout()
 {

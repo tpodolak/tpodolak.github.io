@@ -15,7 +15,7 @@ _XUnit_ provides two ways of sharing data between tests - _ICollectionFixture_ a
 
 _Xunit.assemblyfixture_ allows you to share data between tests in given assembly via _IAssemblyFixture_ interface. The usage is basically the same as in other _XUnit's_ fixtures. All we have to do is to create a class which instance we want to share with other tests
 
-```
+```csharp
 public class TestFixture : IDisposable
 {
     public static int InitializationCounter { get; private set; }
@@ -35,7 +35,7 @@ public class TestFixture : IDisposable
 
 And then create test classes which implement _IAssemblyFixture_ interface. If we want to have access to the fixture from the tests, we can inject instance of _TFixture_ via constructor
 
-```
+```csharp
 public class TestBase : IAssemblyFixture
 {
     protected readonly ITestOutputHelper TestOutputHelper;
@@ -61,7 +61,7 @@ _Xunit.assemblyfixture_ fixture will ensure that given test class is shared via 
 
 As for now _VS 2017 RC_ requires beta runners of _XUnit_ in order to run our unit tests. _xunit.assemblyfixture_ seems not to cooperate with them smoothly. However, there is a simple workaround to fix that. All we have to do is to add the following attribute to our test project
 
-```
+```csharp
 [assembly: TestFramework("Xunit.TestFramework", "xunit.assemblyfixture")]
 
 ```

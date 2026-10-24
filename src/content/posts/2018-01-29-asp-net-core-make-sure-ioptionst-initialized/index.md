@@ -15,7 +15,7 @@ As most people know _IOptions<T>_ is a convenient way of handling configuration 
 
 Let's say we have a simple controller which depends on two instances of _IOptions<T>_
 
-```
+```csharp
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
@@ -43,7 +43,7 @@ public class ValuesController : Controller
 
 Then we add only _IOptions_ in Startup class - _IOptions<PaymentOptoins>_
 
-```
+```csharp
 public class Startup
 {
     // Rest of the code omitted for brevity
@@ -61,7 +61,7 @@ public class Startup
 
 Now, when we run the app and hit one of the endpoints in _ValuesController_ I was expecting to get an exception, as I didn't register _IOptions<NotificationOptions>_. Surprisingly for me, the application was running normally and _IOptions<NotificationOptions>_ was created with the new instance of _NotificationOptions_ class(with all the properties defaulted). [![](images/NotInitialized.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/NotInitialized.png) In order to find out why it behaves like that we have to take a look how services responsible for handling _IOptions<T>_ are registered in the container.
 
-```
+```csharp
 public static IServiceCollection AddOptions(this IServiceCollection services)
 {
     if (services == null)
@@ -79,7 +79,7 @@ public static IServiceCollection AddOptions(this IServiceCollection services)
 
 As you can see _AddOptions_ method registers open generics for (among others) _IOptions<>_ which means that you don’t have to register specific types of _IOptions<T>_, however, you are responsible for its configuration with
 
-```
+```csharp
 services.Configure(Configuration.GetSection("Section"));
 
 ```
@@ -90,7 +90,7 @@ I was always convinced that _services.Configure_ registers and configure _IOptio
 
 As these kind of errors are rather difficult to catch(at least in case of our application) I wanted to minimize the risk of doing the same bug again. The idea was to make sure that at least one _IConfigureOptions<T>_ or _IPostConfigureOptions<T>_ service is registered in the container (as these are the services which are responsible for setting the values of T class). My first approach was to replace default _OptionsFactory<T>_ with a custom one
 
-```
+```csharp
 public class ValidatableOptionsFactory : OptionsFactory where TOptions : class, new()
 {
     private static readonly string NamespacePrefix = typeof(Program).Namespace.Split('.').First();
@@ -119,7 +119,7 @@ public class Startup
 
 This method works fine (although probably needs smarter TOptions filter) [![](images/ValidatableOptionsFactory.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/ValidatableOptionsFactory.png) however I got to conclusion that there is no point to do validation in a runtime, and the integration test might be a better choice. I came up with following code (I am assuming that all configuration options are stored in the same assembly, as this is convention in my project)
 
-```
+```csharp
 public class OptionsTests
 {
     private readonly Lazy _webHost = new Lazy(Program.BuildWebHost(null));

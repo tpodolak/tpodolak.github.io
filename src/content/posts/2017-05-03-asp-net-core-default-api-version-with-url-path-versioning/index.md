@@ -16,7 +16,7 @@ When you start versioning your _API_ sometimes you want to have access to your e
 
 Let's start with the initial setup of _API_ versioning which will work for every type of versioning apart from url path versioning. All you have to do is to assign an _ApiVersionSelector_ and set the _AssumeDefaultVersionWhenUnspecified_ property to true.
 
-```
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     // Add framework services.
@@ -36,7 +36,7 @@ Now when the user will try to access the endpoint without specifying version exp
 
 Running the same configuration against controllers which are versioned via url path (not query string)
 
-```
+```csharp
 namespace AspNetCoreDefaultApiVersionAndRoutePrefix.Controllers.V1
 {
     [Route("v{version:apiVersion}/[controller]")]
@@ -71,7 +71,7 @@ namespace AspNetCoreDefaultApiVersionAndRoutePrefix.Controllers.V2
 
 will result with _404_ status code, as routing is not able to match the url. [![404](images/404.png)](//tpodolak.com/blog/wp-content/uploads/2017/05/asp-net-core-default-api-version-with-url-path-versioning/404.png) Fortunately, unlike the _ASP.NET Web API_, _ASP.NET Core_ allows us to have multiple route attributes applied to given controller, so in order to fix the issue we just have to add
 
-```
+```csharp
 [Route("[controller]")]
 
 ```
@@ -82,7 +82,7 @@ attribute to versioned controllers. From now on we can access our _API_ without 
 
 If you don’t want to specify default route manually for every controller, you can do it via application model convention. The interesting thing about it is the fact that apart from changing existing values of application model we can also add new items to it. This means that we can add additional _SelectorModel_ with our default route to _Selectors'_ collection
 
-```
+```csharp
 public class DefaultRoutePrefixConvention : IApplicationModelConvention
 {
     public void Apply(ApplicationModel application)
@@ -104,7 +104,7 @@ public class DefaultRoutePrefixConvention : IApplicationModelConvention
 
 Now we can get rid of _\[Route("\[controller\]")\]_ attribute from our versioned controllers and just rely on convention which can be added as follows
 
-```
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     // rest of the code omitted for brevity 

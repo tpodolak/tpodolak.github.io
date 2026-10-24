@@ -16,7 +16,7 @@ Our current _API_ runs on [Nancy](https://github.com/NancyFx/Nancy) which in my 
 
 Before I jump into implementation, here is a sample _Nancy API_ with two endpoints - _products_ and _variants_
 
-```
+```csharp
 public class Startup
 {
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -34,7 +34,7 @@ public class Startup
 
 ```
 
-```
+```csharp
 public sealed class ProductsNancyModule : NancyModule
 {
     public ProductsNancyModule()
@@ -49,7 +49,7 @@ public sealed class ProductsNancyModule : NancyModule
 
 ```
 
-```
+```csharp
 public sealed class VariantsNancyModule : NancyModule
 {
     public VariantsNancyModule()
@@ -70,14 +70,14 @@ The goal is to replace _products_ endpoint with _ASP.NET Core_ implementation wh
 
 The solution is based on [branching](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1#branch-the-middleware-pipeline) the pipeline feature which is available starting from _ASP.NET Core_ 2.1. Long story short - it is possible to configure different pipelines for different route paths thanks to
 
-```
+```csharp
 public static IApplicationBuilder Map(this IApplicationBuilder app, PathString pathMatch, Action configuration)
 
 ```
 
 method. Having that in mind we can \`Map\` _products_ path to run through _ASP.NET Core_ pipeline whereas the rest would go through _Nancy_.
 
-```
+```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
 {
@@ -104,7 +104,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 
 ```
 
-```
+```csharp
 [ApiController]
 public class ProductsController : ControllerBase
 {
@@ -123,7 +123,7 @@ public class ProductsController : ControllerBase
 
 At this point we are almost there, however running request through _Map_ pipeline will remove the path prefix, meaning that our controller would be accessible under _/_ path instead of _products_. In order to bypass this limitation we have to restore original prefix with _RewriteMiddleware_. Once we put it all together, now we are able to replace multiple _Nancy_ endpoints with _ASP.NET Core_ ones using following piece of code
 
-```
+```csharp
 // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 {

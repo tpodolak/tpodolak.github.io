@@ -11,7 +11,7 @@ tags:
 
 I think most of developers are familiar with the object syntax initializer, which basically allows you to set up values of properties just like that
 
-```
+```javascript
 var webClient = new CustomWebClient
             {
                 Settings = new CustomWebClientSettings
@@ -25,7 +25,7 @@ var webClient = new CustomWebClient
 
 In this example the _Settings_ property is assigned with new instance of _CustomWebClientSettings_ class. However for time to time we only want to change particular property of given nested property and leave rest of the object intact. Of course we can write it usual way
 
-```
+```javascript
 // we assume that CustomWebClient initialized Settings property in constructor
 var webClient = new CustomWebClient();
 webClient.Settings.Encoding = "UTF-8";
@@ -35,7 +35,7 @@ webClient.Settings.Method = "POST";
 
 but there is a much cooler syntax for that. The code above can be rewritten to
 
-```
+```javascript
 var webClient = new CustomWebClient
             {
                  Settings = {Encoding = "UTF-8", Method = "POST"}

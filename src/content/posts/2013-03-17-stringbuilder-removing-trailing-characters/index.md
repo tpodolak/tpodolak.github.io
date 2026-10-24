@@ -12,7 +12,7 @@ tags:
 
 Today just quick tip about _StringBuilder_ I used to remove last character(s) from _StringBuilder_ using _Remove_ method.
 
-```
+```csharp
  StringBuilder builder = new StringBuilder("some long text with comma,");
  builder.Remove(builder.Length - 1, 1);
 
@@ -20,7 +20,7 @@ Today just quick tip about _StringBuilder_ I used to remove last character(s) fr
 
 However, recently I've came accross even simpler solution. You just need to lessen the _Length_ property of StringBuilder, in order to get rid of last characters
 
-```
+```csharp
 StringBuilder builder = new StringBuilder("some long text with comma,");
 builder.Length--;
 

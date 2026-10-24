@@ -28,21 +28,21 @@ Na potrzeby mechanizmu lokalizowania aplikacji WPF (ewentualnie Silverlight 5) s
 
 W plikach tych będziemy przechowywać nasze tłumaczenia. Następnie stwórzmy klasę Translator, która będzie dziedziczyła po klasie MarkupExtension.Do klasy tej dodajmy właściwość
 
-```
+```csharp
 public string Key{ get; set; }
 
 ```
 
 ,która będzie przechowywać klucz dzięki któremu z pliku zasobów wyciągniemy tekst w odpowiednim języku. W kolejnym kroku musimy przeciążyć funkcję
 
-```
+```csharp
 public abstract object ProvideValue(IServiceProvider serviceProvider)
 
 ```
 
 tak aby dostarczyła nam ona przetłumaczony tekst.W moim pierwszym podejściu funkcja ta wyglądała w następujący sposób
 
-```
+```csharp
 public override object ProvideValue(IServiceProvider serviceProvider)
 {
     Binding binding = new Binding(Key) { Source = new Localization(),Mode = BindingMode.OneWay};
@@ -58,7 +58,7 @@ Wadami takiego rozwiązania było:
 
 Ostatecznie zatem zrezygnowałem z przedstawionej wyżej opcji i zdecydowałem się na metodę odrobinę bardziej zaawansowaną. Po pierwsze utworzyłem klasę TranslationManager
 
-```
+```csharp
 public class TranslationManager
 {
     public event Action LanguageChanged = val => { };
@@ -105,21 +105,21 @@ public class TranslationManager
 
 która będzie zarządzała tłumaczeniami. Najważniejszą metodą tej klasy jest oczywiście funkcja
 
-```
+```csharp
 public string Translate(string key)
 
 ```
 
 która to zwraca tekst w odpowiednim języku - w zależności od kultury, która zostanie ustawiona w TranslationManagerze. Ponadto TranslationManager posiada jedno zdarzenie
 
-```
+```csharp
 public event Action LanguageChanged
 
 ```
 
 które ma za zadanie poinformować UI o potrzebie odświeżenia zbindowanych elementów. W jaki sposób się to odbywa ? Wszystko zawdzięczamy interfejsowi INotifyPropertyChanged oraz bindingom. Funkcja ProvideValue została zmodyfikowana w następujący sposób
 
-```
+```csharp
 public override object ProvideValue(IServiceProvider serviceProvider)
 {
     Binding binding = new Binding("Value") { Source = new TranslationItem(Key), Mode = BindingMode.OneWay };
@@ -130,7 +130,7 @@ public override object ProvideValue(IServiceProvider serviceProvider)
 
 W funkcji tej tworze binding, który binduje się do właściwości Value obiektu TranslationItem. TranslationItem jest to prosty obiekt który udostępnia właściwość Value zwracającą przetłumaczony tekst. Dodatkowo obiekt ten podpina się do zdarzenia LanguageChanged z klasy TranslationManager. W przypadku gdy ktoś zmieni język aplikacji, odpalone zostanie zdarzenie NotifyPropertyChanged, które poinformuje widok o potrzebie odświeżenia odpowiednich elementów. Klasa TranslationItem wygląda zatem w następujący sposób
 
-```
+```csharp
 public sealed class TranslationItem : INotifyPropertyChanged, IDisposable
 {
     public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -168,14 +168,14 @@ Mając gotowy mechanizm tłumaczący możemy wykorzystać go w następujący spo
 
 Zauważmy, że tekst do labelki jest przypisywany z wykorzystywaniem naszego customoweog MarkupExtension - WPFMarkupExtension:Translator (WPFMarkupExtension - jest to alias na namespace, w którym znajduje się nasza klasa Translator). W składni przekazujemy do właściwości Key klucz do tekstu (znajdującego się w resourcach), który chcemy tłumaczyć. W celu zmiany języka wystarczy, że ustawimy interesującą nas kulturę w klasie TranslationManager
 
-```
+```csharp
 TranslationManager.Instance.CurrentCulture = new CultureInfo("en-US")
 
 ```
 
 Przykładowy widok wykorzystujący napisany translator, oraz pokazujący dynamiczną zmianę języka może wyglądać w następujący sposób (dorzucamy następujące linijki do MainWindow.xaml)
 
-```
+```xml
 
     
     Polski
@@ -185,7 +185,7 @@ Przykładowy widok wykorzystujący napisany translator, oraz pokazujący dynamic
 
 Następnie tworzymy ViewModel do naszego okna
 
-```
+```csharp
 public class MainPageViewModel
 {
         public DelegateCommand PolishCommand { get; set; }
@@ -202,7 +202,7 @@ public class MainPageViewModel
 
 Ostatecznie przypisujemy obiekt klasy MainPageViewModel do DataContextu MainWindow.xaml
 
-```
+```csharp
 public MainWindow()
 {
     InitializeComponent();

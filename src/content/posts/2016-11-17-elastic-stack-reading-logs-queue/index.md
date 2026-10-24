@@ -17,24 +17,24 @@ In my previous post, I've shown how to configure _Logstash_ to parse logs from f
 
 Before we move to _Logstash_ configuration, first of all, we have to prepare _RabbitMQ_ test instance. If you don't have _RabbitMQ_ yet, go to [this](https://www.rabbitmq.com/download.html) website and install the queue. Once installation is done, go to the installation folder (_C:\\Program Files\\RabbitMQ Server\\rabbitmq\_server-3.6.5\\sbin in my case_) and run in console
 
-```
+```bash
 rabbitmq-plugins.bat enable rabbitmq_management
 
 ```
 
 This command will prepare _RabbitMQ_ management website, so it will be easier for us to see what is going on in given queue. In the next step, we have to prepare the queue, the logs will be sent to. You can do it via the website we've just enabled (_http://localhost:15672/_) or via _RabbitMQ_ admin console. As I prefer to automate things as much as possible I will do it via command line. What is quite unusual when it comes _RabbitMQ CLI_ is the fact that it is a python script you have to download and run locally (this is not an executable). The script can be found on management site under this [address](http://localhost:15672/cli/rabbitmqadmin). Once the script is downloaded (in my case it is saved as _rabbitmqadmin.py_) you can start preparing necessary elements: exchange, queue and the binding.
 
-```
+```bash
 python rabbitmqadmin.py declare exchange name=logger type=topic -u username -p password
 
 ```
 
-```
+```bash
 python rabbitmqadmin.py declare queue  name=MyAppLogginQueue auto_delete=false durable=true -u username -p password
 
 ```
 
-```
+```bash
 python rabbitmqadmin.py  declare binding source=logger destination=MyAppLogginQueue routing_key=MyApp -u username -p password
 
 ```
@@ -45,7 +45,7 @@ As you can see I've created exchange called _logger_ which is bound to _MyAppLog
 
 _Logstash_ configuration will be modified version of my [previous](http://tpodolak.com/blog/2016/11/03/logstash-parsing-multiline-log-entries/) config. I will just add another input source. Here is a basic usage
 
-```
+```text
 input {	
 	rabbitmq {
         host => "localhost"
@@ -65,14 +65,14 @@ As you can see we will be consuming messages from _MyAppLogginQueue_ which is de
 
 In order to test the configuration you have to run the _Elasticsearch_, _Kibana_ and use new config for _Logstash_. I've shown how to do it in one of my [recent post](http://tpodolak.com/blog/2016/11/02/getting-started-elastic-stack/) . For sending messages to the queue I will just use _RabbitMQ_ management website _API_. The _API_ exposes
 
-```
+```text
 api/exchanges/%2F/{exchange_name}/publish
 
 ```
 
 endpoint accepting _POST_ verbs which can be used for publishing messages to given exchange. In my case _POST_ body will look as follows
 
-```
+```text
 {
   "vhost": "/",
   "name": "logger",
@@ -92,7 +92,7 @@ endpoint accepting _POST_ verbs which can be used for publishing messages to giv
 
 and I will be sending it to
 
-```
+```text
 http://localhost:15672/api/exchanges/%2F/logger/publish
 
 ```

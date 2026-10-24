@@ -15,7 +15,7 @@ Często podczas użytkowania programów zachodzi konieczność pokazania dodatko
 
 Jak już wcześniej wspomniano klasa InteractionRequest odpowiedzialna jest za pokazywanie komunikatów użytkownikowi - koordynuje ona działanie pomiędzy ViewModelem a widokiem. W celu skorzystania z klasy InteractionRequest w ViewModelu tworzymy publiczną właściwość udostpęniającą obiekt typu InteractionRequest na zewnątrz
 
-```
+```csharp
 public InteractionRequest Request { get; set; }
 Request = new InteractionRequest();
 
@@ -28,7 +28,7 @@ Jak widać za generyczny typ T została podstawiona klasa Notification. Parametr
 
 W celu wywołania okienka należy odpalić funkcję Raise na przykład w taki sposób:
 
-```
+```csharp
 Request.Raise(new Notification { Content = "Info dla użytkownika", Title = "sth" }, confirmation => AfterMessageAction());
 
 ```
@@ -37,7 +37,7 @@ Funkcja Raise przyjmuje jeden lub dwa parametry. Przedstawy bardziej zaawansowan
 
 - definiujemy w XAML-u alias do namespaca interactivity
     
-    ```
+    ```xml
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     
     ```
@@ -49,7 +49,7 @@ Funkcja Raise przyjmuje jeden lub dwa parametry. Przedstawy bardziej zaawansowan
 
 Alternatywą dla InteractionRequest jest stworzenie własnej klasy, do której zostałyby oddelegowane wszystkie prośby o pokazania MessageBoxa. Przykładowa implementacja takiego serwisu może wyglądać w następujący sposób. Po pierwsze stwórzmy interfejs z funkcjami potrzebnymi do pokazania MessageBoxa
 
-```
+```csharp
 public interface IMessageBoxService
 {      
     MessageBoxResult ShowMessageBox (string info, string caption,MessageBoxButton buttons);      
@@ -59,7 +59,7 @@ public interface IMessageBoxService
 
 Następnie zaimplementujmy ten interfejs w klasie MessageBoxService \- właśnie do tej klasy będą oddelegowywane wszystkie prośby o pokazanie MessageBoxa
 
-```
+```csharp
 public class MessageBoxService : IMessageBoxService
 {
     public MessageBoxResult ShowMessageBox(string info, string caption, MessageBoxButton buttons)
@@ -72,14 +72,14 @@ public class MessageBoxService : IMessageBoxService
 
 Taki serwis musimy następnie przekazać do każdego ViewModelu , w którym będzie potrzeba pokazania MessageBoxa. Jako, że ręczne przekazywanie tego obiektu może być nużące, możemy skorzystać z dobrodziejstw Inversion of Control. Ja skorzystałem z kontenera z Unity. Po pierwsze musimy zarejestrować nasz typ w kontenerze
 
-```
+```csharp
 _container.RegisterType();
 
 ```
 
 następnie MessageBoxService może zostać wstrzyknięty do każdego ViewModelu przy np. przy pomocy wstrzykiwania właściwości.
 
-```
+```csharp
 [Dependency]
 public IMessageBoxService MessageBoxService
 {
@@ -95,7 +95,7 @@ Oczywiście żeby nasza właściwość została wstrzyknięta, nasz ViewModel mu
 
 Do pokazywania widoków(jako okien) z poziomu ViewModelu posłużmy się podobnym mechanizmem jak w przypadku pokazywania MessageBox-ów. Zasada działania klasy, która stworzymy będzie taka sama, jednakże będziemy musieli odrobinę poszerzyć jej funkcjonalność. Po pierwsze tak jak poprzednio stwórzmy odpowiedni interfejs - IModalWindowService. UWAGA Przykład ModalWindowServicu zostanie zaprezentowany dla Silverlight-a, gdyż okna modalne w silerlighcie to tak naprawdę okna semi-modalne. Główny wątek się nie zatrzymuje, jednakże użytkownik nie ma możliwości interakcji z oknami będącymi pod aktualnie widocznym oknem.
 
-```
+```csharp
 public interface IModalDialogService
 {
     void ShowDialog(IModalView view,Action CloseAction) where TViewModel : ViewModelBase;       
@@ -105,7 +105,7 @@ public interface IModalDialogService
 
 Zauważmy, że funkcja ShowDialog w parametrze nie przyjmuje konkretnego widoku, lecz interfejs, który każde okno modalne powinno implementować - IModalView. Interfejs ten może wyglądać w następujący sposób:
 
-```
+```csharp
 public interface IModalView where TViewModel : ViewModelBase
 {
     /// 
@@ -138,21 +138,21 @@ public interface IModalView where TViewModel : ViewModelBase
 
 Jako, że okna modalne w Silverlighcie są tak naprawdę oknami semi-modalnymi (patrz wytłumaczenie w sekcji UWAGA) musimy wiedzieć kiedy dane okno zostanie zamknięte. Dlatego, też interfejs ten zawiera zdarzenie
 
-```
+```csharp
 event EventHandler Closed;
 
 ```
 
 ponadto wypadałoby sprawdzić czy dane wpisane w oknie są poprawne, dlatego też dodano zdarzenie
 
-```
+```csharp
 event EventHandler Closing;
 
 ```
 
 w przypadku gdy dane wpisane w oknie nie będą poprawne, nasz ModalDialogService zapobiegnie zamknięciu okna. Ostatecznie nasza klasa ModalDialogService może wyglądać w następujący sposób:
 
-```
+```csharp
 public class ModalDialogService : IModalDialogService
 {
     private EventHandler ClosingEventHandler;
@@ -183,7 +183,7 @@ public class ModalDialogService : IModalDialogService
 
 Nasz serwis podobnie jak w przypadku MessageBoxServicu rejestrujemy w kontenerze, a następnie wstrzykujemy go do ViewModelu
 
-```
+```csharp
 _container.RegisterType();
 [Dependency]
 public IMessageBoxService MessageBoxService
@@ -196,21 +196,21 @@ public IMessageBoxService MessageBoxService
 
 Pozostaje nam jedynie kwestia wyjaśnienia w jaki sposób wywołać nasze okno. Nie powinniśmy tworzyć okna w ViewModelu, gdyż łamie to zasadę MVVM-a. Dlatego też po raz kolejny skorzystamy z kontenera IoC. W kontenerze IoC rejestrujemy sobie nasz widok
 
-```
+```csharp
 _container.RegisterType,AddPersonView>()
 
 ```
 
 jako, że ViewModel jest wstrzykiwany do View poprzez Dependency Injection należy również w kontenerze zarejestrować odpowiedni typ ViewModelu - czyli w tym przypadku AddPersonViewModel
 
-```
+```csharp
 _container.RegisterType()
 
 ```
 
 Mając już zarejestrowane w kontenerze wszystkie niezbędne typu możemy wywołać okno z ViewModelu w następujący sposób:
 
-```
+```csharp
 ModalDialogService.ShowDialog(_container.Resolve>(), model => {//tutaj jakas logika });
 
 ```

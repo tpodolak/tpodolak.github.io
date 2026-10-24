@@ -20,7 +20,7 @@ A while ago I wrote an [article](//tpodolak.com/blog/2016/07/05/nlog-tracking-fl
 
 Before I dig into details of layout renderers mentioned above, we have to configure _ASP.NET Core_ to use _NLog_ as a logger. First of all, we need to grab _NLog.Web.AspNetCore_ _NuGet_ package. Once the package is installed we have to manually add _NLog.config_ to the project (the file won't be added automatically by _NuGet_ installer). The next step is to configure _NLog_ with our config, then configure _NLogWeb_ and finally register _NLog_ in _LoggingFactory_. All of these steps should be done in _Startup_ class.
 
-```
+```csharp
 public class Startup
 {
     public Startup(IHostingEnvironment env)
@@ -44,7 +44,7 @@ public class Startup
 
 The final step required for _NLog_ to work is to register _HttpContextAccessor_ in _IoC_ container of your choice. If you use the build one, you can do it like that
 
-```
+```csharp
 public class Startup
 {
     // rest of the code omitted for brevity
@@ -63,7 +63,7 @@ _Aspnet-traceidentifier_ layout renderer allows you to obtain value of _TraceIde
 
 From now on (without any additional configuration) every log entry logged (once _HttpContext_ is created), will contain _TraceIdentifier_.
 
-```
+```text
 	TimeStamp=2017-02-15 23:10:52.1901 Level=INFO TraceId=0HL2LTTU3JVBI Message=Request starting HTTP/1.1 GET http://localhost:50334/api/values  
 	TimeStamp=2017-02-15 23:10:52.1941 Level=DEBUG TraceId=0HL2LTTU3JVBI Message=Request successfully matched the route with name '' and template 'api/Values'.
 	TimeStamp=2017-02-15 23:10:52.1941 Level=DEBUG TraceId=0HL2LTTU3JVBI Message=Action 'AspNetCoreLoggingWithCorrelationId.Controllers.ValuesController.Post (AspNetCoreLoggingWithCorrelationId)' with id 'a133346a-a8f9-4182-ac10-efa1afb18c4d' did not match the constraint 'Microsoft.AspNetCore.Mvc.Internal.HttpMethodActionConstraint'
@@ -88,7 +88,7 @@ From now on (without any additional configuration) every log entry logged (once 
 
 If for some reasons we don’t like to use _TraceIdentifier_ as our CorrelationId, we can leverage _aspnet-item_ renderer, which basically allows you to read data from _HttpContext.Items_ collection. However in that case, we are responsible for providing and storing unique identifier of request in HttpContext.Items. Fortunately it is pretty straightforward to do with custom middleware.
 
-```
+```csharp
 public class LoggingMiddleware
 {
     private readonly ILogger logger;
@@ -115,7 +115,7 @@ public class LoggingMiddleware
 
 Of course we have to also use this middleware in our application so we have to add following line
 
-```
+```csharp
 app.UseMiddleware();
 
 ```
@@ -124,7 +124,7 @@ in configure method of our _Startup_ class. Having all the pieces in place, now 
 
 From now on, _CorrelationId_ will be automatically added to our log entries
 
-```
+```text
 TimeStamp=2017-02-15 23:35:56.8333 Level=INFO CorrelationId= Message=Request starting HTTP/1.1 GET http://localhost:50334/api/values  
 TimeStamp=2017-02-15 23:35:56.8333 Level=INFO CorrelationId=15989892-9f27-49d0-88b5-ced61b6851ac Message=About to start GET http://localhost:50334/api/values request
 TimeStamp=2017-02-15 23:35:56.8333 Level=DEBUG CorrelationId=15989892-9f27-49d0-88b5-ced61b6851ac Message=Request successfully matched the route with name '' and template 'api/Values'.
@@ -151,7 +151,7 @@ TimeStamp=2017-02-15 23:35:56.9764 Level=DEBUG CorrelationId= Message=Connection
 
 If you take a closer look at logs presented above, you will see that both of the renderers can log proper _CorrelationId_/_TraceId_ regardless of the thread from which the logger was called. This is possible thanks to implementation of _HttpContextAccessor_ which uses _AsyncLocal_ under the hood, which allows you to persist data across threads.
 
-```
+```csharp
 // decompiled code
 namespace Microsoft.AspNetCore.Http
 {

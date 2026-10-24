@@ -13,7 +13,7 @@ tags:
 
 Recently, I have been given a task to make extjs datepicker allowing for selection of multiple dates. Unfortunately afters hours of searching for some build-in function, it turned out that this kind of functionality is not supported by default. Finaly, I decided to extend datepicker by creating component called _highlightableDatePicker_. I started from creating a class which inhierits from _Ext.picker.Date_. First draft of class looked this way
 
-```
+```javascript
 Ext.define('HighlightableDatePicker', {
     extend: 'Ext.picker.Date',
     selectedDates:{},
@@ -37,7 +37,7 @@ In this class I created additional function _highlightDates_ which is responsibl
 
 The most important part of _HighlightableDatepicker_ class is function _highlightDates_ which is responsible for highlighting dates. The body of this method looks like this
 
-```
+```javascript
 highlightDates: function(){
       var me = this;
        if(!me.cells)
@@ -58,7 +58,7 @@ highlightDates: function(){
 
 As You can see, this function simply compares date in cell with dates stored in selectedDates. If there is a match, cell style is modified by adding extra CSS class into _class_ attribute of cell (see addCls function of Extjs), otherwise CSS class responsible for highlighting is removed. Having defind _highlightDates_ function,I also had to attach an event handler to _select_ event, in order to modify collection of selected dates. This handler looks this way
 
-```
+```javascript
 handleSelectionChanged: function(cmp, date){
    var me = this;
        if(me.selectedDates[date.toDateString()])
@@ -72,7 +72,7 @@ handleSelectionChanged: function(cmp, date){
 
 The final step to make this control work is to attach event handlers and call _highlightDates_ function during initialization of component.
 
-```
+```javascript
 initComponent: function() {
         var me = this;
         me.callParent(arguments);
@@ -84,7 +84,7 @@ initComponent: function() {
 
 Please, notice that _highlightDates_ is called after component is rendered, because there is no rendered cells before that moment. Entire code listing is presented below
 
-```
+```javascript
 Ext.define('HighlightableDatePicker', {
     extend: 'Ext.picker.Date',
     selectedDates : {},

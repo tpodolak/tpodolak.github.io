@@ -15,7 +15,7 @@ tags:
 
 I think almost every .NET developer is familiar with _INotifyPropertyChanged_ interface. Typical implementation of this interface looks more or less like that:
 
-```
+```csharp
 public class NotifyPropertyBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
@@ -38,7 +38,7 @@ public class NotifyPropertyBase : INotifyPropertyChanged
 
 Thanks to lambda expressions we can get rid of so called "magic" strings when rising PorpertyChange event.
 
-```
+```csharp
 private int _myProperty;
 public int MyProperty
 {
@@ -55,7 +55,7 @@ public int MyProperty
 
 However, with .NET 4.5 we can even get rid of lambda expressions itself. Everything thanks to _[CallerMemberNameAttribute](http://msdn.microsoft.com/pl-pl/library/system.runtime.compilerservices.callermembernameattribute\(v=vs.110\).aspx)_, which provides us information about caller of given method. Now we can rewrite _NotifyPropertyBase_ class as follows
 
-```
+```csharp
 public class NotifyPropertyBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
@@ -70,7 +70,7 @@ public class NotifyPropertyBase : INotifyPropertyChanged
 
 From this moment we can call _OnPropertyChanged_ method without any arguments
 
-```
+```csharp
 private int _myProperty;
 public int MyProperty
 {

@@ -23,7 +23,7 @@ tags:
 
 It is a common practice to validate function arguments before running actual code. Usually validation looks like that:
 
-```
+```csharp
 public  void Update(Car entity)
 {
     if(entity ==null)
@@ -34,7 +34,7 @@ public  void Update(Car entity)
 
 There is nothing wrong with this code, however we have to repeat this piece of code in every function. Of course we could create some helper class for argument validation and call approperiate validation function before launching rest of the code
 
-```
+```csharp
 public static class ValidationHelper
 {
     public static void CheckNotNull(object entity, string argumentName)
@@ -58,7 +58,7 @@ However I was searching for more universal way for argument validation. That is 
 
 Let's start for creating base attribute
 
-```
+```csharp
 [AttributeUsage(AttributeTargets.Parameter)]
 public abstract class ArgumentValidationAttribute : Attribute
 {
@@ -69,7 +69,7 @@ public abstract class ArgumentValidationAttribute : Attribute
 
 In the next step let's create specialized attribute for "not null" validation. This argument may look this way:
 
-```
+```csharp
 public class NotNullAttribute : ArgumentValidationAttribute
 {
     public override void ValidateArgument(object value,string argumentName)
@@ -91,7 +91,7 @@ That was an easy part, now it's necessary to somehow intercept function executio
 
 You can easily add them using NuGet. Having all necessary files added to solution,let's create function interceptor - _ValidaitionInterceptor_.
 
-```
+```csharp
 public class ValidationInterceptor : IInterceptor
 {
     public void Intercept(IInvocation invocation)
@@ -114,7 +114,7 @@ As You can see _ValidationInterceptor_ implements interface _IInterceptor_which 
 
 In order to take advantage of benefits of function interceptors, we have to resolve objects from Ninject container. First of all I'll create some examplorary classes
 
-```
+```csharp
 public interface IRepository where T:class
 {
     List GetAll();
@@ -144,7 +144,7 @@ public class CarRepository : IRepository
 
 In the next step I'll create simple wrapper for Ninject container and register CarRepository in Kernel
 
-```
+```csharp
 public static class IOCContainer
 {
     private static readonly IKernel Kernel;
@@ -168,7 +168,7 @@ public static class IOCContainer
 
 Please, notice that registration of _CarRepository_ was used with option _Intercept().With()_. Thanks to this configuration,everytime we call method from CarRepository, _Intercept_ method from _ValidaitionInterceptor_ will be called first. Now, it is time to use our repository,we could do that this way
 
-```
+```csharp
 class Program
 {
     static void Main(string[] args)
@@ -187,7 +187,7 @@ Argument _entity_ in method _Update_ from interface _IRepository_ was decorated 
 
 Using _IInterceptor_ we could go one step further and also validate return value of method. In order to do that, we have to slightly modify _Intercept_ method in _ValidaitionInterceptor_ class.
 
-```
+```csharp
 public class ValidaitionInterceptor : IInterceptor
 {
     public void Intercept(IInvocation invocation)
@@ -212,14 +212,14 @@ public class ValidaitionInterceptor : IInterceptor
 
 We also have to change attribute usage of _ArgumentValidationAttribute_ to
 
-```
+```csharp
 [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue)]
 
 ```
 
 Now, we can decorate function _GetAll_ with _NotNull_attribute
 
-```
+```csharp
 [return: NotNull]
 List GetAll();
 

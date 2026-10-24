@@ -11,7 +11,7 @@ tags:
 
 Usually when we need to retrieve data from database server, we write code which looks like that
 
-```
+```csharp
 using (var session = DataAccesLayer.Instance.OpenSession())
 {
     using (var transaction = session.BeginTransaction())
@@ -31,7 +31,7 @@ This code will execute two queries,each of them in separate roundtrip to the ser
 - **MultiQuery**
 First way to execute several queries at once is MultiQuery. In my opinion this is not very handy mechanism because of the fact, that we must use HQL. Here is an example of usage
 
-```
+```javascript
 var projectQuery = session.CreateQuery("FROM Project as prj where prj.Name= :projectName")
                           .SetParameter("projectName", "Project");
 
@@ -46,14 +46,14 @@ var multiQueryByIndex = session.CreateMultiQuery( )
 
 As You can see thanks to _CreateMultiQuery_ method we are able to aggregate multiple queries. In order to get access to results, we have to execute code below
 
-```
+```javascript
 var result = multiQueryByIndex.List();
 
 ```
 
 Now we can get result of specific query using indexer
 
-```
+```javascript
 var projects = result[0] as List;
 var tasks = result[1] as List;
 
@@ -61,7 +61,7 @@ var tasks = result[1] as List;
 
 If we don't like this approach, the _CreateMultiQuery_ method has an overload which allows to give "names" to queries. Thanks to this we can get result of query by its name.
 
-```
+```javascript
 var multiQueryByKey = session.CreateMultiQuery( )
                              .Add( "project", projectQuery )
                              .Add( "task", taskQuery );
@@ -74,7 +74,7 @@ var tasks = multiQueryByKey.GetResult( "task" ) as List;
 - **MultiCriteria**
 Much better way of creating multiple queries is MultiCriteria. In this case we can use _QueryOver_ API, so we don't have to rely on _HQL_ query strings.
 
-```
+```csharp
 var projectQuery = session.QueryOver().Where(val => val.Name == "Project");
 var taskQuery = session.QueryOver( ).Where(val => val.Name == "First task");
 var multiCriteriaByIndex = session.CreateMultiCriteria( )
@@ -97,7 +97,7 @@ tasks = multiCriteriaByKey.GetResult( "task" ) as List;
 As You can see the usage of _CreateMultiCriteria_ method is pretty consistent with _CreateMultiQuery_. Unfortunately we still have to retrieve data from specific query by index or by query name.- **Future**
 My personal favorite for creating multi queries is _Future_. The usage is pretty straightforward
 
-```
+```javascript
 var projects = session.QueryOver().Where(val => val.Name == "Project").Future();
 var tasks = session.QueryOver().Where(val => val.Name == "First task").Future();
 

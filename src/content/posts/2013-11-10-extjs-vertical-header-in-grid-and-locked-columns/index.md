@@ -15,7 +15,7 @@ tags:
 
 A while ago I wrote an article where I described how to create a plugin, which can flip header of _Ext.panel.Grid_ vertically. I've been using this plugin for a couple of months in a company I work for, however in the last week it turned out that this extension does not work for grid with [locked columns](http://dev.sencha.com/deploy/ext-4.0.0/examples/grid/locking-grid.html). After digging into _Extjs_ source code I found out that when You use locked columns, the grid is created as a combination of two grids: _normalGrid_ and _lockedGrid_. Therefore it is necessary to apply vertical-header plugin to these two grids separately. In order to do that, I improved this extension to detect if grid has locked columns or not. The main change is in _init_ function which now looks that way
 
-```
+```javascript
 init: function (grid) {
       var me = this;
       me.grid = grid;
@@ -43,7 +43,7 @@ init: function (grid) {
 
 In the first step I check if columns are locked. The method for do that is pretty straightforward
 
-```
+```javascript
 isLocked: function () {
           var me = this;
           return me.grid.normalGrid && me.grid.lockedGrid;
@@ -53,7 +53,7 @@ isLocked: function () {
 
 Afterward I do create two instances of vertical-header plugin and initialize them with appropriate partial grid (lockedGrid or normalGrid). Entire code listing is presented below
 
-```
+```javascript
 Ext.define('GeneralLearning.ux.VerticalHeader', {
     alias: 'plugin.verticalheader',
     grid: null,

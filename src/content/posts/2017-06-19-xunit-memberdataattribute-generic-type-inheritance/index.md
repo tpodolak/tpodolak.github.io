@@ -11,7 +11,7 @@ tags:
 
 When I was writing [Cake.Intellisense](https://github.com/tpodolak/Cake.Intellisense) I was playing a lot with _Roslyn_ syntax rewriters. The one thing which was pretty important for me at this time was a reliable set of tests which can quickly show if rewritten code is valid _C#_ code and if it matches my expectations. As I don’t like to repeat my code I wanted to have a base test class which can be provided with different test cases from inherited classes. The initial implementation looked as follows
 
-```
+```csharp
 public abstract class CSharpSyntaxRewriterTest where T : CSharpSyntaxRewriter
 {
     public static IEnumerable TestCases { get; set; }
@@ -42,7 +42,7 @@ public abstract class CSharpSyntaxRewriterTest where T : CSharpSyntaxRewriter
 
 As you can see I have a generic base test class which holds test cases in a static field _TestCases_. The field is static as it is required by _XUnit_, this solution is perfectly valid because a static field is shared across [all instances of the same type](https://stackoverflow.com/a/3037259). Having a base test class ready I wanted to write a set of unit tests for following syntax rewriter
 
-```
+```csharp
 public class InternalToPublicClassModifierSyntaxRewriter : CSharpSyntaxRewriter
 { 
     public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
@@ -67,7 +67,7 @@ public class InternalToPublicClassModifierSyntaxRewriter : CSharpSyntaxRewriter
 
 The rewriter shown above is a very simple piece of code which replaces internal class modifier with a public one. Writing the tests for that class was supposed to be very easy, I just had to provide test cases with input code and expected result.
 
-```
+```csharp
 public class InternalToPublicClassModifierSyntaxRewriterTests
         : CSharpSyntaxRewriterTest
 {
@@ -113,7 +113,7 @@ I started from going back to the basics. As we probably all know, the static con
 
 The first condition is not met because instance of the test class is created after test cases are enumerated. That is why member data fields have to be a static fields/properties etc. When it comes to second condition the situation in here is a bit more complicated but if you take a look at the [MemberDataAttributeBase](https://github.com/xunit/xunit/blob/bccfcccf26b2c63c90573fe1a17e6572882ef39c/src/xunit.core/MemberDataAttributeBase.cs) class
 
-```
+```csharp
 public override IEnumerable GetData(MethodInfo testMethod)
 {
     Guard.ArgumentNotNull("testMethod", testMethod);
@@ -127,14 +127,14 @@ public override IEnumerable GetData(MethodInfo testMethod)
 
 you will notice that member data looks for properties in _DeclaringType_ of method. In my case declaring type is
 
-```
+```csharp
 XUnitMemberDataAndInheritance.CSharpSyntaxRewriterTest`1[[XUnitMemberDataAndInheritance.InternalToPublicClassModifierSyntaxRewriter]]
 
 ```
 
 not
 
-```
+```csharp
 InternalToPublicClassModifierSyntaxRewriterTests
 
 ```
@@ -145,7 +145,7 @@ So when _XUnit_ accesses _TestCase_ property the static constructor from _Intern
 
 In order to bend the behavior of _XUnit_ to my needs, I had to ensure that the static constructor from inherited class is called. Fortunately, workaround is pretty straightforward - I had to introduce a custom _MemberDataAttribute_ which calls static constructor from _ReflectedType_ manually
 
-```
+```csharp
 [DataDiscoverer("Xunit.Sdk.MemberDataDiscoverer", "xunit.core")]
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class CustomMemberDataAttribute : MemberDataAttributeBase
@@ -183,7 +183,7 @@ public class CustomMemberDataAttribute : MemberDataAttributeBase
 
 Now all I have to do is use newly created attribute in _CSharpSyntaxRewriterTest_ test class
 
-```
+```csharp
 [Theory]
 [CustomMemberData(nameof(TestCases))]
 public void Verify(SyntaxRewriterTestCase testCase)

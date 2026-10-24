@@ -11,7 +11,7 @@ tags:
 
 I am not a big fan of cursors, however for time to time I have to write one. In my case cursor usually is responsible for some complicated updates. Until yesterday I've been writing my update statements within the cursor the standard way
 
-```
+```sql
 -- cursor code omitted for brevity
 -- some complicated update
 UPDATE Person.Person set FirstName = 'some logic goes here' where Person.BusinessEntityID = @Id
@@ -22,14 +22,14 @@ where @Id variable is set by cursor.
 
 There is nothing wrong with that, however we can do the same thing using specialized syntax - _current of_ keyword(s)
 
-```
+```sql
 UPDATE Person.Person set FirstName = 'some logic goes here' where current of personCursor
 
 ```
 
 The entire cursor statement then looks that way
 
-```
+```sql
 DECLARE personCursor CURSOR FOR SELECT top 1000 * FROM Person.Person
 OPEN personCursor
 FETCH NEXT FROM personCursor

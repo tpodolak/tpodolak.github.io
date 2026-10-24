@@ -21,7 +21,7 @@ Interactions oraz Interactivity są to dwie dll-ki, które poszerzają sposób k
 
 Powyższy przykład działa w następujący sposób. Za każdym razem gdy zostanie wywołane zdarzenie MouseMove na przycisku, odpalona zostanie komenda SubmitCommand. Wadą używania InvokeCommandAction jest to, że sami musimy się martwić o wygaszenie kontrolki w przypadku gdy dana komenda nie może być wykonana. Dlatego też w pierwszej linii mamy bindowanie właściwości IsEnabled przycisku do właściwości CanSubmit z ViewModelu. Alias i: jest aliasen na namespace interactivity z dll-ki
 
-```
+```csharp
 System.Windows.Interactivity.xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity".
 
 ```
@@ -32,7 +32,7 @@ TargetObject jest zbindowany do DataContextu, to właśnie tam będzie szukana f
 
 Kolejnym ciekawym featurem Interactivity jest klasa Behavior. Jest niezastąpiona jeżeli potrzebujemy ingerować w działanie widoku po jakimś zdarzeniu. Nie musimy wówczas tworzyć obsługi eventów w code behind. Możemy wyłuskać daną funkcjonalność i zamknąć ją w klasie Behavior a następnie doczepić do wszystkich widoków danego typu. Załóżmy, że sterujemy ListBoxem z poziomu ViewModelu (przełączamy SelectedItem). Możemy zaznaczyć jakiś Item, co jednak jeżeli nasza lista jest bardzo długa,a zaznaczamy ostatni element. Na widoku element rzeczywiście się zaznaczył jednak lista się nie przewinęła. Przez co cały czas wiszą elementy z początku i nie widać czy któryś element jest zaznaczony. Dopiero gdy przeskrolujemy ręcznie ListBoxa widzimy, że rzeczywiście prawidłowo zareagował na zmianę property w ViewModelu. Jest to idealna sytuacja, aby stworzyć własny Behavior, który będziemy mogli podczepić do wszystkich listboxów w każdym widoku.
 
-```
+```csharp
 public class Behavior
 {
 

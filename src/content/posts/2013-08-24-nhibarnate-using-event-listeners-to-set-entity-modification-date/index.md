@@ -18,7 +18,7 @@ I think, that it is a common practice to store information about creation and mo
 - IPreInsertEventListener
 - IPreUpdateEventListener
 
-```
+```csharp
 public class NHListener : IPreInsertEventListener, IPreUpdateEventListener
 {
     public bool OnPreInsert(PreInsertEvent @event)
@@ -36,7 +36,7 @@ public class NHListener : IPreInsertEventListener, IPreUpdateEventListener
 
 As You probably guessed OnPreInsert method is invoked before insert, and OnPreUpdate is called before update of entity. Having prepared the basic skeleton of class, it is time to configure NHibernate to use our event listeners. The basic configuration is taken from my previous post about NHibernate [automappings](http://tpodolak.com/blog/2013/03/25/fluent-nhibernate-automappings), so I will only extend it by appending event listeners
 
-```
+```csharp
 Fluently.Configure().Database(
                     MsSqlConfiguration.MsSql2008.ConnectionString(
                         @"YourConnectionString"))
@@ -52,7 +52,7 @@ Fluently.Configure().Database(
 
 Now we can put some logic into OnPreInsert and OnPreUpdate functions. First of all we have to somehow identify entities which hold information about creation and modification time. In order to do that I created simple interface _IDateInfo_
 
-```
+```csharp
 public interface IDateInfo
 {
     DateTime ModificationDate { get; set; }
@@ -63,7 +63,7 @@ public interface IDateInfo
 
 In the next step we have to modify _OnPreInsert_ and _OnPreUpdate_ methods, so that they can set creation and modification date of entities which implement _IDateInfo_ interface.
 
-```
+```csharp
 public class NHListener : IPreInsertEventListener, IPreUpdateEventListener
 {
     public bool OnPreInsert(PreInsertEvent @event)
@@ -93,7 +93,7 @@ public class NHListener : IPreInsertEventListener, IPreUpdateEventListener
 
 Unfortunately at this moment saving entity (which implements IDateInfo interface) will throw exception [![Exception](images/Exception.png)](http://tpodolak.com/blog/wp-content/uploads/2013/08/nhibarnate-using-event-listeners-to-set-entity-modification-date/Exception.png) Despite the fact that we set values of _ModificationDate_ and _CreationDate_ properties , NHiberante seems not to notice that. That is why we have to manually update values of _State_ object from _PreInsertEvent_ and _PreUpdateEvent_. According to the documentation _State_ object from class _PreInsertEvent_ holds values which should be inserted and _State_ object from class _PreUpdateEvent_ holds values which should be updated. Function which update values of state object might look like that
 
-```
+```csharp
 private void SetState(IEntityPersister persister, object[] state, string propertyName, object value)
 {
     var index = Array.IndexOf(persister.PropertyNames, propertyName);
@@ -106,7 +106,7 @@ private void SetState(IEntityPersister persister, object[] state, string propert
 
 Updated NHListener class now looks like that
 
-```
+```csharp
 using System;
 using System.Linq.Expressions;
 using NHibernate.Event;

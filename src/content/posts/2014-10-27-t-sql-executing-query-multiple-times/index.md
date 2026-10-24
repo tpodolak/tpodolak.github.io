@@ -11,7 +11,7 @@ tags:
 
 For time to time during my everyday work I have to do some SQL query optimization. The simplest way of measuring whether my changes improved the performance or not, is simply measure the execution time of given query (I know that this is not the best way of doing that, but let's leave aside execution plans for now). However measuring time of single executin is not very meaningfull. Thats why I like execute query multiple times by using this simple trick
 
-```
+```sql
 GO 100
 
 ```

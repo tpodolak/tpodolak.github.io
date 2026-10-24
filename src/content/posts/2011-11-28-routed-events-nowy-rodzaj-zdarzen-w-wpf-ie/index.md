@@ -23,14 +23,14 @@ RoutedEvent jest to nowy typ zdarzeń, który po raz pierwszy został zaprezento
 
 Definiowanie własnych RoutedEvents wygląda następująco. W pierwszym kroku przy pomocy EventManagera i jego funkcji RegisterRoutedEvent rejestrujemy nasze zdarzenie.
 
-```
+```csharp
 public static RoutedEvent PreviewTrippleClickEvent = EventManager.RegisterRoutedEvent("PreviewTrippleClick", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(MyContentControl));
 
 ```
 
 następnie piszemy wrapper RoutedEventa na zwykłe zdarzenie
 
-```
+```csharp
 public event RoutedEventHandler PreviewTrippleClick
 {
     add
@@ -54,7 +54,7 @@ Funkcja RegisterRoutedEvent przyjmuje cztery parametry:
 
 Jako, że stworzenie nowego RoutedEventa jest dość czasochłonne (w porównaniu ze zwykłym zdarzeniem) warto zassać sobie snippet, który znacząco przyśpiesza tworzenie routed eventów. Snippet taki można znaleźć tutaj [RoutedEventSnippet](http://interactiveasp.net/blogs/natesstuff/archive/2008/10/15/routed-event-code-snippet.aspx) Mając już zdefiniowany nowy RoutedEvent można go wywołać w następujący sposób:
 
-```
+```csharp
 RaiseEvent(new RoutedEventArgs(MyContentControl.TrippleClickEvent, this));
 
 ```
@@ -63,7 +63,7 @@ Funkcja RaiseEvent w parametrze przyjmuje obiekt typu RoutedEventArts. W przypad
 
 Routowanie zdarzenia może zostać zatrzymane, poprzez ustawienie flagi e.Handled na true. Gdzie e jest to obiekt klasy RoutedEventArgs. Przykładowe zatrzymanie routowania eventa może wyglądać w następujący sposób
 
-```
+```csharp
 private void Window_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 {
     e.Handled = true;
@@ -73,7 +73,7 @@ private void Window_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 
 UWAGA Można zadeklarować zdarzenie w taki sposób aby wartość flagi e.Handled była pomijana. Jednak można to zrobić jedynie z poziomu kodu. Za pomocą metody AddHandler(RoutedEvent, Delegate, bool) jeżeli ustawimy ostatni parametr na true, wówczas nasza metoda wykona się nawet w przypadku gdy e.Hadnled == true. Metoda ta dostępna jest dla klasy UIElement i wszystkich klas po niej dziedziczących. **Attached events** Attached event działają podobnie jak attached dependency properties. Pozwalają one rozszerzyć kolekcję zdarzeń danej kontrolki o dodatkowe zdarzenia(nawet jeżeli nie mamy dostępu do źródeł danej kontrolki. Przykładowo, istnieje możliwość obsługi eventu click na kontrolce, która tak naprawdę takiego eventu nie posiada. Każdy RoutedEvent może zostać użyty jako attached event.
 
-```
+```xml
 
     
         

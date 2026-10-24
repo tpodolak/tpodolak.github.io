@@ -21,7 +21,7 @@ Każdy programista, który napisał chociaż parę linijek kody w WinFormsach wi
 
 W celu rozluźnienia połączenia między widokiem a ViewModelem wprowadzono interfejs
 
-```
+```csharp
 public interface ICommand
 {  
     event EventHandler CanExecuteChanged;    
@@ -33,21 +33,21 @@ public interface ICommand
 
 Funkcja
 
-```
+```csharp
 public bool CanExecute(object parameter)
 
 ```
 
 ma za zadanie sprawdzić, czy daną komendę można wykonać. Jeżeli nie,funkcja zwraca false i kontrolka zbindowana do danej komendy jest wygaszana (właściwość IsEnabled danej kontrolki ustawiana jest na false). Z kolei funkcja
 
-```
+```csharp
 public void Execute(object parameter)
 
 ```
 
 jest to odpowiednik event handlera podłączonego do zdarzenia. Zdarzenie
 
-```
+```csharp
 public event EventHandler CanExecuteChanged;
 
 ```
@@ -58,14 +58,14 @@ informuje widok o tym czy dana komenda może się wykonać czy też nie - dzięk
 
 Załóżmy, że mamy okno na którym znajduje się przycisk. Po naciśnięciu przycisku chcielibyśmy aby wykonała się jakaś czynność. Każdy obiekt typu Window oraz Control posiada kolekcję CommandBindings, która przechowuje wszystkie komendy danego okna. W celu dodania nowej komendy należy zrobić następującą rzecz. Po pierwsze musimy stworzyć nową komendę. Robimy to przy pomocy następującego kodu:
 
-```
+```csharp
 private static RoutedCommand AddCommand = new RoutedCommand();
 
 ```
 
 W celu dodania komendy do danego okna/kontrolki wykonujemy następującą operację
 
-```
+```csharp
 this.CommandBindings.Add(new CommandBinding(AddCommand,ExecuteAddCommand,CanExecuteAddCommand));
 
 ```
@@ -78,7 +78,7 @@ Funkcja Add z klasy CommandBindingCollection przyjmuje w parametrze obiekt typu 
 
 Na koniec należy jeszcze zbindować naszą komendę z przyciskiem. Przykładowy kod dodawania komendy może wyglądać w następujący sposób.
 
-```
+```csharp
 public partial class WatchList : Window
 {
     private static RoutedCommand AddCommand = new RoutedCommand();

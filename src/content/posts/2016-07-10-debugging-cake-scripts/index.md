@@ -9,7 +9,7 @@ tags:
 
 We've been using [Cake](http://cakebuild.net/) in our project for quite some time and it has been working great. However for time to time lack of debugging support was really annoying for me. Fortunately it seems that these times are gone now. During [NDC Oslo 2016](https://vimeo.com/171704581) [Gary Ewan Park](https://github.com/gep13) showed that it is possible to attach debugger to the build process. Here are the steps to achieve that. Let's assume that we have following simple cake script.
 
-```
+```javascript
 var target = Argument("target", "Default");
 Task("Default")
     .Does(() =>
@@ -23,14 +23,14 @@ RunTarget(target);
 
 In order to make the debugging possible it is necessary to add
 
-```
+```csharp
 #break
 
 ```
 
 preprocessor directive to the task we want the debugger to stop.
 
-```
+```javascript
 var target = Argument("target", "Default");
 Task("Default")
     .Does(() =>
@@ -45,42 +45,42 @@ RunTarget(target);
 
 This operation doesn't affect the default build process, so if you run in console
 
-```
+```powershell
 .\build.ps1 -target Default
 
 ```
 
 the build will run as usual. In order to be able to attach the debugger we have to call _Cake_ with
 
-```
+```text
  --debug
 
 ```
 
 flag. You can't do it directly via
 
-```
+```text
 \build.ps1
 
 ```
 
 script so assuming that you didn't change directory structure created by bootstrapper, go to _Tools_/_Cake_ folder and run from _PowerShell_
 
-```
+```powershell
 .\Cake.exe ..\..\build.cake -target=Default --debug
 
 ```
 
 where
 
-```
+```text
 ..\..\build.cake
 
 ```
 
 is path to your cake script and
 
-```
+```text
 Default
 
 ```

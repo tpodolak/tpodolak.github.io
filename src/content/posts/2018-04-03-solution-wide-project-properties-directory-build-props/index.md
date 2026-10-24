@@ -12,7 +12,7 @@ tags:
 
 When you work with a solution which contains multiple projects, you usually have some kind of convention which is applied to all of the projects. For instance, in my case, I always make sure that Stylecop.Analyzers package is installed and properly configured in every project. In this particular case, this boils down to adding these lines into the _csproj_ file
 
-```
+```xml
 
   True
 
@@ -28,7 +28,7 @@ Unfortunately, you have to add these lines to every project in a solution in ord
 
 Fortunately starting form _MSBuild_ 15 you can bypass the limitations mentioned above thanks to automatic imports of properties from _Directory.Build.props_ file. All you have to do is to create a beforementioned file in the root folder of your solution and you are good to go. The properties defined in the _Directory.Build.props_ file will be automatically propagated to all of the child projects. In my case, this file looks as follows
 
-```
+```xml
 
   
     True

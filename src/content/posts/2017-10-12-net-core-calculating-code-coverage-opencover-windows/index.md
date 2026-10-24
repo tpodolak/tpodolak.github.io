@@ -15,14 +15,14 @@ I've been struggling for some time to make _OpenCover_ work with _.NET Core_ pro
 
 If you run an _OpenCover_ with the same arguments you were running it for a classic framework, you will end up with something like this [![](images/MissingPdbs.png)](//tpodolak.com/blog/wp-content/uploads/2017/10/net-core-calculating-code-coverage-on-windows/MissingPdbs.png) As you can see the coverage was not calculated and _OpenCover_ is complaining about a missing _PDBs_. In order to fix that we have to do two things. First of all, we have to build the project with a full _PDBs_
 
-```
+```bash
 dotnet build "PathToYourSolution.sln" /p:DebugType=Full
 
 ```
 
 And then run _OpenCover_ with and _\-oldStyle_ switch
 
-```
+```bat
 OpenCover.Console.exe -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test \"PathToTestProject.csproj\" --configuration Debug --no-build" -filter:"+[*]* -[*.Tests*]*" -oldStyle -register:user -output:"OpenCover.xml"
 
 ```
@@ -33,7 +33,7 @@ From now on, _OpenCover_ recognizes _PDB_ files and the code coverage is calcula
 
 As we use a _Cake_ as our build automation tool I've also prepared a sample script for generating a code coverage. The core part of the script looks as follows
 
-```
+```javascript
 // rest of the code omitted for brevity
 
 Task("Build")

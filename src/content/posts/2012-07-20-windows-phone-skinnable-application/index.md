@@ -23,7 +23,7 @@ Today, I would like to present my concept of making skinnable application in Win
 
 As I mentioned before, there is no support for using dynamic resources in WP7, therefore, in order to force a control to change style, we have to assign this style in code behind. It is rather obvious that in a single window/control there might be quite a lot of other controls whose style also should be changed. That is why, I decided to write controls iterator first.
 
-```
+```csharp
 public class ViewsEnumerator : IEnumerator
 {
     private Stack _frameworkElementsStack = new Stack();
@@ -88,7 +88,7 @@ public class ViewsEnumerator : IEnumerator
 
 In this iterator I used DFS algorithm for searching elements in a tree. Thanks to this piece of code I can take advantage of LINQ's benefits. In the next step I created base classes for views.
 
-```
+```csharp
 public interface IViewBase : IEnumerable
 {
 }
@@ -128,7 +128,7 @@ public class ViewBase : UserControl, IViewBase
 
 Having prepared basis for skinnable control, let me introduce a custom attribute called the _SkinnablePartAttribute_
 
-```
+```csharp
 [AttributeUsage(AttributeTargets.Class)]
 public class SkinnablePartAttribute : Attribute
 {
@@ -139,7 +139,7 @@ public class SkinnablePartAttribute : Attribute
 
 This attribute should decorate custom controls which should have an ability to change theme/skin. As you can see, the _SkinnablePartAttribute_ has a _ThemePartName_ property which holds information about a name of _ResourceDictionary_ where styles for the given control ought to be searched. Now, it is time to take a look at a _SkinManager_ class. The _SkinManager_ class has one public function - _ApplySkin_
 
-```
+```csharp
 public static void ApplySkin(TView view, string skinName)
            where TView : FrameworkElement, IViewBase
 {
@@ -159,7 +159,7 @@ public static void ApplySkin(TView view, string skinName)
 
 This function iterates through all controls which implement a _IViewBase_ interface - in other words, the function iterates through our custom controls. If a control is decorated with the _SkinnablePartAttribue_, a new _Uri_ is created based on the information from the _ThemePartName_ property and from the skinName parameter(I assumed that all dictionaries are located in the Themes directory). In the final step, private function also known as the _AppySkin_ function is called. This function looks this way:
 
-```
+```csharp
 private static void ApplySkin(TView view, Uri uri, int mergedDictionaryIndex = 0)
             where TView :  IViewBase
 {
@@ -188,14 +188,14 @@ private static void ApplySkin(TView view, Uri uri, int mergedDictionaryIndex = 0
 
 Here, all the magic begins. In the first step, current _ResourceDictionary_ is transformed into the standard dictionary. The key of this dictionary is a value of style – a reference to the style object. In the next step, I created a new _ResourceDictionary_ based on the Uri parameter passed to this function. In the last step, another loop over controls is performed. However, this time only controls with the assigned _Style_ property are taken into consideration. Then, if the _newStyleDictionary_ contains a key of given control style we are ready to swap styles.
 
-```
+```csharp
 control.Style = newStyleDictionary[beforeClearDictionary[control.Style].key] as Style;
 
 ```
 
 Entire listing of _SkinManager_ is presented below
 
-```
+```csharp
 public static class SkinManager
 {
     private static void ApplySkin(TView view, Uri uri, int mergedDictionaryIndex = 0)
@@ -247,7 +247,7 @@ public static class SkinManager
 
 In order to use the _SkinManager_ it is essential to make some preparation. First of all, you have to create _Themes_ directory in a project. In this directory there must be separate subdirectories for every skin you would like to use. What is more, in these subdirectories you should place all _ResourceDictionaries_ specified in the _SkinnablePartAttribute_. A sample directory structure is shown in the picture below: [![DirectoryStructure](images/DirectoryStructure.png)](http://tpodolak.com/blog/wp-content/uploads/2012/07/windows-phone-skinnable-application/DirectoryStructure.png) The very last step is to make controls (which should be skinnable) inherit from _ViewBase_. Here is example of usage
 
-```
+```csharp
 namespace Joomanji.Chat.Client.Views
 {
     [SkinnablePart(ThemePartName = "ChatWindowSkin")]
@@ -272,10 +272,10 @@ and screenshots of the same view with different skin
 
 After some test, it turned out that the mechanism presented above has problems with controls which change their content dynamically. Let me clarify - styling grids, list boxes etc. work fine, however changing row styles and　listboxitem styles are not working properly. In order to overcome this problem you must define a style for a specific target type. Here is an example of usage with the listbox:
 
-```
-
+```xml
+<Style TargetType="ListBox">
     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     <Setter Property="VerticalAlignment" Value="Stretch"/>
     <Setter Property="ItemTemplate" Value="{StaticResource GeneralChatMessageTemplate}"/>
-
+</Style>
 ```

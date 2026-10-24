@@ -13,7 +13,7 @@ tags:
 
 Witam Dzisiejszy post nie będzie związany z platformą .NET, lecz z javascriptowym frameworkiem Extjs w wersji 4.1. Jako, że ostatnio w pracy poświęcam dużo czasu na pisanie w wyżej wymienionej technologii postanowiłem zaprezentować, w jaki sposób zmienić styl konkretnej komórki w gridzie. Zacznijmy od przygotowania danych do wyświetlenia - zdefiniujmy zatem stora, który będzie przechowywał informacje mające zostać zaprezentowane na gridzie.
 
-```
+```javascript
 Ext.create('Ext.data.Store', {
     storeId:'itemsStore',
     fields:['name', 'email', 'change'],
@@ -36,7 +36,7 @@ Ext.create('Ext.data.Store', {
 
 Następnie podepnijmy stora pod grida w wersji podstawowej - bez zmiany stylu konkretnych komórek.
 
-```
+```javascript
 Ext.create('Ext.grid.Panel', {
     store: Ext.data.StoreManager.lookup('itemsStore'),
     columns: [
@@ -53,7 +53,7 @@ Ext.create('Ext.grid.Panel', {
 
 W celu zmiany parametrów poszczególnych komórek grida posłużymy się tzw. rendererem. Renderer jest to funkcja, której zadaniem jest modyfikacją komórek w danej kolumnie grida. Dzięki rendererowi możemy nie tyko zmienić zawartość komórki, ale również przypisać jej osobny styl lub klasę CSS. Myślę, że renderer można porównać do conwertera znanego z technologii WPF. Funkcję renderera podłączymy pod ostatnią kolumnę. Kod po modyfikacjach będzie wyglądał w następujący sposób:
 
-```
+```javascript
 Ext.create('Ext.grid.Panel', {
     store: Ext.data.StoreManager.lookup('itemsStore'),
     columns: [
@@ -75,7 +75,7 @@ Ext.create('Ext.grid.Panel', {
 
 ```
 
-```
+```css
 .price-fall  {
     background-color: red !important;
     

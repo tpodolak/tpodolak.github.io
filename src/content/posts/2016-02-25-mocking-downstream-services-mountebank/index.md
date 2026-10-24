@@ -17,7 +17,7 @@ I'm a part of a team which creates large enterprise platform for the banking sec
 
 Before I go to the implementation details, take a look at a sample implementation of situation I described at the very beginning. Let's assume that we have _WCF_ service which contains business logic of our application and it is consumed by the _UI_ side
 
-```
+```csharp
 public class BookingFacade :  IBookingFacade
 {
     public Response Price(Models.GetPriceRequest request)
@@ -56,7 +56,7 @@ public class BookingFacade :  IBookingFacade
 
 _BookingFacade_ uses _Pricer_ service which basically is just a wrapper for external/downstream service we have to use in order to retrieve some data (and we do not have an ownership of that service).
 
-```
+```csharp
 public class Pricer : IPricer
 {
     public TradingDates GetTradingDates()
@@ -81,7 +81,7 @@ public class Pricer : IPricer
 
 Very simple end-to-end test for _BookingFacade_ can look like that
 
-```
+```csharp
 [TestFixture]
 public class BookingFacadeTests
 {
@@ -124,21 +124,21 @@ As you can see I apply _SetAttributes_ transform for _appSettings_ node, which m
 
 Setting up fake downstream systems completely from scratch would be a very painful and time consuming process. Fortunately there are tools which can make this task easier. The tool I use is called [mountebank](http://www.mbtest.org/) - you can easily install it via _npm_
 
-```
+```bash
 npm install -g mountebank
 
 ```
 
 Having _mountebank_ on board it is time to configure it, so that it acts as fake _Pricer_ service. It can be done in couple of ways but I will go with file based configuration. You can run the tool using following command
 
-```
+```bash
 mb --configfile impostors.ejs --allowInjection
 
 ```
 
 [![ImpostorsListening](images/ImpostorsListening.png)](//tpodolak.com/blog/wp-content/uploads/2016/02/mocking-downstream-services-with-mountebank/ImpostorsListening.png) Where _impostors.ejs_ is a configuration file with following structure
 
-```
+```json
 {
   "imposters": [
     <% include pricer.json %>
@@ -149,7 +149,7 @@ mb --configfile impostors.ejs --allowInjection
 
 _<% include pricer.json %>_ is _[EJS](http://www.embeddedjs.com/)_ syntax which (in this case) allows you to split configuration into multiple files. As you've probably already figured it out, _Pricer.json_ contains the actual mock configuration for _Pricer_ service. The initial mock object consists of couple of properties which setup the name, port and protocol for given mock.
 
-```
+```json
 {
   "port": 4545,
   "protocol": "http",
@@ -161,7 +161,7 @@ _<% include pricer.json %>_ is _[EJS](http://www.embeddedjs.com/)_ syntax which 
 
 Note that we do not specify the address of mock but just a port. _Mountebank_ by default runs on _http://localhost:2525_ and mocks listen on _http://localhost:{port}_. The actual magic happens in _stubs_ property. Here is an example of stub/mock for _GetTradingDates_ method.
 
-```
+```json
 {
     "responses": [
       {
@@ -194,7 +194,7 @@ As you can see stub object consists of two properties
 
 **_predicates_** property is an array of predicates which will be used during matching process. Predicate object can be quite complex, it supports lots of different matching techniques. In this case, for simple _GET_ method I just use _equals_ operator to match _HTTP_ verb and _HTTP_ method. The same technique can be used for stubbing _POST_ methods. However, in this case, you can also perform matching against the body of the request. The one thing you have to remember is that _body_ property is not an object but string. So in my case, if I want to make a stub for _GetPrice_ which takes as params following request object
 
-```
+```csharp
 public class GetPriceRequest
 {
     public bool IsAdvised { get; set; }
@@ -204,7 +204,7 @@ public class GetPriceRequest
 
 I can write for instance this stub
 
-```
+```json
 {
     "responses": [
       {
@@ -231,7 +231,7 @@ I can write for instance this stub
 
 Of course for more complex request it is pointless to write every possible combination of params. Fortunately you can create fallback/default stub which will match everything
 
-```
+```json
 {
     "responses": [
       {

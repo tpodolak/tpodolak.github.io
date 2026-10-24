@@ -10,7 +10,7 @@ tags:
 
 Last week I've encountered an interesting bug in swagger documentation of our API. For some reason couple of _Get_ operations were missing some of the query parameters. The issue itself was only visible in a couple of controllers, simplified version of one of them is shown below
 
-```
+```csharp
 public class ValuesController : ApiController
 {
     // GET api/values
@@ -24,7 +24,7 @@ public class ValuesController : ApiController
 
 As you can see the controller has a Get method which takes as an argument following class
 
-```
+```csharp
 public class FullAvailabilityRequest : AvailabilityRequest
 {
     public string TermsOfService { get; set; }

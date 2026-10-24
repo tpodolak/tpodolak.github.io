@@ -25,7 +25,7 @@ Walidacja jest to technika sprawdzająca, czy dany obiekt spełnia pewne założ
 
 Walidacja poprzez rzucanie wyjątków odbywa się w następujący sposób. W seterze danej właściwości dodajemy warunek sprawdzający czy wpisane dane są poprawne. Jeżeli nie to najzwyczajniej w świecie rzucamy wyjątek, w którym podajemy komunikat błędu. Przykładowy properties z walidacją może wyglądać w ten sposób:
 
-```
+```csharp
 private string _name;
 public string Name
 {
@@ -46,7 +46,7 @@ Taki sposób walidowania jest jednak rzadko stosowany i wielu programistów twie
 
 ### 2\. Walidacja z użyciem interfejsu IDataErrorInfo
 
-```
+```csharp
 public interface IDataErrorInfo
 {
     string this[string columnName] { get; }
@@ -59,7 +59,7 @@ W celu wyłapywania błędów w widoku, należy w bindingu ustawić ValidatesOnD
 
 Przykładowa klasa implementująca interfejs IDataErrorInfo może wyglądać następująco:
 
-```
+```csharp
 public class Customer : IDataErrorInfo
 {
     public string Name { get; set; }
@@ -89,7 +89,7 @@ public class Customer : IDataErrorInfo
 
 Najważniejszą metodą w powyższej klasie jest indekser
 
-```
+```csharp
 string this[string propertyName]
 
 ```
@@ -100,7 +100,7 @@ to właśnie tutaj mogą zostać sprawdzone wszystkie właściwości danego obie
 
 Interfejs INotifyDataErrorInfo prezentuje się w następujący sposób:
 
-```
+```csharp
 public interface INotifyDataErrorInfo
 {
      bool HasErrors { get; }
@@ -118,7 +118,7 @@ W celu "wyłapania" błędów przez widok należy w bindingu ustawić properties
 
 Jak już wcześniej wspomniano funkcja GetErrors(string propertyName) zwraca kolekcję błędów dla danej właściwości. Zatem do klasy, która będzie implementowała interfejs INotifyDataErrorInfo należy dodać kolekcję przechowującą obiekty typu ValidationResult. Przykładowa implementacja interfejsu może wyglądać w następujący sposób:
 
-```
+```csharp
 public class BaseViewModel : INotifyDataErrorInfo
 {
     private ICollection _validationResults;
@@ -164,7 +164,7 @@ public class BaseViewModel : INotifyDataErrorInfo
 
 Funkcja Validate() najpierw czyści wszystkie poprzednie wyniki walidacji, a następnie przy pomocy klasy Validator oraz funkcji TryValidateObject waliduje wszystkie właściwości, które zostały oznaczone atrybutem dziedziczącym po klasie ValidationAttribute.Z kolei funkcja Validate(string propertyName) waliduje tylko konkretną właściwość. Przykładowe walidowanie właściwości przy pomocy atrybutów może wyglądać w następujący sposób:
 
-```
+```csharp
 [Required(ErrorMessage = "Pole nie może być puste")]
 public string Subject
 {
@@ -180,7 +180,7 @@ public string Subject
 
 W celu stworzenia własnych regół walidacji, nie uwzględnionych w zapewnionych przez framework atrybutach należy stworzyć własną klasę dziedziczącą po klasie ValidationAttribute, a następnie przeciążyć metodę IsValid. Przykładowa klasa może wyglądać w następujący sposób:
 
-```
+```csharp
 public class IntValidation : ValidationAttribute
 {
     private bool allowNull;

@@ -13,7 +13,7 @@ tags:
 
 A couple of days ago I was trying to use _Redis_ as session storage for one of my ASP .NET websites. Even though it seemed to be a rather straightforward task (Scott Hanselman wrote about that a [while ago](http://www.hanselman.com/blog/UsingRedisAsAServiceInAzureToSpeedUpASPNETApplications.aspx)), I ended up with some weird exception while running the app: _ERR unknown command 'EVAL'_ [![unknown command 'EVAL'](images/UnknownCommandEval.png)](http://tpodolak.com/blog/wp-content/uploads/2016/10/redissessionstateprovider-unknown-command-eval/UnknownCommandEval.png) This wasn’t for sure a connectivity issue, as I was able to connect to _Redis_ server from _Redis Client_ - _redis-cli_. For me it looked like my server is not able to "understand" _EVAL_ command. I started digging around and it turned out that this command has been introduced in version [2.6.0](http://redis.io/commands/EVAL) I've connected to the server using _redis-cli_ and checked the version with
 
-```
+```text
 info
 
 ```

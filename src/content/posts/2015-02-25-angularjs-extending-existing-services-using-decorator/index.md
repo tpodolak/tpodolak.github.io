@@ -13,7 +13,7 @@ tags:
 
 One of the features I miss the most in _AngularJS_ is ability to easy unsubscribe event handlers. There is no convenience function opposed to _$on_, so in order to unsubscribe event, we have to call method returned by _$on_ function
 
-```
+```javascript
 (function () {
     angular.module('app.download', [])
         .controller('downloadCtrl', downloadController);
@@ -34,7 +34,7 @@ One of the features I miss the most in _AngularJS_ is ability to easy unsubscrib
 
 However in my opinion this approach fails in real life scenarios, because usually we are subscribed to more than one event - thus we have to have multiple local variables for detaching listeners. Fortunately _AngularJS_ provides an easy way to extend existing services with some new functionalities - we can achieve that by using _$provide_ service. This service exposes [_decorator_](https://docs.angularjs.org/api/auto/service/$provide#decorator) method, which is able to intercept creation of any service, so we are able to augment it with some new functions. The best moment to call _$provide.decorator_ method is during module configuration, thanks to this approach we are sure that our custom logic is invoked before module is started.
 
-```
+```javascript
 angular.module('app.common', [])
        .config(extendServices);
 
@@ -49,7 +49,7 @@ function extendServices($provide) {
 
 In my case I wanted to extend _$rootScope_ with new method _$un_ for unsubscribing events, so I called method _decorator_ with parameter _'$rootScope'_ (note single quotation marks) - this tells _Angular_ that I will be modifying _$rootScope_ service
 
-```
+```javascript
 angular.module('app.common', [])
     .config(extendServices);
 
@@ -66,7 +66,7 @@ function extendRootScope($delegate) {
 
 Because I passed _'$rootScope'_ as a first argument of _$provide.decorator_ method, the _$delegate_ parameter in _extendRootScope_ function is actually a _$rootScope_ service. Now having access to the service I can augment it with my custom logic for detaching event handlers.
 
-```
+```javascript
 /*ngInject*/
 function extendRootScope($delegate){
     $delegate.$un=function(name,listener){
@@ -83,7 +83,7 @@ function extendRootScope($delegate){
 
 Entire code listing looks then as follows
 
-```
+```javascript
 (function () {
     angular.module('app.common', [])
            .config(extendServices);
@@ -112,7 +112,7 @@ Entire code listing looks then as follows
 
 From now on, you can unsubscribe events handlers simply by calling $un method
 
-```
+```javascript
 (function () {
     angular.module('app.download', ['app.common'])
         .controller('downloadCtrl', downloadController);
@@ -131,7 +131,7 @@ From now on, you can unsubscribe events handlers simply by calling $un method
 
 and our listener will react only once
 
-```
+```javascript
 console.log('Broadcasting afterRender event for the first time');
 $rootScope.$broadcast('afterRender');
 console.log('Broadcasting afterRender event for the second time');

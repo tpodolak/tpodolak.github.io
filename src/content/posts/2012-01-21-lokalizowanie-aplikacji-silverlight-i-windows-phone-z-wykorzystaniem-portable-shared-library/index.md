@@ -29,7 +29,7 @@ Niestety z powodu tego, że klasa Localization nie posiada publicznego konstrukt
 
 Jako, że podejście drugi jest wg mnie dużo lepsze to postaram się je teraz przedstawić. Do projektu SharedPortableClasses dodajmy klasę LocalizationProxy.cs.
 
-```
+```csharp
 public class LocalizationProxy : INotifyPropertyChanged
 {
     public Localization LocalizationManager { get; private set; }
@@ -65,14 +65,14 @@ Zanim przystąpimy do tłumaczenia samego interfejsu musimy jeszcze zmodyfikowa�
 
 Widok ten jest bardzo prosty. Posada on dwa przyciski służące do zmiany aktualnego języka oraz labelkę, na której dany tekst będzie się pojawiać. Najciekawszą rzeczą w tym kodzie jest sposób wyświetlania tłumaczonego tekstu. Jak widać do właściwości Text elementu typu TextBlok nie jest przypisywana wartość stała, ale używany jest binding
 
-```
+```csharp
 Text="{Binding Source={StaticResource LocalizationProxy},Path=LocalizationManager.Title,Mode=TwoWay}"
 
 ```
 
 To co wyświetli się w danym TextBloku zależne jest od tego co zwróci nam nasz mechanizm tłumaczący. Odnosimy się do niego poprzez wskazanie zasobu, który nazwaliśmy LocalizationProxy (taki klucz nadaliśmy mu w zasobach aplikacji). Następnie do konkretnego tekstu odnosimy się podając odpowiednią ścieżkę - w tym przypadku jest to LocalizationManager.Title. LocalizationManager jest to właściwość, którą stworzyliśmy w klasie LocalizationProxy, natoamist Title jest to klucz jaki wpisaliśmy w pliku zasobów Localization.resx. Przeglądając plik Localization.Designer.cs można zauważyć, że została tam wygenerowana właściwość Title.
 
-```
+```csharp
 public static string Title 
 {
     get { return ResourceManager.GetString("Title", resourceCulture); }
@@ -82,7 +82,7 @@ public static string Title
 
 Właściwość tak zwraca nam tekst w odpowiednim języku. Sam mechanizm zwracania tekstu dla wybranego przez nas języka jest już dostarczony z Frameworkiem. Tekst wyświetlany w aplikacji będzie w takim języku/kulturze jaka zostania przypisana do właściwości Thread.CurrentThread.CurrentUICulture. Możemy to w łatwy sposób sprawdzić zmieniając dynamicznie kulture wątku. Stwórzmy nową klasę i nazwijmy ją MainPageViewModel. Wygląda ona w następujący sposób
 
-```
+```csharp
 public class MainPageViewModel
 {
     public DelegateCommand PolisLanguageCommand { get; set; }
@@ -115,7 +115,7 @@ public class MainPageViewModel
 
 Następnie stwórzmy obiekt tej klasy i przypiszmy go do DataContext-u okna MainPage.
 
-```
+```csharp
 public partial class MainPage : UserControl
 {
     public MainPage()

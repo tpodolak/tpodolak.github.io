@@ -25,7 +25,7 @@ Trigery jest to mechmizm WPF-a służący reakcji UI na jakieś zdarzenie. Wyró
 
 Oto przykład wykorzystania Property Triggera. W ResourceDictionary tworzymy styl, który zostanie przypisany do przycisku.
 
-```
+```xml
 
     <Style.Triggers>
         <Trigger Property="IsMouseOver" Value="True">
@@ -42,7 +42,7 @@ Widzimy, że dany trigger jest powiązany z właściwością IsMouseOver.W przyp
 
 Oto przykład wykorzystania Data Triggera. W ResourceDictionary tworzymy styl, który zostanie przypisany do przycisku.
 
-```
+```xml
 
     <Style.Triggers>
         <DataTrigger Binding="{Binding Path=Text}" Value="Kolor">
@@ -58,7 +58,7 @@ W tym przypadku nasz trigger reaguje na zmiany właściwości Text. Jako, że ni
 
 Oto przykład wykorzystania MultiDataTriggera. W ResourceDictionary tworzymy styl, który zostanie przypisany do przycisku.
 
-```
+```xml
 
     <Style.Triggers>
         <MultiDataTrigger>
@@ -78,7 +78,7 @@ Tym razem nasz trigger zareaguje, tylko i wyłącznie gdy wartość właściwoś
 
 Zasada działania MultiTriggera jest analogiczna z zasadą działania MultiDataTriggera. Różnica między ni mi jest taka, że w MultiTriggerze możemy jedynie odnosić się do propertisów danej kontrolki (kontrolki dla której styl tworzymy,oraz kontrolek wchodzących w skład naszej kontrolki). Przykładowy kod MultiTriggera może wyglądać w następujący sposób:
 
-```
+```xml
 
     <Style.Triggers>
         <MultiTrigger>

@@ -17,7 +17,7 @@ In one of my previous post I've shown how to improve logging in an application b
 
 First of all (as usual) we have to get the tools, so go to [elastic.co](https://www.elastic.co/downloads) and download apps mentioned before. These are stand-alone applications so no installation is required. The only requirement is to have _JAVA\_HOME_ system variable pointing to your java directory. In my case, this looks as follows
 
-```
+```text
 C:\Program Files\Java\jre1.8.0_91\
 
 ```
@@ -30,7 +30,7 @@ Once all three applications are downloaded we can run _Elasticsearch_ (as there 
 
 Having our _Elasticsearch_ instance up and running, now it is time configure _Logstash_ so that it will be able to parse logs. Configuration provided in next sections will be able to parse logs with the following format
 
-```
+```text
 TimeStamp=2016-07-20 21:22:46.0079 CorrelationId=dc665fe7-9734-456a-92ba-3e1b522f5fd4 Level=INFO Message=About to start GET / request
 
 ```
@@ -39,7 +39,7 @@ TimeStamp=2016-07-20 21:22:46.0079 CorrelationId=dc665fe7-9734-456a-92ba-3e1b522
 
 _Logstash_ configuration is done via config file in specific format. You can read about that [here](https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html) The very first step is to define input and output sections
 
-```
+```text
 input {
     file {
         path => ["C:/logs/*.log"]
@@ -57,14 +57,14 @@ output {
 
 As you can see the logs will be read from _C:\\logs_ directory and parsed content will be pushed to _Elasticsearch_ instance and to the console output. We can verify correctness of configuration calling
 
-```
+```bat
 logstash.bat -f  "Path\To\Config\File.conf" -t
 
 ```
 
 [![configurationtest](images/ConfigurationTest.png)](http://tpodolak.com/blog/wp-content/uploads/2016/10/getting-started-elastic-stack/ConfigurationTest.png) If you are making your config file for the first time it is good idea to add additional properties to the _file_ section
 
-```
+```text
 ignore_older => 0
 sincedb_path => "NUL"
 
@@ -76,21 +76,21 @@ At this point, _Logstash_ can read the log file but it doesn’t do anything spe
 
 For parsing logs shown in previous section I've ended up with this grok pattern
 
-```
+```text
 TimeStamp=%{TIMESTAMP_ISO8601:logdate} CorrelationId=%{UUID:correlationId} Level=%{LOGLEVEL:logLevel} Message=%{GREEDYDATA:logMessage}
 
 ```
 
 Notice that you are able to give aliases for particular fields, for instance
 
-```
+```text
 TimeStamp=%{TIMESTAMP_ISO8601:logdate} 
 
 ```
 
 means that everything that matches _TimeStamp=%{TIMESTAMP\_ISO8601}_ will be stored in _logdate_ field. Having defined our pattern, now we can add it to the config file. After modifications, it looks as follows
 
-```
+```text
 input {
     file {
         path => ["C:/logs/*.log"]
@@ -113,14 +113,14 @@ output {
 
 Once we run this config and start querying elastic search for list of all indices via
 
-```
+```text
 http://localhost:9200/_cat/indices?v
 
 ```
 
 we will see that our logs were parsed and stored in index called _logstash-2016.10.30_ [![indices](images/indices.png)](http://tpodolak.com/blog/wp-content/uploads/2016/10/getting-started-elastic-stack/indices.png) If we now go to
 
-```
+```text
 http://localhost:9200/logstash-2016.10.30
 
 ```
@@ -131,7 +131,7 @@ we will be able to see index information [![indexinfo](images/IndexInfo-1.png)](
 
 At this moment there are two main problems with our configuration. First of all, the indices are created based on read time from file. Second of all our _logdate_ field is treated as string. [![logdateasstring](images/logdateasstring.png)](http://tpodolak.com/blog/wp-content/uploads/2016/10/getting-started-elastic-stack/logdateasstring.png) By default _Logstash_ creates indices based on read time of the source. However in my opinion it is better to create index names based on time given event occurred. In order to do that, we have to tell the _Logstash_ which field is responsible for holding timestamp. In my case, this field is called _logdate_. All we have to do is to map this field into field via date filter
 
-```
+```text
 date {
         match => [ "logdate", "yyyy-MM-dd HH:mm:ss.SSSS" ]
 }
@@ -140,7 +140,7 @@ date {
 
 As you can see first argument is a filed name and rest of the arguments (you can specify more) are just date time formats. By default date filter maps a field from the _match_ property into _@timestamp_ field. So the config above equals this one
 
-```
+```text
 date {
         match => [ "logdate", "yyyy-MM-dd HH:mm:ss.SSSS" ]
         target => "@timestamp"
@@ -150,7 +150,7 @@ date {
 
 If we restart _Logstash_ and get the indices, we will see something similar to that [![multipleindices](images/multipleindices.png)](http://tpodolak.com/blog/wp-content/uploads/2016/10/getting-started-elastic-stack/multipleindices.png) Second problem can be handled in very similar way. We have to add second date filter and select as target _longdate_ field
 
-```
+```text
 date {
         match => [ "logdate", "yyyy-MM-dd HH:mm:ss.SSSS" ]
         target => "logdate"
@@ -164,21 +164,21 @@ From now on _logdate_ field will be treated as date so we will be able to filter
 
 Having all the configuration in place now we are ready to run _Kibana_. As in previous steps, no installation is needed so just run the _Kibana.bat_ file [![kibanastarted](images/kibanastarted.png)](http://tpodolak.com/blog/wp-content/uploads/2016/10/getting-started-elastic-stack/kibanastarted.png) and go to
 
-```
+```text
 http://localhost:5601/
 
 ```
 
 If you run the app for the first time you will be asked to configure the indices. You can use the default parameters and just click "Create" button. Once the indices are setup you can start writing queries against the logs. By default entire message is searched for the search terms, however the real power comes with queries written against specific fields. For example, you can search for any errors in the application with this simple query
 
-```
+```text
 logLevel: (FATAL OR ERROR)
 
 ```
 
 Thanks to date type fields, you can combine this query with date range selector and narrow down time to specific values, just like that
 
-```
+```text
 logdate:[2016-07-20 TO 2016-10-31] AND logLevel: (FATAL OR ERROR)
 
 ```

@@ -13,7 +13,7 @@ tags:
 
 Witam Ostatnio napotkałem na dość ciekawy wyjątek podczas wykonywania NHibernatowego inserta. W bazie danych mam prostą tabelę [![Table](images/Table.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/03/fluentnhibernate-mapowanie-kolumn-typu-time/Table.jpg) Do takiej tabeli został stworzony model
 
-```
+```csharp
 namespace Model
 {
     public class Appointment
@@ -28,7 +28,7 @@ namespace Model
 
 oraz mapping
 
-```
+```csharp
 namespace Model.Mappings
 {
     public class AppointmentMapping : ClassMap
@@ -47,7 +47,7 @@ namespace Model.Mappings
 
 Niestety ku mojemu zaskoczeniu próbując zapisać do bazy obiekt typu Appointment dostałem następujący wyjątek _SqlException: Operand type clash: bigint is incompatible with time_ [![Exception](images/Exception-1024x358.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/03/fluentnhibernate-mapowanie-kolumn-typu-time/Exception.jpg) Mówiąc szczerze wyjątek ten niewiele mi powiedział, zwłaszcza, że zapytanie wygenerowane przez NHibernata (przechwycone w NHibernateProfilerze) wyglądało jak najbardziej poprawnie. Jednakże zapytanie przechwycone przez SqlProfilera wyglądało w następujący sposób
 
-```
+```sql
 exec sp_executesql N'INSERT INTO [Appointment] (Name,StartDate,Duration) VALUES (@p0,@p1,@p2); 
 select SCOPE_IDENTITY()',
 N'@p0 nvarchar(4000),
@@ -61,7 +61,7 @@ N'@p0 nvarchar(4000),
 
 Widać tutaj, że drugi parametr (@p2) został oznaczony jako bigint, a nie time (tak jak jest to oznaczone w bazie). Przyczyną takiego stanu rzeczy jest zły mapping. Z tego co wyczytałem, jeżeli chcemy aby poprawnie zmapować TimeSpana na kolumnę typu time, musimy zmodyfikować interesujący nas mapping na następujący.
 
-```
+```csharp
 Map(val => val.Duration).Not.Nullable().CustomType("TimeAsTimeSpan");
 
 ```

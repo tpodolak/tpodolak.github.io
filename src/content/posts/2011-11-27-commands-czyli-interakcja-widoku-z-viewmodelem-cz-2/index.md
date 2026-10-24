@@ -21,7 +21,7 @@ Tak jak wspomniałem w poprzednim wpisie, tym razem zajmiemy się tworzeniem wł
 
 Klasa implementująca ICommand może wyglądać w następujący sposób
 
-```
+```csharp
 public class DelegateCommand : ICommand
 {
     private Action execute;

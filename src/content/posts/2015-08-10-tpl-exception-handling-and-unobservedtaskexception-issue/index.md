@@ -21,7 +21,7 @@ Working with _Tasks_ is a modern way of writing asynchronous code in an easy and
 
 Because of the fact that _Tasks_ are run asynchronously we can't just use a standard _try catch_ block surrounding _Task_
 
-```
+```csharp
 public static void TryCatchBlockWrongWay()
 {
     try
@@ -39,7 +39,7 @@ public static void TryCatchBlockWrongWay()
 
 In that case catch block is unreachable (I will describe later what happens with that exception), of course we could use _try catch_ inside _Task.Factory.StartNew_ lambda expression but this is not always the case. Usually we want to handle exception in the caller of the _Task_, not inside the _Task_ itself. There are couple of ways of achieving that - depending on the situation you can use one of the following ways. Exception are propagated to caller once you start waiting for the result of _Task_. So basically you can use _try catch_ block if you wait for a _Task_ to finish - either by accessing _Result_ property or using _Wait_ method
 
-```
+```csharp
 public static void HandleExceptionTryCatchResult()
 {
     try
@@ -80,7 +80,7 @@ public static void HandleExceptionTryCatchWait()
 
 However accessing _Result_ or calling _Wait_ method are blocking calls, so this might not be a perfect solution for every scenario. Fortunately we can also leverage _ContinueWith_ method which gives you an ability to specify what should be done once _Task_ finishes processing the operation. What is more important you can configure this method to only be called if exception occurs. Nonetheless there is one crucial thing you have to remember - in order to make exception handled or observed you have to access _Exception_ property of _Task_...
 
-```
+```csharp
 public static void HandleExceptionContinueWith()
 {
     Task.Factory.StartNew(() => { throw new Exception("From method HandleExceptionContinueWith"); })
@@ -99,7 +99,7 @@ public static void HandleExceptionContinueWith()
 
 or call _Handle_ method from _AggregateException_ object
 
-```
+```csharp
 public static void HandleExceptionContinueWithAndHandleMethod()
 {
     Task.Factory.StartNew(() => { throw new Exception("From method HandleExceptionContinueWith"); })
@@ -117,7 +117,7 @@ public static void HandleExceptionContinueWithAndHandleMethod()
 
 Otherwise exception will not be handled which may cause a lot of troubles described in section 3 of this post. Lastly if you use _.NET 4.5_ you can also just use _async await_ and _try catch_ block
 
-```
+```csharp
 // called from Main
 public static async void HandleExceptionTryCatchAwait()
 {
@@ -146,7 +146,7 @@ private static async Task HandleExceptionTryCatchAwaitInternal()
 
 If it happens that exception thrown by _Task_ is not handled, once the _Task_ is garbage-collected, finalizer thread will throw _UnobservedTaskException_.
 
-```
+```csharp
 Task.Factory.StartNew(() => { throw new Exception("fire-and-forget no exception handling"); });
 using (var autoresetEvent = new AutoResetEvent(false))
 {
@@ -165,7 +165,7 @@ The implication of this depends on framework we are running our application on. 
 
 to _app.config_our process will be killed once _UnobservedTaskExceptionis_ is thrown. [![UnobservedTaskExceptionis](images/ProcessKilled.png)](http://tpodolak.com/blog/wp-content/uploads/2015/08/tpl-exception-handling-and-unobservedtaskexception-issue/ProcessKilled.png) The problem arises in _.NET 4.0_ (if you run your app on _.NET 4.0_ not only compile it against this framework version), in this version of framework default escalation policy is very strict and will kill our process once the _UnobservedTaskException_ is thrown by finalizer thread. Furthermore you cannot change this policy using _app.config_. Fortunately there is a one last chance to handle UnobservedExceptions and prevent our process from being killed. All you have to do is to wire up _TaskScheduler.UnobservedTaskException_ static event handler and then set exception to observed state
 
-```
+```csharp
 TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 {

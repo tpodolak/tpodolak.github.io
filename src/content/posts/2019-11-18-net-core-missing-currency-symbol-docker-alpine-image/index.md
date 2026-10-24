@@ -9,7 +9,7 @@ tags:
 
 During the process of moving a Scala-based API to .NET Core, we encountered an interesting localization issue when running our code in a docker container based on an alpine image. The code itself was doing a currency formatting based on some culture. It looked more or less as below
 
-```
+```csharp
 [Route("api/[controller]")]
 [ApiController]
 public class PriceController : ControllerBase

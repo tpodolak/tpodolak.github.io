@@ -21,7 +21,7 @@ In the company I'm currently working for, it is a common practice to use Devexpr
 
 After some digging, I created an action in controller which looks like this
 
-```
+```csharp
 public void ExportToPdf()
 {
     using (MemoryStream stream = new MemoryStream())
@@ -43,7 +43,7 @@ In the first step I made a new instance of a devexpress report(TestReport), then
 
 The solution presented above works fine, however, I wanted to create something more reusable, that is why I decided to create a custom _ActionResult - PDFActionResult_. In order to create my own _ActionResult_, I created a _PDFActionResult_ class which inherits from an abstract ActionResult class.
 
-```
+```csharp
 public class PDFActionResult : ActionResult
 {
     private readonly byte[] _byteArray;
@@ -77,7 +77,7 @@ public class PDFActionResult : ActionResult
 
 As you can see, all logic from the _ExportToPdf_ action was transferred to the PDFActionResult class. Now, all you have to do to return Pdf from DevexpressReport is to return the PDFActionResult from your controller action.
 
-```
+```csharp
 public PDFActionResult ExportToPdfUsingCustomResult()
 {
     var testReport = new TestReport();
