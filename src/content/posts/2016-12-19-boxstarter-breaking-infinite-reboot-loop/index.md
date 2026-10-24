@@ -15,20 +15,26 @@ tags:
 
 ### 2\. Detecting pending reboots
 
-If you dive into _Boxstarter_ source code you will notice that script responsible for checking if reboot is necessary uses [Get-PendingReboot](https://github.com/mwrock/boxstarter/blob/master/Boxstarter.Bootstrapper/Get-PendingReboot.ps1) cmdlet. By default _Boxstarter_ doesn’t export it, so if you want to see what it does you have to add following line in your _Boxstarer_ script
+If you dive into `Boxstarter` source code you will notice that script responsible for checking if reboot is necessary uses [Get-PendingReboot](https://github.com/mwrock/boxstarter/blob/master/Boxstarter.Bootstrapper/Get-PendingReboot.ps1) cmdlet. By default `Boxstarter` doesn’t export it, so if you want to see what it does you have to add following line in your `Boxstarer` script
 
-```powershell
+```powershell frame=none
 Import-Module (Join-Path $Boxstarter.BaseDir Boxstarter.Bootstrapper\Get-PendingReboot.ps1) -global -DisableNameChecking
 
 ```
 
-Calling the _Get-PendingReboot_ cmdlet will give you an information about mandatory reboots. In my case, the output looked as follows [![getpendingreboot](images/GetPendingReboot.png)](/tpodolak.com/blog/wp-content/uploads/2016/12/boxstarter-breaking-infinite-reboot-loop/GetPendingReboot.png) As you can see _RebootPending_ flag is set to true and the reason is that the value of _PendingFileRenVal_ property is not null. Basically, in most of the cases, a restart is indeed required however, some applications leave information about pending reboot in the registry (_HKEY\_LOCAL\_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\PendingFileRenameOperations_) and operating system (in some cases) never cleans this up. As a result _Get-PendingReboot_ indicates that reboot is required and _Boxstarter_ falls into infinite restart loop. [![pendingfilerenameoperationsframe](images/PendingFileRenameOperationsFrame.png)](//tpodolak.com/blog/wp-content/uploads/2016/12/boxstarter-breaking-infinite-reboot-loop/PendingFileRenameOperationsFrame.png)
+Calling the `Get-PendingReboot` cmdlet will give you an information about mandatory reboots. In my case, the output looked as following
+
+[![getpendingreboot](images/GetPendingReboot.png)](/tpodolak.com/blog/wp-content/uploads/2016/12/boxstarter-breaking-infinite-reboot-loop/GetPendingReboot.png) 
+
+As you can see `RebootPending` flag is set to true and the reason is that the value of `PendingFileRenVal` property is not null. Basically, in most of the cases, a restart is indeed required however, some applications leave information about pending reboot in the registry (`HKEY\LOCAL\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\PendingFileRenameOperations`) and operating system (in some cases) never cleans this up. As a result `Get-PendingReboot` indicates that reboot is required and `Boxstarter` falls into infinite restart loop.
+
+[![pendingfilerenameoperationsframe](images/PendingFileRenameOperationsFrame.png)](//tpodolak.com/blog/wp-content/uploads/2016/12/boxstarter-breaking-infinite-reboot-loop/PendingFileRenameOperationsFrame.png)
 
 ### 3\. Fixing the problem
 
 The obvious solution is to remove that value from the registry key manually. However this approach didn’t work for me, basically because the registry value somehow was added at the beginning of execution of my script. That is why, I've decided to modify my script and add a function which clears undesirable pending file renames of my choice.
 
-```powershell
+```powershell frame:none
 function Clear-Known-Pending-Renames($ignoredRenames){
     $regKey = "HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\"
     $regProperty = "PendingFileRenameOperations"
@@ -53,7 +59,9 @@ function Clear-Known-Pending-Renames($ignoredRenames){
 
 ```
 
-As you can see I am taking current value of _PendingFileRenameOperations_ and remove the entries which I know that will stay there forever. Calling that function as the very first step of my installation script solved the problem and I was able to successfully restore my machine from _Boxstarter_ script [![fullscrtipt](images/FullScrtipt.png)](//tpodolak.com/blog/wp-content/uploads/2016/12/boxstarter-breaking-infinite-reboot-loop/FullScrtipt.png)
+As you can see I am taking current value of `PendingFileRenameOperations` and remove the entries which I know that will stay there forever. Calling that function as the very first step of my installation script solved the problem and I was able to successfully restore my machine from `Boxstarter` script
+
+[![fullscrtipt](images/FullScrtipt.png)](//tpodolak.com/blog/wp-content/uploads/2016/12/boxstarter-breaking-infinite-reboot-loop/FullScrtipt.png)
 
 [![pendingfilerenameoperationsclearedframe](images/PendingFileRenameOperationsClearedFrame.png)](//tpodolak.com/blog/wp-content/uploads/2016/12/boxstarter-breaking-infinite-reboot-loop/PendingFileRenameOperationsClearedFrame.png)
 

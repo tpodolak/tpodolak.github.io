@@ -91,7 +91,7 @@ public class ValuesController : Controller
 
 was producing this output
 
-```log
+```log wrap=false
 TimeStamp=2018-02-28 20:14:37.2711 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=TRACE Message=Get method called trace 
 TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=WARN Message=Get method called warning 
 TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=ERROR Message=Get method called error 
@@ -101,7 +101,7 @@ TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsit
 
 However, after introducing new implementation of `ILogger<T>`, it started appending wrong caller member name
 
-```log
+```log wrap=false
 TimeStamp=2018-02-28 20:17:27.4044 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=TRACE Message=Get method called trace additional stuff in here 
 TimeStamp=2018-02-28 20:17:27.5117 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=WARN Message=Get method called warning additional stuff in here 
 TimeStamp=2018-02-28 20:17:27.5117 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=ERROR Message=Get method called error additional stuff in here 

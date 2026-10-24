@@ -194,7 +194,7 @@ Having our metadata libraries prepared now we can adjust our build scripts to ha
     from `imports.csx` file
 - Run the build
     
-    ```powershell
+    ```powershell frame="none"
     build.ps1 -script build.csx -target Your-Target
     
     ```

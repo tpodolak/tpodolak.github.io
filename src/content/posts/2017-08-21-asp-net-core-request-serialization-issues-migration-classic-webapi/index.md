@@ -9,7 +9,7 @@ tags:
 
 We've been migrating a classic `WebApi` application into the `ASP.NET Core API` for quite a while now, and last week we decided to deploy it on the test environment and try to run a website against it. We were pretty confident about the quality of a migration because all of the integration tests from old `API` were green when running against a new one. We were expecting maybe some business logic bugs but from our perspective, the infrastructure part was good to go. Unfortunately, when the `QA's` run the selenium test suite they quickly found a major issue in our codebase. They basically were getting `HTTP 500` errors indicating a `NullReferenceException`. That was pretty surprising to us and after a bit of a digging we found following lines in the logs
 
-```log
+```log wrap=false
 TimeStamp=2017-08-20 00:43:49.4383 TraceId=0HL77AF0N305P Level=DEBUG Message=JSON input formatter threw an exception. Newtonsoft.Json.JsonSerializationException: Error converting value {null} to type 'System.Int32'. Path 'PassengerNumber', line 2, position 26. ---> System.InvalidCastException: Null object cannot be converted to a value type.
    at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
    at Newtonsoft.Json.Serialization.JsonSerializerInternalReader.EnsureType(JsonReader reader, Object value, CultureInfo culture, JsonContract contract, Type targetType)
