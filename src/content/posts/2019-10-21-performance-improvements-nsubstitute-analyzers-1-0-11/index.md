@@ -26,7 +26,6 @@ I am glad to announce that the latest release of [NSubstitute.Analyzers](https:/
 | SubstituteAnalyzer | 1,960.4 | 8.197 | 7.2666 | 89.8438 | 19.5313 | 343.67 |
 | UnusedReceivedAnalyzer | 524.0 | 1.671 | 1.5630 | 29.2969 | 1.9531 | 92.45 |
 
-Benchmark results of NSubstitute.Analyzers.CSharp 1.0.11
 | Analyzer | Mean (us) | Error (us) | StdDev (us) | Gen 0 | Gen 1 | Allocated (KB) |
 | --- | --- | --- | --- | --- | --- | --- |
 | CallInfoAnalyzer | 1,828.8 | 5.599 | 4.963 | 123.0469 | 11.7188 | 379.78 |
@@ -38,7 +37,6 @@ Benchmark results of NSubstitute.Analyzers.CSharp 1.0.11
 | SubstituteAnalyzer | 1,870.2 | 29.787 | 27.863 | 87.8906 | 23.4375 | 346.09 |
 | UnusedReceivedAnalyzer | 482.1 | 1.705 | 1.511 | 25.8789 | 1.9531 | 80.96 |
 
-  
 
 ### 3\. Benchmark comparision of NSubstitute.Analyzers.VisualBasic
 
@@ -53,7 +51,6 @@ Benchmark results of NSubstitute.Analyzers.CSharp 1.0.11
 | SubstituteAnalyzer | 3.615 | 0.0168 | 0.0149 | 105.4688 | 23.4375 | 393.13 |
 | UnusedReceivedAnalyzer | 1.306 | 0.0258 | 0.0528 | 13.6719 | 1.9531 | 43.3 |
 
-Benchmark results of NSubstitute.Analyzers.VisualBasic 1.0.11
 | Analyzer | Mean (ms) | Error (ms) | StdDev (ms) | Gen 0 | Gen 1 | Allocated (KB) |
 | --- | --- | --- | --- | --- | --- | --- |
 | CallInfoAnalyzer | 3.737 | 0.0878 | 0.1110 | 152.3438 | 11.7188 | 471.79 |

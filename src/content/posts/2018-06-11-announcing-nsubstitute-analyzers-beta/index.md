@@ -18,7 +18,8 @@ I am glad to announce that yesterday, together with _NSubstitute_ team we releas
 As for today analyzers can detect two most common misusages of _NSubstitute_:
 
 - non-virtual call setup
-![](images/NonVirtualSetup.png)- Received used without following method call
+![](images/NonVirtualSetup.png)
+- Received used without following method call
 ![](images/UnusedReceived.png)
 
 Feels free to [suggest](https://github.com/nsubstitute/NSubstitute.Analyzers/issues) additional diagnostic you would like to have in the package.
