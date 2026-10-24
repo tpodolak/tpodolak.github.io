@@ -10,7 +10,7 @@ tags:
 
 ### 1\. Introduction
 
-In my current project, we use _Microsoft.Extensions.Logging.ILogger<T>_ default implementation as our logging mechanism. This basically comes with the _ASP.NET Core 2.0_ package and it was working fine so far. However recently we decided to switch the default implementation with a custom one, due to the fact that we wanted to have some additional logic applied for all of the logging providers.
+In my current project, we use `Microsoft.Extensions.Logging.ILogger<T>` default implementation as our logging mechanism. This basically comes with the `ASP.NET Core 2.0` package and it was working fine so far. However recently we decided to switch the default implementation with a custom one, due to the fact that we wanted to have some additional logic applied for all of the logging providers.
 
 ### 2\. Implementation
 
@@ -60,9 +60,9 @@ services.Replace(new ServiceDescriptor(typeof(ILogger<>), typeof(Logger.Logger<>
 
 As you can see we basically wanted to add information from custom exceptions to the message. Due to the fact that this is added in here, we don’t have to modify all of our existing logging providers.
 
-### 3\. _NLog_ call site renderer issue
+### 3\. `NLog` call site renderer issue
 
-Once we run the application all of the providers were working fine and were producing expected output apart from _NLog_ provider. Originally _NLog_ provider for the following code
+Once we run the application all of the providers were working fine and were producing expected output apart from `NLog` provider. Originally `NLog` provider for the following code
 
 ```csharp
 [Route("api/[controller]")]
@@ -91,7 +91,7 @@ public class ValuesController : Controller
 
 was producing this output
 
-```text
+```log
 TimeStamp=2018-02-28 20:14:37.2711 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=TRACE Message=Get method called trace 
 TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=WARN Message=Get method called warning 
 TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Controllers.ValuesController.Get Level=ERROR Message=Get method called error 
@@ -99,9 +99,9 @@ TimeStamp=2018-02-28 20:14:37.3261 Callsite=AspNetCoreCustomLoggerAndNLogCallsit
 
 ```
 
-However, after introducing new implementation of _ILogger<T>_, it started appending wrong caller member name
+However, after introducing new implementation of `ILogger<T>`, it started appending wrong caller member name
 
-```text
+```log
 TimeStamp=2018-02-28 20:17:27.4044 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=TRACE Message=Get method called trace additional stuff in here 
 TimeStamp=2018-02-28 20:17:27.5117 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=WARN Message=Get method called warning additional stuff in here 
 TimeStamp=2018-02-28 20:17:27.5117 Callsite=AspNetCoreCustomLoggerAndNLogCallsiteIssue.Logger`1.Log Level=ERROR Message=Get method called error additional stuff in here 
@@ -109,7 +109,7 @@ TimeStamp=2018-02-28 20:17:27.5202 Callsite=AspNetCoreCustomLoggerAndNLogCallsit
 
 ```
 
-After some digging, it turned out that the issue lies in the (indirect)configuration of _NLog's_ [callsite layout renderer](https://github.com/NLog/NLog/wiki/Callsite-layout-renderer). Long story short, when you add _NLog_ provider to your logger providers, under the hood it adds _Microsoft.Extensions.Logging.Abstractions_ assembly(among others) to something called hidden assembly collection. Once the _NLog_ tries to figure out what is the caller member name, it crawls the stack trace to find a method name. If the method in current frame comes from a hidden assembly, logger skips it and continues iteration. As we changed the _Logger<T>_ to our custom one, it is no longer part of _Microsoft.Extensions.Logging.Abstractions_ assembly, so the _NLog_ reports _Log_ method from our custom logger as a caller member name.
+After some digging, it turned out that the issue lies in the (indirect)configuration of `NLog's` [callsite layout renderer](https://github.com/NLog/NLog/wiki/Callsite-layout-renderer). Long story short, when you add `NLog` provider to your logger providers, under the hood it adds `Microsoft.Extensions.Logging.Abstractions` assembly(among others) to something called hidden assembly collection. Once the `NLog` tries to figure out what is the caller member name, it crawls the stack trace to find a method name. If the method in current frame comes from a hidden assembly, logger skips it and continues iteration. As we changed the `Logger<T>` to our custom one, it is no longer part of `Microsoft.Extensions.Logging.Abstractions` assembly, so the `NLog` reports `Log` method from our custom logger as a caller member name.
 
 ### 4\. The fix
 
