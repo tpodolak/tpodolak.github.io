@@ -100,59 +100,34 @@ In both cases requested query doesn't contain "projection" section, so entire do
 ```json
 // query 
 { 
-
   "find" : "Accounts", 
-
   "filter" : { 
 
     "_id" : ObjectId("5dac6ab1ea342a254e1b7748") 
-
   }, 
-
   "$db" : "Accounting", 
-
   "lsid" : { 
-
     "id" : CSUUID("c6b40361-c47f-4fe6-99bd-6a9ec1702576") 
-
   } 
-
 } 
 
 // returned document 
-
 { 
-
   "cursor" : { 
-
     "firstBatch" : [{ 
-
         "_id" : ObjectId("5dac6ab1ea342a254e1b7748"), 
-
         "AccountName" : "WRKYDWKKJY", 
-
         "Transactions" : [{ 
-
             "_id" : ObjectId("5dac6ab1ea342a254e1b7749"), 
-
             "Amount" : "413648280", 
-
             "CreatedAt" : ISODate("2019-10-20T14:09:53.635Z"), 
-
             "ModifiedAt" : ISODate("2019-10-20T14:09:53.635Z") 
-
           }] 
-
       }], 
-
     "id" : NumberLong(0), 
-
     "ns" : "Accounting.Accounts" 
-
   }, 
-
   "ok" : 1.0 
-
 } 
 
 ```
@@ -316,53 +291,30 @@ One way or another we will end up with proper projection definition which will r
 ```json
 // query
 { 
-
   "find" : "Accounts", 
-
   "filter" : { 
-
     "_id" : ObjectId("5dac846eea29403cb83f99bb") 
-
   }, 
-
   "projection" : { 
-
     "_id" : 1, 
-
     "AccountName" : 1 
-
   }, 
-
   "$db" : "Accounting", 
-
   "lsid" : { 
-
     "id" : CSUUID("cf5d5a88-2598-4110-9295-6417d1a5f7dd") 
-
   } 
-
 } 
 
 // returned document
-
 { 
-
   "cursor" : { 
-
     "firstBatch" : [{ 
-
         "_id" : ObjectId("5dac846eea29403cb83f99bb"), 
-
         "AccountName" : "CBBRRWQVKJ" 
-
       }], 
-
     "id" : NumberLong(0), 
-
     "ns" : "Accounting.Accounts" 
-
   }, 
-
   "ok" : 1.0 
 }
 
