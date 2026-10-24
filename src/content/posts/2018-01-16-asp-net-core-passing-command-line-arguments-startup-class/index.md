@@ -9,11 +9,11 @@ tags:
 
 ### 1\. Introduction
 
-I usually pass configuration to my web API via JSON files, but recently I needed to pass them also via command-line arguments. As the solution for _ASP.NET Core 2.x_ is quite different than for _ASP.NET Core 1.x_ I decided to describe both methods in here.
+I usually pass configuration to my web API via JSON files, but recently I needed to pass them also via command-line arguments. As the solution for `ASP.NET Core 2.x` is quite different than for `ASP.NET Core 1.x` I decided to describe both methods in here.
 
 ### 2\. ASP.NET Core 2.x
 
-For the newest version of _ASP.NET Core_, the solution is pretty straightforward as _IConfiguration_ is injected by default to the _Startup_ class. All we have to do is to add _CommandLineConfigurationSource_ to _IConfigurationBuilder_ when configuring _IWebHost_. _CommandLineConfigurationSource_ is part of the _Microsoft.Extensions.Configuration.CommandLine_ package and can be easily used by _AddCommandLine_ extension method
+For the newest version of `ASP.NET Core`, the solution is pretty straightforward as `IConfiguration` is injected by default to the `Startup` class. All we have to do is to add `CommandLineConfigurationSource` to `IConfigurationBuilder` when configuring `IWebHost`. `CommandLineConfigurationSource` is part of the `Microsoft.Extensions.Configuration.CommandLine` package and can be easily used by `AddCommandLine` extension method
 
 ```csharp
 public class Program
@@ -82,7 +82,7 @@ public class Startup
 
 ### 3\. ASP.NET Core 1.x
 
-The solution for _ASP.NET Core 1.x_ requires a bit more work but it is possible to achieve the same result. We still will be using _CommandLineConfigurationSource_ from _Microsoft.Extensions.Configuration.CommandLine_ package, however this time we have to manually create _IConfiguration_ object and register it in the container before the _Startup_ class is created. This is possible because the _WebHostBuilder_ exposes _ConfigureServices_ method.
+The solution for `ASP.NET Core 1.x` requires a bit more work but it is possible to achieve the same result. We still will be using `CommandLineConfigurationSource` from `Microsoft.Extensions.Configuration.CommandLine` package, however this time we have to manually create `IConfiguration` object and register it in the container before the `Startup` class is created. This is possible because the `WebHostBuilder` exposes `ConfigureServices` method.
 
 ```csharp
 public class Program
@@ -104,7 +104,7 @@ public class Program
 
 ```
 
-Having our service registered now we can easily access _IConfiguration_ object in our application
+Having our service registered now we can easily access `IConfiguration` object in our application
 
 ```csharp
 public class Startup
@@ -135,4 +135,6 @@ public class Startup
 
 ```
 
-[![](images/AspNetCoreCommandLineArgument-1.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-passing-command-line-arguments-to-startup-class/AspNetCoreCommandLineArgument-1.png) Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCorePassingCommandLineArgumentsToStartupClass)
+[![](images/AspNetCoreCommandLineArgument-1.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-passing-command-line-arguments-to-startup-class/AspNetCoreCommandLineArgument-1.png)
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCorePassingCommandLineArgumentsToStartupClass)
