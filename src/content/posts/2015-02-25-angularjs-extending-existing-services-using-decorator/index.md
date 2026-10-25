@@ -11,7 +11,7 @@ tags:
   - "javascript"
 ---
 
-One of the features I miss the most in _AngularJS_ is ability to easy unsubscribe event handlers. There is no convenience function opposed to _$on_, so in order to unsubscribe event, we have to call method returned by _$on_ function
+One of the features I miss the most in `AngularJS` is ability to easy unsubscribe event handlers. There is no convenience function opposed to `$on`, so in order to unsubscribe event, we have to call method returned by `$on` function
 
 ```javascript
 (function () {
@@ -29,10 +29,9 @@ One of the features I miss the most in _AngularJS_ is ability to easy unsubscrib
         }
     }
 }());
-
 ```
 
-However in my opinion this approach fails in real life scenarios, because usually we are subscribed to more than one event - thus we have to have multiple local variables for detaching listeners. Fortunately _AngularJS_ provides an easy way to extend existing services with some new functionalities - we can achieve that by using _$provide_ service. This service exposes [_decorator_](https://docs.angularjs.org/api/auto/service/$provide#decorator) method, which is able to intercept creation of any service, so we are able to augment it with some new functions. The best moment to call _$provide.decorator_ method is during module configuration, thanks to this approach we are sure that our custom logic is invoked before module is started.
+However in my opinion this approach fails in real life scenarios, because usually we are subscribed to more than one event - thus we have to have multiple local variables for detaching listeners. Fortunately `AngularJS` provides an easy way to extend existing services with some new functionalities - we can achieve that by using `$provide` service. This service exposes [`decorator`](https://docs.angularjs.org/api/auto/service/$provide#decorator) method, which is able to intercept creation of any service, so we are able to augment it with some new functions. The best moment to call `$provide.decorator` method is during module configuration, thanks to this approach we are sure that our custom logic is invoked before module is started.
 
 ```javascript
 angular.module('app.common', [])
@@ -44,10 +43,9 @@ function extendServices($provide) {
      /*some interception logic*/
     });
 }
-
 ```
 
-In my case I wanted to extend _$rootScope_ with new method _$un_ for unsubscribing events, so I called method _decorator_ with parameter _'$rootScope'_ (note single quotation marks) - this tells _Angular_ that I will be modifying _$rootScope_ service
+In my case I wanted to extend `$rootScope` with new method `$un` for unsubscribing events, so I called method `decorator` with parameter `'$rootScope'` (note single quotation marks) - this tells `Angular` that I will be modifying `$rootScope` service
 
 ```javascript
 angular.module('app.common', [])
@@ -61,10 +59,9 @@ function extendServices($provide) {
 /*ngInject*/
 function extendRootScope($delegate) {
 }
-
 ```
 
-Because I passed _'$rootScope'_ as a first argument of _$provide.decorator_ method, the _$delegate_ parameter in _extendRootScope_ function is actually a _$rootScope_ service. Now having access to the service I can augment it with my custom logic for detaching event handlers.
+Because I passed `'$rootScope'` as a first argument of `$provide.decorator` method, the `$delegate` parameter in `extendRootScope` function is actually a `$rootScope` service. Now having access to the service I can augment it with my custom logic for detaching event handlers.
 
 ```javascript
 /*ngInject*/
@@ -78,7 +75,6 @@ function extendRootScope($delegate){
     };
     return $delegate;
 }
-
 ```
 
 Entire code listing looks then as follows
@@ -107,10 +103,9 @@ Entire code listing looks then as follows
         return $delegate;
     }
 }());
-
 ```
 
-From now on, you can unsubscribe events handlers simply by calling $un method
+From now on, you can unsubscribe events handlers simply by calling `$un` method
 
 ```javascript
 (function () {
@@ -126,7 +121,6 @@ From now on, you can unsubscribe events handlers simply by calling $un method
         }
     }
 }());
-
 ```
 
 and our listener will react only once
@@ -136,7 +130,8 @@ console.log('Broadcasting afterRender event for the first time');
 $rootScope.$broadcast('afterRender');
 console.log('Broadcasting afterRender event for the second time');
 $rootScope.$broadcast('afterRender');
-
 ```
 
-[![AngularJS](images/InvokeEvents.png)](http://tpodolak.com/blog/wp-content/uploads/2015/02/angularjs-extending-existing-services-using-decorator/InvokeEvents.png) Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AngularJSDecorator)
+[![AngularJS](images/InvokeEvents.png)](http://tpodolak.com/blog/wp-content/uploads/2015/02/angularjs-extending-existing-services-using-decorator/InvokeEvents.png)
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AngularJSDecorator)

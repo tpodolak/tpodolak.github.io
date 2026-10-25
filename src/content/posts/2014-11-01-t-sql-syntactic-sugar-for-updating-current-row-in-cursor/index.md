@@ -17,14 +17,12 @@ I am not a big fan of cursors, however for time to time I have to write one. In 
 UPDATE Person.Person set FirstName = 'some logic goes here' where Person.BusinessEntityID = @Id
 where @Id variable is set by cursor. 
 -- cursor code omitted for brevity
-
 ```
 
-There is nothing wrong with that, however we can do the same thing using specialized syntax - _current of_ keyword(s)
+There is nothing wrong with that, however we can do the same thing using specialized syntax - `current of` keyword(s)
 
 ```sql
 UPDATE Person.Person set FirstName = 'some logic goes here' where current of personCursor
-
 ```
 
 The entire cursor statement then looks that way
@@ -41,5 +39,4 @@ BEGIN
 END
 CLOSE personCursor
 DEALLOCATE personCursor
-
 ```
