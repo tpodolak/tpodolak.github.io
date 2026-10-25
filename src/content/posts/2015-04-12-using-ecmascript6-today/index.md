@@ -15,7 +15,7 @@ tags:
 
 ### 1\. Introduction
 
-Although _ECMAScript6_ has not been officially released yet, we can play around with new language features today. There are tools such as _Traceur_ or _Babel_ which are able to convert _ECMAScript6_ into _ECMASciprt5_, thus we are able to run the code in every browser. So let's try to run the snippet below, which leverages [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)using those tools
+Although `ECMAScript6` has not been officially released yet, we can play around with new language features today. There are tools such as `Traceur` or `Babel` which are able to convert `ECMAScript6` into `ECMASciprt5`, thus we are able to run the code in every browser. So let's try to run the snippet below, which leverages [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)using those tools
 
 ```javascript
 (function () {
@@ -38,14 +38,13 @@ Although _ECMAScript6_ has not been officially released yet, we can play around 
     console.log('Value of secondProp = ' + b);
 
 }());
-
 ```
 
-### 2\. Using _Traceur_
+### 2\. Using `Traceur`
 
-I'll start from _Traceur_ first. First of all we have to install it, so run in console (I am using gulp as my build system)
+I'll start from `Traceur` first. First of all we have to install it, so run in console (I am using gulp as my build system)
 
-```bash
+```bash frame="none" showLineNumbers=false
 npm install gulp-traceur --save-dev
 
 ```
@@ -53,8 +52,8 @@ npm install gulp-traceur --save-dev
 Then we have to write simple gulp task which:
 
 - grabs all of our js files
-- runs the code analysis using _JsHint_
-- transpiles source files into valid _ECMAScript5_
+- runs the code analysis using `JsHint`
+- transpiles source files into valid `ECMAScript5`
 - concatenates the result into single file
 - generates source maps (for debugging proposes)
 
@@ -74,17 +73,18 @@ return gulp.src('app/*.js')
            .pipe(concat('app.all.js'))
            .pipe(sourcemaps.write('.'))
            .pipe(gulp.dest('dest'));
-
 ```
 
-Having our result file ready, now we can add a script tag in html pointing to _app.all.js_. However at this point in the runtime we will get an error.
+Having our result file ready, now we can add a script tag in html pointing to `app.all.js`. However at this point in the runtime we will get an error.
 
-```text
+```text frame="none" showLineNumbers=false
 $traceurRuntime is not defined
 
 ```
 
-[![ECMAScript6 today](images/runtimeerror.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/runtimeerror.png) Quick look at the generated _app.all.js_ file reveals the problem
+[![ECMAScript6 today](images/runtimeerror.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/runtimeerror.png)
+
+Quick look at the generated `app.all.js` file reveals the problem
 
 ```javascript
 "use strict";
@@ -116,21 +116,29 @@ $traceurRuntime is not defined
 
 ```
 
-Transpiled code has references to _$traceurRuntime_ objects, so in order to make our code work, we have to add additional script tag pointing to _traceur-runtime.js_. You can easily get the sources with _bower_, just run in console
+Transpiled code has references to `$traceurRuntime` objects, so in order to make our code work, we have to add additional script tag pointing to `traceur-runtime.js`. You can easily get the sources with `bower`, just run in console
 
-```bash
+```bash frame="none" showLineNumbers=false
 npm install bower --save-dev
 bower install  traceur-runtime
 
 ```
 
-Now everything should work and in console we'll get expected result [![ECMAScript6 today](images/result.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/result.png) As you could see in example above _Traceur_ generates overcomplicated code which makes debugging of the original sources (using source maps) a painful process. Just take a look at the following screenshot [![ECMAScript6 today](images/SourceMapTraceur.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/SourceMapTraceur.png) fortunately _Babel_ doesn't seem to have these drawbacks.
+Now everything should work and in console we'll get expected result
 
-### 3\. Using _Babel_
+[![ECMAScript6 today](images/result.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/result.png)
 
-Let's modify our gulp build script to use _Babel_ instead of _Traceur_
+As you could see in example above `Traceur` generates overcomplicated code which makes debugging of the original sources (using source maps) a painful process. Just take a look at the following screenshot
 
-```bash
+[![ECMAScript6 today](images/SourceMapTraceur.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/SourceMapTraceur.png)
+
+fortunately `Babel` doesn't seem to have these drawbacks.
+
+### 3\. Using `Babel`
+
+Let's modify our gulp build script to use `Babel` instead of `Traceur`
+
+```bash frame="none" showLineNumbers=false
 npm install gulp-babel --save-dev
 
 ```
@@ -154,7 +162,7 @@ return gulp.src('app/*.js')
 
 ```
 
-And basically that all, we are ready to go. _Babel_ doesn't require any runtime dependencies, generated code is simple
+And basically that all, we are ready to go. `Babel` doesn't require any runtime dependencies, generated code is simple
 
 ```javascript
 'use strict';
@@ -184,7 +192,12 @@ And basically that all, we are ready to go. _Babel_ doesn't require any runtime 
     console.log('Value of secondProp = ' + b);
 })();
 //# sourceMappingURL=app.all.js.map
-
 ```
 
-and even source maps seem to work correctly. [![ECMAScript6 today](images/SourceMapBabel.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/SourceMapBabel.png) So when it comes to me I choose _Babel_. Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/UsingEcmaScript6Today)
+and even source maps seem to work correctly.
+
+[![ECMAScript6 today](images/SourceMapBabel.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/SourceMapBabel.png)
+
+So when it comes to me I choose `Babel`.
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/UsingEcmaScript6Today)
