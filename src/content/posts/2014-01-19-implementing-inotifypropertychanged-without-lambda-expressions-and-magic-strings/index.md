@@ -13,19 +13,19 @@ tags:
   - "inotifypropertychanged"
 ---
 
-I think almost every .NET developer is familiar with _INotifyPropertyChanged_ interface. Typical implementation of this interface looks more or less like that:
+I think almost every .NET developer is familiar with `INotifyPropertyChanged` interface. Typical implementation of this interface looks more or less like that:
 
 ```csharp
 public class NotifyPropertyBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
-    protected virtual void OnPropertyChanged( Expression> propertyExpression )
+    protected virtual void OnPropertyChanged( Expression<Func<object>> propertyExpression )
     {
         PropertyChangedEventHandler handler = PropertyChanged;
         if (handler != null) handler( this, new PropertyChangedEventArgs( GetPropertyName( propertyExpression ) ) );
     }
 
-    private string GetPropertyName( Expression> propertyExpression )
+    private string GetPropertyName( Expression<Func<object>> propertyExpression )
     {
         var unaryExpression = propertyExpression.Body as UnaryExpression;
         var memberExpression = unaryExpression == null ? (MemberExpression)propertyExpression.Body : (MemberExpression)unaryExpression.Operand;
@@ -33,10 +33,9 @@ public class NotifyPropertyBase : INotifyPropertyChanged
         return propertyName;
     }
 }
-
 ```
 
-Thanks to lambda expressions we can get rid of so called "magic" strings when rising PorpertyChange event.
+Thanks to lambda expressions we can get rid of so called "magic" strings when rising `PorpertyChange` event.
 
 ```csharp
 private int _myProperty;
@@ -50,10 +49,9 @@ public int MyProperty
         OnPropertyChanged( ( ) => MyProperty );
     }
 }
-
 ```
 
-However, with .NET 4.5 we can even get rid of lambda expressions itself. Everything thanks to _[CallerMemberNameAttribute](http://msdn.microsoft.com/pl-pl/library/system.runtime.compilerservices.callermembernameattribute\(v=vs.110\).aspx)_, which provides us information about caller of given method. Now we can rewrite _NotifyPropertyBase_ class as follows
+However, with `.NET 4.5` we can even get rid of lambda expressions itself. Everything thanks to [CallerMemberNameAttribute](http://msdn.microsoft.com/pl-pl/library/system.runtime.compilerservices.callermembernameattribute\(v=vs.110\).aspx), which provides us information about caller of given method. Now we can rewrite `NotifyPropertyBase` class as follows
 
 ```csharp
 public class NotifyPropertyBase : INotifyPropertyChanged
@@ -65,10 +63,9 @@ public class NotifyPropertyBase : INotifyPropertyChanged
         if (handler != null) handler( this, new PropertyChangedEventArgs( propertyName));
     }
 }
-
 ```
 
-From this moment we can call _OnPropertyChanged_ method without any arguments
+From this moment we can call `OnPropertyChanged` method without any arguments
 
 ```csharp
 private int _myProperty;
@@ -82,7 +79,10 @@ public int MyProperty
       OnPropertyChanged();
     }
 }
-
 ```
 
-and thanks to _CallerMemberName_ attribute, argument _propertyName_ will be filled with appropriate value. [![callermembername](images/callermembername.png)](http://tpodolak.com/blog/wp-content/uploads/2014/01/implementing-inotifypropertychanged-without-lambda-expressions-and-magic-strings/callermembername.png) Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/NotifyPropertyChangedCallerMemberName)
+and thanks to `CallerMemberName` attribute, argument `propertyName` will be filled with appropriate value.
+
+[![callermembername](images/callermembername.png)](http://tpodolak.com/blog/wp-content/uploads/2014/01/implementing-inotifypropertychanged-without-lambda-expressions-and-magic-strings/callermembername.png)
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/NotifyPropertyChangedCallerMemberName)
