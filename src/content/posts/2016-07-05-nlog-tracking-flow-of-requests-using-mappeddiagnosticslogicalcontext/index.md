@@ -19,7 +19,7 @@ public class HomeController : Controller
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     
-    public async Task Index()
+    public async Task<ActionResult> Index()
     {
         await PreprocessRequest(nameof(Index));
         return View();
@@ -44,7 +44,7 @@ public class HomeController : Controller
 
 Default log file usually looks like that
 
-```text
+```log wrap=false showLineNumbers=false
 TimeStamp=2016-07-03 11:56:02.2327 ThreadId=5 Level=INFO Message=About to start GET / request
 TimeStamp=2016-07-03 11:56:02.3797 ThreadId=5 Level=INFO Message=Log from Index action, from thread=5
 TimeStamp=2016-07-03 11:56:02.3797 ThreadId=6 Level=INFO Message=Log from Index, from thread 6 assigned by scheduler
@@ -54,11 +54,11 @@ TimeStamp=2016-07-03 11:56:04.8250 ThreadId=8 Level=INFO Message=Request complet
 
 ```
 
-Having multiple simultaneous _Index_ requests, makes it almost impossible to figure out which log entry is part of which call. Fortunately with _NLog_ it is possible to solve this problem without too much of a hassle.
+Having multiple simultaneous `Index` requests, makes it almost impossible to figure out which log entry is part of which call. Fortunately with `NLog` it is possible to solve this problem without too much of a hassle.
 
 ### 2\. Proposed solution
 
-The whole idea is to leverage _MappedDiagnosticsLogicalContext_ "storage" to keep some unique identifier of request for entire call. Note, that this identifier will be accessible also from other threads created from within given call. In order to set unique request id (also known as correlation id) I will use custom _HttpModule_. The very first implementation looks like that
+The whole idea is to leverage `MappedDiagnosticsLogicalContext` "storage" to keep some unique identifier of request for entire call. Note, that this identifier will be accessible also from other threads created from within given call. In order to set unique request id (also known as correlation id) I will use custom `HttpModule`. The very first implementation looks like that
 
 ```csharp
 public class LoggingHttpModule : IHttpModule
@@ -93,16 +93,53 @@ public class LoggingHttpModule : IHttpModule
         Logger.Info($"Request completed with status code: {httpContext.Response.StatusCode} ");
     }
 }
-
 ```
 
-Once the _HttpModule_ is ready it is necessary to register it in _web.config_.
+Once the `HttpModule` is ready it is necessary to register it in `web.config`.
 
-From now on, every request goes through _LogginHttpModule_ and proper _correlationId_ is set in _MappedDiagnosticsLogicalContext_. As we want to have _correlationId_ included in log files it is necessary to modify _Nlog.config_. In my case it looks like that
+```xml
+<!--rest of the code omitted -->
+<system.webServer>
+  <modules>
+  <!--rest of the code omitted -->
+    <add name="LoggingHttpModule" type="AspNetMvcLoggingWithCorrelationId.HttpModules.LoggingHttpModule"/>
+  </modules>
+</system.webServer>
+<!--rest of the code omitted -->
+<system.web>
+<!--rest of the code omitted -->
+  <httpModules>
+  <!--rest of the code omitted -->
+    <add name="ApplicationInsightsWebTracking" type="Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule,Microsoft.AI.Web"/>
+  </httpModules>
+</system.web>
+```
 
-Note that we can access our _correlationId_ variable via _${mdlc:item=correlationid}_ Log file after the changes looks like that
+From now on, every request goes through `LogginHttpModule` and proper `correlationId` is set in `MappedDiagnosticsLogicalContext`. As we want to have `correlationId` included in log files it is necessary to modify `Nlog.config`. In my case it looks like that
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.nlog-project.org/schemas/NLog.xsd NLog.xsd"
+      autoReload="true"
+      throwExceptions="false"
+      internalLogLevel="Off" internalLogFile="c:\temp\nlog-internal.log" >
 
-```text
+  <variable name="myvar" value="myvalue"/>
+  <targets>
+    <target xsi:type="File" name="f" fileName="${basedir}/logs/${shortdate}.log"
+            layout="TimeStamp=${longdate} CorrelationId=${mdlc:item=correlationid} Level=${uppercase:${level}} Message=${message}" />
+  </targets>
+
+  <rules>
+    <logger name="*" minlevel="Debug" writeTo="f" />
+  </rules>
+</nlog>
+```
+
+Note that we can access our `correlationId` variable via `${mdlc:item=correlationid}` Log file after the changes looks like that
+
+```log wrap=false showLineNumbers=false
 TimeStamp=2016-07-03 12:41:35.7292 CorrelationId=b322d1fa-47b2-4582-b7a9-c9463b7c0a47 Level=INFO Message=About to start GET / request
 TimeStamp=2016-07-03 12:41:35.8752 CorrelationId=b322d1fa-47b2-4582-b7a9-c9463b7c0a47 Level=INFO Message=Log from Index action, from thread=6
 TimeStamp=2016-07-03 12:41:35.8752 CorrelationId=b322d1fa-47b2-4582-b7a9-c9463b7c0a47 Level=INFO Message=Log from Index, from thread 7 assigned by scheduler
@@ -112,7 +149,7 @@ TimeStamp=2016-07-03 12:41:38.4454 CorrelationId= Level=INFO Message=Request com
 
 ```
 
-This is almost perfect, however for some reasons _correlationId_ is lost in _EndRequest_ event handler. I am not sure if this is bug in _NLog_ (I've posted question in _Nlog's_ github) or it is by design, however there is easy workaround for that. We can store our _correlationId_ in _HttpContext.Items_ collection and reassign it to _MappedDiagnosticsLogicalContext_ in _EndRequest_ event handler.
+This is almost perfect, however for some reasons `correlationId` is lost in `EndRequest` event handler. I am not sure if this is bug in `NLog` (I've posted question in `Nlog's` github) or it is by design, however there is easy workaround for that. We can store our `correlationId` in `HttpContext.Items` collection and reassign it to `MappedDiagnosticsLogicalContext` in `EndRequest` event handler.
 
 ```csharp
 private void HandleBeginRequest(object sender, EventArgs e)
@@ -141,7 +178,7 @@ private void HandleEndRequest(object sender, EventArgs e)
 
 After these changes our log file finally looks OK
 
-```text
+```log wrap=false showLineNumbers=false
 TimeStamp=2016-07-03 12:41:35.7292 CorrelationId=b322d1fa-47b2-4582-b7a9-c9463b7c0a47 Level=INFO Message=About to start GET / request
 TimeStamp=2016-07-03 12:41:35.8752 CorrelationId=b322d1fa-47b2-4582-b7a9-c9463b7c0a47 Level=INFO Message=Log from Index action, from thread=6
 TimeStamp=2016-07-03 12:41:35.8752 CorrelationId=b322d1fa-47b2-4582-b7a9-c9463b7c0a47 Level=INFO Message=Log from Index, from thread 7 assigned by scheduler
