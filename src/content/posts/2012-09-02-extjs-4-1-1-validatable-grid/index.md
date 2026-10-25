@@ -16,7 +16,7 @@ tags:
   - "validation"
 ---
 
-In this post I will present a simple plugin to _Ext.panel.Grid_ which displays validation errors on a grid. The validation mechanism is based on the model validation - useful feature of _Extjs_ framework. Let's start from creating a simple model:
+In this post I will present a simple plugin to `Ext.panel.Grid` which displays validation errors on a grid. The validation mechanism is based on the model validation - useful feature of `Extjs` framework. Let's start from creating a simple model:
 
 ```javascript
 Ext.define('CustomerModel', {
@@ -28,10 +28,9 @@ Ext.define('CustomerModel', {
     ],
     validations: [{type: 'presence', field: 'lastname', message:'Required field'}]
 });
-
 ```
 
-As we can see, this model has a _validation_ field where we can define a validation mechanism for every field in our model. In this example the _lastname_ field is required, I use build in Extjs validator of the _presence_ type. More build-in validation types might be found [here](http://www.sencha.com/learn/using-validations-and-associations-in-sencha-touch). Of course, it is possible to define custom validation types, simple example can be found on [Stackoverflow](http://stackoverflow.com/questions/7414115/how-to-add-a-custom-validation-rule-to-a-model-in-sencha-touch)Having defined model validation, let's create _ValidatableGrid_plugin. The main function of _ValidatableGrid_ plugin is function called _validate_ which is attached to grid component. This function looks this way;
+As we can see, this model has a `validation` field where we can define a validation mechanism for every field in our model. In this example the `lastname` field is required, I use build in Extjs validator of the `presence` type. More build-in validation types might be found [here](http://www.sencha.com/learn/using-validations-and-associations-in-sencha-touch). Of course, it is possible to define custom validation types, simple example can be found on [Stackoverflow](http://stackoverflow.com/questions/7414115/how-to-add-a-custom-validation-rule-to-a-model-in-sencha-touch)Having defined model validation, let's create `ValidatableGrid`plugin. The main function of `ValidatableGrid` plugin is function called `validate` which is attached to grid component. This function looks this way;
 
 ```javascript
 validate: function(){
@@ -59,10 +58,9 @@ validate: function(){
        })
        return isValid;
    }
-
 ```
 
-This function iterates through every model in grid's store and runs validation method. As a result, we get a _validationResult_ object which holds information about errors of model. This object has a function _isValid_ which returns true if there is no errors or false otherwise. Having checked the model, we have to show errors on the grid. In order to do that, we have to find a cell, in which invalid field is displayed using _getCellByPosition_ function. In the last step, we only have to modify CSS classes of cell. That is why, I added _x-form-invalid-field_ class to show red line in cell and also _data-errorqtip_ class to show validation error tooltip. The entire listing looks this way;
+This function iterates through every model in grid's store and runs validation method. As a result, we get a `validationResult` object which holds information about errors of model. This object has a function `isValid` which returns true if there is no errors or false otherwise. Having checked the model, we have to show errors on the grid. In order to do that, we have to find a cell, in which invalid field is displayed using `getCellByPosition` function. In the last step, we only have to modify `CSS` classes of cell. That is why, I added `x-form-invalid-field` class to show red line in cell and also `data-errorqtip` class to show validation error tooltip. The entire listing looks this way;
 
 ```javascript
 Ext.define('ValidatableGrid', {
@@ -99,7 +97,6 @@ Ext.define('ValidatableGrid', {
         return isValid;
     }
 })
-
 ```
 
 here is example of usage;
@@ -137,7 +134,10 @@ vGrid = Ext.create('Ext.grid.Panel', {
                { text: 'Last name', dataIndex: 'lastname' }]});
 
 vGrid.validate();
-
 ```
 
-and the result [![validatable grid](images/ValidatableGridWithTooltip.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-validatable-grid/ValidatableGridWithTooltip.jpg) Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/ExtjsValidatableGrid)
+and the result
+
+[![validatable grid](images/ValidatableGridWithTooltip.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-validatable-grid/ValidatableGridWithTooltip.jpg)
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/ExtjsValidatableGrid)

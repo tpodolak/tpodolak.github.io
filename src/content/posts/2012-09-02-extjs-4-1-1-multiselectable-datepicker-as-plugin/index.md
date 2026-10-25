@@ -15,7 +15,7 @@ tags:
   - "plugin"
 ---
 
-A couple of weeks ago I wrote a post about creating a mutiselectable datepicker. The idea of creating this component was to use the object inheritance. Today, I would like to show how to create a multiselectable datepicker as a plugin to _Ext.date.Picker_. The code responsible for selecting dates is almost the same, the only thing which must be changed is the component initialization and access to the datepicker component. In order to make a plugin to any _Ext.Component_ class, you must implement the _init_ method which takes as argument a reference to the component - so let's change the existing code to meet this requirement. We need to rename _initComponent_ function to _init_. In addition to, we should delete the _extend_ property from our code. After these changes the _init_ function looks like this:
+A couple of weeks ago I wrote a post about creating a mutiselectable datepicker. The idea of creating this component was to use the object inheritance. Today, I would like to show how to create a multiselectable datepicker as a plugin to `Ext.date.Picker`. The code responsible for selecting dates is almost the same, the only thing which must be changed is the component initialization and access to the datepicker component. In order to make a plugin to any `Ext.Component` class, you must implement the `init` method which takes as argument a reference to the component - so let's change the existing code to meet this requirement. We need to rename `initComponent` function to `init`. In addition to, we should delete the `extend` property from our code. After these changes the `init` function looks like this:
 
 ```javascript
 init:function(datePicker){
@@ -25,10 +25,9 @@ init:function(datePicker){
         me.datePicker.on('select',me.handleSelectionChanged,me);
         me.datePicker.on('afterrender',me.higlighDates,me);
 }
-
 ```
 
-Please notice, that the _init_ function takes as an argument the datepicker component - and from now on this is our only way to access this component. The rest of the code also requires some modifications - it's necessary to change all references to the _datepicker_ (from the variable _me_ to _me.datePicker_). The entire code listing is presented below.
+Please notice, that the `init` function takes as an argument the datepicker component - and from now on this is our only way to access this component. The rest of the code also requires some modifications - it's necessary to change all references to the `datepicker` (from the variable `me` to `me.datePicker`). The entire code listing is presented below.
 
 ```javascript
 Ext.define('Multiselect', {
@@ -68,7 +67,6 @@ Ext.define('Multiselect', {
         me.higlighDates();
     }
 })
-
 ```
 
 Here is example of usage;
@@ -77,7 +75,10 @@ Here is example of usage;
 var picker = Ext.create('Ext.picker.Date', {
                     plugins: [Ext.create('Multiselect')]
                 });
-
 ```
 
-and the result [![multiselectable datepicker](images/datepicker.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-multiselectable-datepicker-as-plugin/datepicker.jpg) Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/ExtjsMultiselectableDatePickerAsPlugin)
+and the result
+
+[![multiselectable datepicker](images/datepicker.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-multiselectable-datepicker-as-plugin/datepicker.jpg)
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/ExtjsMultiselectableDatePickerAsPlugin)

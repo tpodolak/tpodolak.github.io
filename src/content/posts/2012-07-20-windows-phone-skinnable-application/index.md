@@ -17,16 +17,16 @@ tags:
 
 ### 1\. Introduction
 
-Today, I would like to present my concept of making skinnable application in Windows Phone 7.1. Making a skinnable application in Windows Phone might be a little bit tricky. Unfortunately, WP7 doesn't support _DynamicResource_ keyword which is a basic tool for making skins in WPF. In order to overcome this inconvenience I decided to write a _SkinManager_ for WindowsPhone.
+Today, I would like to present my concept of making skinnable application in `Windows Phone 7.1`. Making a skinnable application in `Windows Phone` might be a little bit tricky. Unfortunately, `WP7` doesn't support `DynamicResource` keyword which is a basic tool for making skins in `WPF`. In order to overcome this inconvenience I decided to write a `SkinManager` for WindowsPhone.
 
 ### 2\. Base view
 
-As I mentioned before, there is no support for using dynamic resources in WP7, therefore, in order to force a control to change style, we have to assign this style in code behind. It is rather obvious that in a single window/control there might be quite a lot of other controls whose style also should be changed. That is why, I decided to write controls iterator first.
+As I mentioned before, there is no support for using dynamic resources in `WP7`, therefore, in order to force a control to change style, we have to assign this style in code behind. It is rather obvious that in a single window/control there might be quite a lot of other controls whose style also should be changed. That is why, I decided to write controls iterator first.
 
 ```csharp
-public class ViewsEnumerator : IEnumerator
+public class ViewsEnumerator : IEnumerator<FrameworkElement>
 {
-    private Stack _frameworkElementsStack = new Stack();
+    private Stack<FrameworkElement> _frameworkElementsStack = new Stack<FrameworkElement>();
     private FrameworkElement _current;
     private readonly FrameworkElement _startingElement;
     
@@ -83,13 +83,12 @@ public class ViewsEnumerator : IEnumerator
 
     #endregion
 }
-
 ```
 
-In this iterator I used DFS algorithm for searching elements in a tree. Thanks to this piece of code I can take advantage of LINQ's benefits. In the next step I created base classes for views.
+In this iterator I used `DFS` algorithm for searching elements in a tree. Thanks to this piece of code I can take advantage of `LINQ's` benefits. In the next step I created base classes for views.
 
 ```csharp
-public interface IViewBase : IEnumerable
+public interface IViewBase : IEnumerable<FrameworkElement>
 {
 }
 
@@ -97,23 +96,23 @@ public class ViewBase : UserControl, IViewBase
 {
    #region Implementation of IEnumerable
 
-    /// 
+    /// <summary>
     /// Returns an enumerator that iterates through the collection.
-    /// 
-    /// 
-    /// A  that can be used to iterate through the collection.
-    /// 
-    public IEnumerator GetEnumerator()
+    /// </summary>
+    /// <returns>
+    /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+    /// </returns>
+    public IEnumerator<FrameworkElement> GetEnumerator()
     {
         return new ViewsEnumerator(this);
     }
 
-    /// 
+    /// <summary>
     /// Returns an enumerator that iterates through a collection.
-    /// 
-    /// 
-    /// An  object that can be used to iterate through the collection.
-    /// 
+    /// </summary>
+    /// <returns>
+    /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+    /// </returns>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
@@ -121,12 +120,11 @@ public class ViewBase : UserControl, IViewBase
 
     #endregion
 }
-
 ```
 
 ### 3\. SkinManager class
 
-Having prepared basis for skinnable control, let me introduce a custom attribute called the _SkinnablePartAttribute_
+Having prepared basis for skinnable control, let me introduce a custom attribute called the `SkinnablePartAttribute`
 
 ```csharp
 [AttributeUsage(AttributeTargets.Class)]
@@ -137,7 +135,7 @@ public class SkinnablePartAttribute : Attribute
 
 ```
 
-This attribute should decorate custom controls which should have an ability to change theme/skin. As you can see, the _SkinnablePartAttribute_ has a _ThemePartName_ property which holds information about a name of _ResourceDictionary_ where styles for the given control ought to be searched. Now, it is time to take a look at a _SkinManager_ class. The _SkinManager_ class has one public function - _ApplySkin_
+This attribute should decorate custom controls which should have an ability to change theme/skin. As you can see, the `SkinnablePartAttribute` has a `ThemePartName` property which holds information about a name of `ResourceDictionary` where styles for the given control ought to be searched. Now, it is time to take a look at a `SkinManager` class. The `SkinManager` class has one public function - `ApplySkin`
 
 ```csharp
 public static void ApplySkin(TView view, string skinName)
@@ -157,7 +155,7 @@ public static void ApplySkin(TView view, string skinName)
 
 ```
 
-This function iterates through all controls which implement a _IViewBase_ interface - in other words, the function iterates through our custom controls. If a control is decorated with the _SkinnablePartAttribue_, a new _Uri_ is created based on the information from the _ThemePartName_ property and from the skinName parameter(I assumed that all dictionaries are located in the Themes directory). In the final step, private function also known as the _AppySkin_ function is called. This function looks this way:
+This function iterates through all controls which implement a `IViewBase` interface - in other words, the function iterates through our custom controls. If a control is decorated with the `SkinnablePartAttribue`, a new `Uri` is created based on the information from the `ThemePartName` property and from the skinName parameter(I assumed that all dictionaries are located in the Themes directory). In the final step, private function also known as the `AppySkin` function is called. This function looks this way:
 
 ```csharp
 private static void ApplySkin(TView view, Uri uri, int mergedDictionaryIndex = 0)
@@ -186,14 +184,14 @@ private static void ApplySkin(TView view, Uri uri, int mergedDictionaryIndex = 0
 
 ```
 
-Here, all the magic begins. In the first step, current _ResourceDictionary_ is transformed into the standard dictionary. The key of this dictionary is a value of style – a reference to the style object. In the next step, I created a new _ResourceDictionary_ based on the Uri parameter passed to this function. In the last step, another loop over controls is performed. However, this time only controls with the assigned _Style_ property are taken into consideration. Then, if the _newStyleDictionary_ contains a key of given control style we are ready to swap styles.
+Here, all the magic begins. In the first step, current `ResourceDictionary` is transformed into the standard dictionary. The key of this dictionary is a value of style – a reference to the style object. In the next step, I created a new `ResourceDictionary` based on the Uri parameter passed to this function. In the last step, another loop over controls is performed. However, this time only controls with the assigned `Style` property are taken into consideration. Then, if the `newStyleDictionary` contains a key of given control style we are ready to swap styles.
 
 ```csharp
 control.Style = newStyleDictionary[beforeClearDictionary[control.Style].key] as Style;
 
 ```
 
-Entire listing of _SkinManager_ is presented below
+Entire listing of `SkinManager` is presented below
 
 ```csharp
 public static class SkinManager
@@ -245,7 +243,7 @@ public static class SkinManager
 
 ### 4\. Example of usage
 
-In order to use the _SkinManager_ it is essential to make some preparation. First of all, you have to create _Themes_ directory in a project. In this directory there must be separate subdirectories for every skin you would like to use. What is more, in these subdirectories you should place all _ResourceDictionaries_ specified in the _SkinnablePartAttribute_. A sample directory structure is shown in the picture below: [![DirectoryStructure](images/DirectoryStructure.png)](http://tpodolak.com/blog/wp-content/uploads/2012/07/windows-phone-skinnable-application/DirectoryStructure.png) The very last step is to make controls (which should be skinnable) inherit from _ViewBase_. Here is example of usage
+In order to use the `SkinManager` it is essential to make some preparation. First of all, you have to create `Themes` directory in a project. In this directory there must be separate subdirectories for every skin you would like to use. What is more, in these subdirectories you should place all `ResourceDictionaries` specified in the `SkinnablePartAttribute`. A sample directory structure is shown in the picture below: [![DirectoryStructure](images/DirectoryStructure.png)](http://tpodolak.com/blog/wp-content/uploads/2012/07/windows-phone-skinnable-application/DirectoryStructure.png) The very last step is to make controls (which should be skinnable) inherit from `ViewBase`. Here is example of usage
 
 ```csharp
 namespace Joomanji.Chat.Client.Views
