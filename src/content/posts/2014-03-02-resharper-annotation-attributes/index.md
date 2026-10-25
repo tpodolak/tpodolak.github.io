@@ -15,10 +15,10 @@ tags:
 
 ### 1\. Introduction
 
-I think one of the most important features of Resharper is on-the-fly code quality analysis. Basically, every time Resharper finds possible pitfall in code, it indicates this with appropriate warning. The most common warning is _"Possible System.NullReferenceException"_. You can easily reproduce it by writing this code
+I think one of the most important features of Resharper is on-the-fly code quality analysis. Basically, every time Resharper finds possible pitfall in code, it indicates this with appropriate warning. The most common warning is `"Possible System.NullReferenceException"`. You can easily reproduce it by writing this code
 
 ```csharp
-List objlList = new List( );
+List<object> objlList = new List<object>( );
 var result = objlList.SingleOrDefault( );
 Console.WriteLine( result.GetHashCode( ) );
 ```

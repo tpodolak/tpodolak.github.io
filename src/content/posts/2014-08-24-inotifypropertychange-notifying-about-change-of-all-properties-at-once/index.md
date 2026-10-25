@@ -13,10 +13,10 @@ tags:
   - "wpf"
 ---
 
-Today, working on a new feature for my pet project, I realized that I have to notify the view, that all properties in view model have changed. The most obvious way to achieve that would, of course be to rise _PropertyChange_ event a bunch of times.
+Today, working on a new feature for my pet project, I realized that I have to notify the view, that all properties in view model have changed. The most obvious way to achieve that would, of course be to rise `PropertyChange` event a bunch of times.
 
 ```csharp
-protected virtual void OnPropertyChanged(Expression> propertyExpression)
+protected virtual void OnPropertyChanged(Expression<Func<object>> propertyExpression)
 {
    //..
    //implementation
@@ -37,7 +37,6 @@ public void Refresh()
    OnPropertyChanged(() => ThirdProperty);
    //and so on ...
 }
-
 ```
 
 This is good solution for one time usage, however I was interested in something more general, something which could be extracted to base view model. Fortunately, it turns out that there is a simple trick to do that. All You have to do is use an empty string or null as a property name. So in my case this comes down to this one-liner
@@ -47,5 +46,4 @@ public void Refresh()
 {
    OnPropertyChanged(string.Empty);
 }
-
 ```
