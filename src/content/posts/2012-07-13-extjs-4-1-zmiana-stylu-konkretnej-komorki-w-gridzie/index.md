@@ -11,7 +11,7 @@ tags:
   - "renderer"
 ---
 
-Witam Dzisiejszy post nie będzie związany z platformą .NET, lecz z javascriptowym frameworkiem Extjs w wersji 4.1. Jako, że ostatnio w pracy poświęcam dużo czasu na pisanie w wyżej wymienionej technologii postanowiłem zaprezentować, w jaki sposób zmienić styl konkretnej komórki w gridzie. Zacznijmy od przygotowania danych do wyświetlenia - zdefiniujmy zatem stora, który będzie przechowywał informacje mające zostać zaprezentowane na gridzie.
+Witam Dzisiejszy post nie będzie związany z platformą `.NET`, lecz z javascriptowym frameworkiem `Extjs` w wersji `4.1`. Jako, że ostatnio w pracy poświęcam dużo czasu na pisanie w wyżej wymienionej technologii postanowiłem zaprezentować, w jaki sposób zmienić styl konkretnej komórki w gridzie. Zacznijmy od przygotowania danych do wyświetlenia - zdefiniujmy zatem stora, który będzie przechowywał informacje mające zostać zaprezentowane na gridzie.
 
 ```javascript
 Ext.create('Ext.data.Store', {
@@ -31,7 +31,6 @@ Ext.create('Ext.data.Store', {
         }
     }
 });
-
 ```
 
 Następnie podepnijmy stora pod grida w wersji podstawowej - bez zmiany stylu konkretnych komórek.
@@ -48,10 +47,9 @@ Ext.create('Ext.grid.Panel', {
     forceFit:true,
     renderTo: Ext.getBody()
 });
-
 ```
 
-W celu zmiany parametrów poszczególnych komórek grida posłużymy się tzw. rendererem. Renderer jest to funkcja, której zadaniem jest modyfikacją komórek w danej kolumnie grida. Dzięki rendererowi możemy nie tyko zmienić zawartość komórki, ale również przypisać jej osobny styl lub klasę CSS. Myślę, że renderer można porównać do conwertera znanego z technologii WPF. Funkcję renderera podłączymy pod ostatnią kolumnę. Kod po modyfikacjach będzie wyglądał w następujący sposób:
+W celu zmiany parametrów poszczególnych komórek grida posłużymy się tzw. rendererem. `Renderer` jest to funkcja, której zadaniem jest modyfikacją komórek w danej kolumnie grida. Dzięki rendererowi możemy nie tyko zmienić zawartość komórki, ale również przypisać jej osobny styl lub klasę `CSS`. Myślę, że renderer można porównać do conwertera znanego z technologii `WPF`. Funkcję renderera podłączymy pod ostatnią kolumnę. Kod po modyfikacjach będzie wyglądał w następujący sposób:
 
 ```javascript
 Ext.create('Ext.grid.Panel', {
@@ -72,7 +70,6 @@ Ext.create('Ext.grid.Panel', {
     
     renderTo: Ext.getBody()
 });
-
 ```
 
 ```css
@@ -83,14 +80,17 @@ Ext.create('Ext.grid.Panel', {
 .price-rise {
     background-color: #B0FFC5;
     color:green;
-}​
-
+}
 ```
 
 Zauważmy, że funkcja renderer przyjmuje kilka parametrów. Najważniejsze z nich to
 
-- value - wartość wyświetlona w komórce grida
-- metaData- obiekt dający nam dostęp do parametrów komórki (np. tdCls)
-- record - record grida
+- `value` - wartość wyświetlona w komórce grida
+- `metaData`- obiekt dający nam dostęp do parametrów komórki (np. tdCls)
+- `record` - record grida
 
-W moim przypadku na podstawie wartości wyświetlanej w komórkach kolumny "Change",określam czy dana komórka powinna być czerwona czy zielona. Wygląd grida przed oraz po zastosowaniu renderera przedstawiają poniższe screeny [![Before](images/Before.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/07/extjs-4-1-zmiana-stylu-konkretnej-komorki-w-gridzie/Before.jpg) [![zmiana stylu](images/After.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/07/extjs-4-1-zmiana-stylu-konkretnej-komorki-w-gridzie/After.jpg)
+W moim przypadku na podstawie wartości wyświetlanej w komórkach kolumny `Change`,określam czy dana komórka powinna być czerwona czy zielona. Wygląd grida przed oraz po zastosowaniu renderera przedstawiają poniższe screeny
+
+[![Before](images/Before.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/07/extjs-4-1-zmiana-stylu-konkretnej-komorki-w-gridzie/Before.jpg)
+
+[![zmiana stylu](images/After.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/07/extjs-4-1-zmiana-stylu-konkretnej-komorki-w-gridzie/After.jpg)

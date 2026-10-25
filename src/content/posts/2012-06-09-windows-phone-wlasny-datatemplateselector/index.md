@@ -9,7 +9,7 @@ tags:
   - "windows-phone"
 ---
 
-Pisząc moją małą aplikację pod Windows Phone po raz kolejny natknąłem się na problem. Pod WP7 nie ma tak przydatnej rzeczy jaką jest DataTemplateSelector znany nam bardziej, lub mniej z Silverlighta oraz WPF-a.Na szczęście napisane własnego DataTemplateSelector-a nie jest specjalnie skomplikowane. Jak zwykle w takich przypadkach liczy się pomysł - jak dobrze, że jest Google. Nasz customowy DataTemplateSelector zostanie oparty o kontrolkę ContentControl. Po pierwsze stwórzmy klasę bazową DataTemplateSelectora dziedziczącą po ContentControl,w której przeciążamy funkcję OnContentChanged,
+Pisząc moją małą aplikację pod Windows Phone po raz kolejny natknąłem się na problem. Pod `WP7` nie ma tak przydatnej rzeczy jaką jest `DataTemplateSelector` znany nam bardziej, lub mniej z Silverlighta oraz WPF-a.Na szczęście napisane własnego `DataTemplateSelector-a` nie jest specjalnie skomplikowane. Jak zwykle w takich przypadkach liczy się pomysł - jak dobrze, że jest `Google`. Nasz customowy `DataTemplateSelector` zostanie oparty o kontrolkę `ContentControl`. Po pierwsze stwórzmy klasę bazową `DataTemplateSelectora` dziedziczącą po `ContentControl`,w której przeciążamy funkcję `OnContentChanged`,
 
 ```csharp
 public abstract class AbstractDataTemplateSelector : ContentControl
@@ -22,15 +22,14 @@ public abstract class AbstractDataTemplateSelector : ContentControl
         ContentTemplate = SelectTemplate(newContent, this);
     }
 }
-
 ```
 
-Klasa ta będzie klasą z której będą wywodzić się wszystkie nasze TemplateSelectory. Załóżmy, że chcemy zbudować DataTemplateSelector, który będzie obsługiwał aplikację chata. Powinien on zatem reagować na dwa typy elementów:
+Klasa ta będzie klasą z której będą wywodzić się wszystkie nasze `TemplateSelectory`. Załóżmy, że chcemy zbudować `DataTemplateSelector`, który będzie obsługiwał aplikację chata. Powinien on zatem reagować na dwa typy elementów:
 
 - wiadomości przychodzące
 - wiadomości wychodzące
 
-Stwórzmy zatem "wyspecjalizowany" DataTemplateSelector, który w zależności od typu wiadomości zwróci odpowiedni DataTemplate.
+Stwórzmy zatem "wyspecjalizowany" `DataTemplateSelector`, który w zależności od typu wiadomości zwróci odpowiedni DataTemplate.
 
 ```csharp
 public class ChatMessageTemplateSelector : AbstractDataTemplateSelector
@@ -56,23 +55,21 @@ public class ChatMessageTemplateSelector : AbstractDataTemplateSelector
         return In;
     }
 }
-
 ```
 
-W klasie ChatMessageTemplateSelector przeciążyliśmy metodę SelectTemplate. W metodzie tej, na podstawie zbindowanego obiektu (parametr item) określamy jaki template powinniśmy zwrócić. Templaty do wiadomości przychodzących oraz wychodzących zostały zdefiniowane jako propertisy.
+W klasie `ChatMessageTemplateSelector` przeciążyliśmy metodę `SelectTemplate`. W metodzie tej, na podstawie zbindowanego obiektu (parametr item) określamy jaki template powinniśmy zwrócić. Templaty do wiadomości przychodzących oraz wychodzących zostały zdefiniowane jako propertisy.
 
-- Out - template wiadomości wychodzącej
-- In - template wiadomości przychodzącej
+- `Out` - template wiadomości wychodzącej
+- `In` - template wiadomości przychodzącej
 
-Pozostaje nam tylko zdefiniować wymienione wyżej templaty. Nie będziemy robić tego w kodzie, ale w XAML-u. Nasz nowo stworzony DataTemplateSelector wykorzytamy w ListBox-ie
+Pozostaje nam tylko zdefiniować wymienione wyżej templaty. Nie będziemy robić tego w kodzie, ale w XAML-u. Nasz nowo stworzony `DataTemplateSelector` wykorzytamy w ListBox-ie
 
 ```xml
-XHTML
 <ListBox  ItemsSource="{Binding MessageList,Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch"
                      ItemTemplate="{StaticResource GeneralChatMessageTemplate}" />
 ```
 
-Jako, że nasz ChatMessageTemplateSelector jest tak naprawdę obiektem typu ContentControl, zatem możemy go zbindować do właściwości ItemTemplate ListBox-a. Zasób GeneralChatMessageTemplate wygląda w następujący sposób
+Jako, że nasz `ChatMessageTemplateSelector` jest tak naprawdę obiektem typu `ContentControl`, zatem możemy go zbindować do właściwości `ItemTemplate` `ListBox-a`. Zasób `GeneralChatMessageTemplate` wygląda w następujący sposób
 
 ```xml
 <DataTemplate x:Key="GeneralChatMessageTemplate">
@@ -81,10 +78,10 @@ Jako, że nasz ChatMessageTemplateSelector jest tak naprawdę obiektem typu Cont
 </DataTemplate>
 ```
 
-Jak widać jest to obiekt typu ChatMessageTemplateSelector, którego właściwość Content jest zbindowana do aktualnego kontekstu (pojedyncze słowo kluczowe Binding). Widzimy również, że ustawiliśmy wartości właściwości odpowiadających za templaty poszczególnych wiadomości (In="{StaticResource IncomingChatMessageTemplate}" Out="{StaticResource OutcomingChatMessageTemplate}"). Wspomniane templaty wyglądają w następujący sposób
+Jak widać jest to obiekt typu `ChatMessageTemplateSelector`, którego właściwość `Content` jest zbindowana do aktualnego kontekstu (pojedyncze słowo kluczowe `Binding`).
+Widzimy również, że ustawiliśmy wartości właściwości odpowiadających za templaty poszczególnych wiadomości (`In="{StaticResource IncomingChatMessageTemplate}" Out="{StaticResource OutcomingChatMessageTemplate}"`). Wspomniane templaty wyglądają w następujący sposób
 
 ```xml
-``
 <DataTemplate x:Key="IncomingChatMessageTemplate">
             <Border BorderThickness="0,0,0,1" BorderBrush="#2d3550" >
                 <Grid Background="#181c2a" HorizontalAlignment="Stretch">
@@ -106,7 +103,8 @@ Jak widać jest to obiekt typu ChatMessageTemplateSelector, którego właściwo�
                     <TextBlock FontFamily="Segoe UI, Tahoma" FontSize="12" Margin="5,0,0,0" TextWrapping="Wrap" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding Message,Mode=TwoWay}" ></TextBlock>
                 </Grid>
             </Border>
-</DataTemplate>`
+</DataTemplate>
+```
 
 ```xml
 <DataTemplate x:Key="OutcomingChatMessageTemplate">
@@ -133,4 +131,6 @@ Jak widać jest to obiekt typu ChatMessageTemplateSelector, którego właściwo�
 </DataTemplate>
 ```
 
-Od teraz gdy do ListBox-a zostanie dodany nowy item, pierwszą rzeczą jaka się odpali będzie funkcja OnContentChanged. W funkcji tej AbstractDataTemplateSelector na podstawie nowo przybyłego itemu ustawi właściwość ContentTemplate, na taki template jaki zwróci mu funkcja SelectTemplate. Wynik działania ChatMessageTemplateSelector wygląda w następujący sposób [![DataTemplateSelector](images/Result.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/06/windows-phone-wlasny-datatemplateselector/Result.jpg)
+Od teraz gdy do `ListBox-a` zostanie dodany nowy item, pierwszą rzeczą jaka się odpali będzie funkcja `OnContentChanged`. W funkcji tej `AbstractDataTemplateSelector` na podstawie nowo przybyłego itemu ustawi właściwość `ContentTemplate`, na taki template jaki zwróci mu funkcja `SelectTemplate`. Wynik działania `ChatMessageTemplateSelector` wygląda w następujący sposób
+
+[![DataTemplateSelector](images/Result.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/06/windows-phone-wlasny-datatemplateselector/Result.jpg)
