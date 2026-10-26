@@ -26,7 +26,8 @@ czyli po prostu w konstruktorze przesyłamy obiekt implementujący interfejs `IE
 
 **Filtrowanie**
 
-W celu przefiltrowania kolekcji wystarczy podać odpowiedni obiekt typu `Predicate`(czyli tak naprawdę wystarczy napisać funkcję zwracającą `bool` oraz przyjmującą w parametrze obiekt). Załóżmy, że chcemy pokazać na widoku jedynie tych graczy, który nazywają się `Tomek`.
+W celu przefiltrowania kolekcji wystarczy podać odpowiedni obiekt typu `Predicate`(czyli tak naprawdę wystarczy napisać funkcję zwracającą `bool` oraz przyjmującą w parametrze obiekt).
+Załóżmy, że chcemy pokazać na widoku jedynie tych graczy, który nazywają się `Tomek`.
 W tym celu wystarczy, że zrobimy coś takiego:
 
 ```csharp
@@ -43,7 +44,8 @@ PlayerListCollectionView.Refresh();
 **Grupowanie**
 
 Kolekcja `ListViewCollection` wspiera również grupowanie.
-W celu pogrupowania listy po jakimś elemencie wystarczy do naszej listy dorzucić tzw. `group description`. Odbywa się to w taki sposób:
+W celu pogrupowania listy po jakimś elemencie wystarczy do naszej listy dorzucić tzw. `group description`.
+Odbywa się to w taki sposób:
 
 ```csharp
 PlayerListCollectionView.GroupDescriptions.Add(new PropertyGroupDescription { PropertyName = "Name" }

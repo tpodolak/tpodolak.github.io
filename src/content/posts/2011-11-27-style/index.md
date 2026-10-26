@@ -43,7 +43,8 @@ Dla przykładu - następujący styl:
 </Style>
 ```
 
-ustawi rozmiar czcionki na buttonie na `22 pkt`. Jako, że nie została ustawiona właściwość `TargetType` dla stylu, musimy podawać pełną nazwę właściwości(czyli nazwę klasy oraz nazwę właściwości).
+ustawi rozmiar czcionki na buttonie na `22 pkt`.
+Jako, że nie została ustawiona właściwość `TargetType` dla stylu, musimy podawać pełną nazwę właściwości(czyli nazwę klasy oraz nazwę właściwości).
 Oczywiście możemy również ustawiać bardziej skomplikowane właściwości
 
 ```xml
@@ -74,8 +75,10 @@ Od tej chwili wszystkie buttony będą renderowane z użyciem powyższego stylu 
 
 **Dziedziczenie styli**
 
-Style mogą być dziedziczone. Oznacza to tyle, że styl pochodny będzie rozszerzał styl bazowy. W przypadku gdy styl bazowy ma zdefiniowany `TargetType`, styl dziedziczący nie może go zmienić.
-W celu zdefiniowania dziedziczenia używa się właściwości BasedOn. Przykładowe dziedziczenie styli pokazano poniżej
+Style mogą być dziedziczone. Oznacza to tyle, że styl pochodny będzie rozszerzał styl bazowy.
+W przypadku gdy styl bazowy ma zdefiniowany `TargetType`, styl dziedziczący nie może go zmienić.
+W celu zdefiniowania dziedziczenia używa się właściwości BasedOn.
+Przykładowe dziedziczenie styli pokazano poniżej
 
 ```xml
 <Style x:Key="baseStyle">
@@ -87,7 +90,9 @@ W celu zdefiniowania dziedziczenia używa się właściwości BasedOn. Przykład
 </Style>
 ```
 
-W stylu dziedziczącym można przesłaniać właściwości ze stylu bazowego. W przypadku gdy nie zostaną one przesłonięte, użyte zostaną propertisy ze stylu bazowego. W celu zaaplikowania stylu do jakiejś kontrolki posługujemy się następującą składnią
+W stylu dziedziczącym można przesłaniać właściwości ze stylu bazowego.
+W przypadku gdy nie zostaną one przesłonięte, użyte zostaną propertisy ze stylu bazowego.
+W celu zaaplikowania stylu do jakiejś kontrolki posługujemy się następującą składnią
 
 ```xml
 <Button Style="{StaticResource myStyle}"></Button>

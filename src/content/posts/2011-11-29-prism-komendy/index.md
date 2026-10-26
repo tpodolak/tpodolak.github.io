@@ -62,7 +62,8 @@ Jeżeli warunek ten zostanie spełniony następuje wywoływanie po kolei wszystk
 
 [![Komendy](images/CompositeCommand.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/11/prism-komendy/CompositeCommand.jpg)
 
-`CompositeCommand` może również wykorzystana np. do zapisania tylko aktywnego widoku. Dzięki temu, że `DelegateCommand` implementuje interfejs `IActiveAware`, `CompositeCommand` wie, który widok jest aktualnie zaznaczony i zapisze tylko wybrany widok.
+`CompositeCommand` może również wykorzystana np. do zapisania tylko aktywnego widoku.
+Dzięki temu, że `DelegateCommand` implementuje interfejs `IActiveAware`, `CompositeCommand` wie, który widok jest aktualnie zaznaczony i zapisze tylko wybrany widok.
 
 Interfejs `IActiveAware` wygląda w następujący sposób
 

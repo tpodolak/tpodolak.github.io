@@ -153,7 +153,8 @@ W moim przypadku wygląda to następująco:
 xmlns:AttachedCommands="clr-namespace:MainModule.Commands"
 ```
 
-Następnie bindujemy jakąś kontrolkę do naszego attached property `Command`. Wygląda to w następujący sposób:
+Następnie bindujemy jakąś kontrolkę do naszego attached property `Command`.
+Wygląda to w następujący sposób:
 ```xml
 <Button Name="txtButton" Grid.Column="2" AttachedCommands:MouseMove.Command="{Binding SomeCommandFromViewModel}"></Button>
 ```

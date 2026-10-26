@@ -19,7 +19,7 @@ tags:
 Głównym założeniem `RoutedEventów` jest to, że w momencie wywołania takiego zdarzenia może ono podróżować w górę, lub w dół drzewa wizualnego oraz drzewa logicznego.
 Każdy `RoutedEvent` może przyjmować jedną z trzech strategii poruszania się po drzewie:
 
-- `Bubbling` - zdarzenie najpierw jest wywoływane w elemencie źródłowym, a następnie podróżuje ono w górę drzewa wizualnego (od naszego elementu do korzenia drzewa), aż do roota (lub do momenty gdy nie zostanie obsłużone poprzez e.Handled = true)
+- `Bubbling` - zdarzenie najpierw jest wywoływane w elemencie źródłowym, a następnie podróżuje ono w górę drzewa wizualnego (od naszego elementu do korzenia drzewa), aż do roota (lub do momenty gdy nie zostanie obsłużone poprzez `e.Handled = true`)
 - `Tunelling` - zdarzenie wywoływane jest w korzeniu drzewa, a następnie podróżuje w dół drzewa, aż osiągnie element źródłowy (lub gdy nie zostanie obsłużone poprzez `e.Handled = true`)
 - `Direct` - zdarzenie jest wywoływane tylko i wyłącznie w elemencie źródłowym - czyli zdarzenie to zachowuje się tak samo jak standardowe `.NET-owe` zdarzenia
 
@@ -76,7 +76,8 @@ private void Window_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 ```
 :::warning[UWAGA]
 Można zadeklarować zdarzenie w taki sposób aby wartość flagi `e.Handled` była pomijana.
-Jednak można to zrobić jedynie z poziomu kodu. Za pomocą metody `AddHandler(RoutedEvent, Delegate, bool)` jeżeli ustawimy ostatni parametr na true, wówczas nasza metoda wykona się nawet w przypadku gdy `e.Hadnled == true`.
+Jednak można to zrobić jedynie z poziomu kodu.
+Za pomocą metody `AddHandler(RoutedEvent, Delegate, bool)` jeżeli ustawimy ostatni parametr na true, wówczas nasza metoda wykona się nawet w przypadku gdy `e.Hadnled == true`.
 Metoda ta dostępna jest dla klasy `UIElement` i wszystkich klas po niej dziedziczących.
 :::
 

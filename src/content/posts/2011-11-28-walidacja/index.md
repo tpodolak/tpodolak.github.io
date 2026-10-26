@@ -15,7 +15,8 @@ tags:
   - "wpf"
 ---
 
-Walidacja jest to technika sprawdzająca, czy dany obiekt spełnia pewne założenia poprawności danych. W `WPF-ie` oraz `Silverlighcie` istnieją trzy sposoby walidacji obiektów:
+Walidacja jest to technika sprawdzająca, czy dany obiekt spełnia pewne założenia poprawności danych.
+W `WPF-ie` oraz `Silverlighcie` istnieją trzy sposoby walidacji obiektów:
 
 - walidacja poprzez rzucanie wyjątków,
 - walidacja z użyciem interfejsu `IDataErrorInfo`,
@@ -219,4 +220,5 @@ public class IntValidation : ValidationAttribute
 ```
 
 Walidacja przy użyciu interfejsu `INotifyDataErrorInfo` idealnie nadaje się (wg mnie) do walidowaniu całych `ViewModeli`.
-Przy zamykaniu okna wystarczy wywołać funkcję `Validate` z bazowego `ViewModelu`, a w przypadku gdy zwróci ona `false` zatrzymać zamykanie okna. Jako, że walidacja zostanie przeprowadzona na wszystkich wybranych przez nas propertisach, widok automatycznie się zaktualizuje i pokaże komunikaty błędów na odpowiednich kontrolkach okna.
+Przy zamykaniu okna wystarczy wywołać funkcję `Validate` z bazowego `ViewModelu`, a w przypadku gdy zwróci ona `false` zatrzymać zamykanie okna.
+Jako, że walidacja zostanie przeprowadzona na wszystkich wybranych przez nas propertisach, widok automatycznie się zaktualizuje i pokaże komunikaty błędów na odpowiednich kontrolkach okna.

@@ -59,7 +59,8 @@ public class DelegateCommand : ICommand
 }
 ```
 
-Klasa `DelegateCommand` przyjmuje w konstruktorze dwa parametry - delegaty do funkcji. Pierwszy z nich jest to delegat do funkcji, która ma się wykonać, gdy komenda może zostać wykonana.
+Klasa `DelegateCommand` przyjmuje w konstruktorze dwa parametry - delegaty do funkcji.
+Pierwszy z nich jest to delegat do funkcji, która ma się wykonać, gdy komenda może zostać wykonana.
 Drugi natomiast jest to delegat do funkcji, która sprawdza czy dana komenda może zostać wykonana.
 Ważnym elementem jest tutaj następujący kawałek kodu:
 
@@ -79,7 +80,8 @@ public event EventHandler CanExecuteChanged
 
 który podłącza naszą klasę do `WPF-owego` systemu komend.
 
-Teraz wystarczy w ViewModelu stworzyć obiekt typu DelegateCommand przekazać do niego odpowiednie funkcje, a następnie zbindować go do widoku. Może to wyglądać w następujący sposób:
+Teraz wystarczy w ViewModelu stworzyć obiekt typu DelegateCommand przekazać do niego odpowiednie funkcje, a następnie zbindować go do widoku.
+Może to wyglądać w następujący sposób:
 
 - `ViewModel`
     ```csharp
@@ -97,7 +99,8 @@ Teraz wystarczy w ViewModelu stworzyć obiekt typu DelegateCommand przekazać do
     ```
 
 ### 2. Implementacja interfejsu `ICommand` `Silverlight`
-Przedstawiony powyżej przykład skompiluje się jedynie w aplikacji `WPF-owej`. `Silverlight` niestety nie posiada `CommandManagera`, dlatego też gdy chcemy używać komend właśnie w tej technologii musimy zmodyfikować nasz kod na następujący:
+Przedstawiony powyżej przykład skompiluje się jedynie w aplikacji `WPF-owej`.
+`Silverlight` niestety nie posiada `CommandManagera`, dlatego też gdy chcemy używać komend właśnie w tej technologii musimy zmodyfikować nasz kod na następujący:
 ```csharp
 public class DelegateCommand : ICommand
 {
@@ -167,7 +170,8 @@ funkcję tą musimy wywoływać zawsze gdy zmieni się jakaś właściwość, kt
 
 ### 3. Przykład
 Załóżmy, że na widoku mamy przycisk edytuj, który powinien być aktywny tylko i wyłącznie wtedy, gdy zaznaczono jakiś element na gridzie.
-Przycisk ten jest zbindowany do komendy `EditCommand`. Jak już wcześniej wspomniano, z powodu braku w `Silverlighcie` `CommandManagera` sami musimy wywołać zdarzenie informujące o potrzebie zmiany stanu przycisku.
+Przycisk ten jest zbindowany do komendy `EditCommand`.
+Jak już wcześniej wspomniano, z powodu braku w `Silverlighcie` `CommandManagera` sami musimy wywołać zdarzenie informujące o potrzebie zmiany stanu przycisku.
 Dlatego też, w `ViewModelu` została stworzona właściwość `SelectedItem`
 
 ```csharp
@@ -188,8 +192,8 @@ W chwili, gdy zaznaczenie się zmienia, wywoływany jest seter z tej właściwo�
 Dzięki czemu informujemy kontrolkę o ewentualnej potrzebie zmiany jej stanu.
 
 ### 4. Podsumowanie
-Komendy w bardzo prosty i wygodny sposób pozwalają nam wywoływać metody bezpośrednio z `ViewModelu`. Niestety mają one również swoje ograniczenia:
+Komendy w bardzo prosty i wygodny sposób pozwalają nam wywoływać metody bezpośrednio z `ViewModelu`.
+Niestety mają one również swoje ograniczenia:
 
 - reagują jedynie na zdarzenie `Click`,
 - można je wykorzystać jedynie na kontrolkach dziedziczących po klasie `ButtonBase` oraz kontrolkach typu `MenuItem`
-

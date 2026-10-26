@@ -30,7 +30,9 @@ Klikamy w przycisk `Dalej`. W kolejnym oknie mamy do wyboru dwie opcje
 - Configure SQL Server for application services
 - Remove application services from an existing database
 
-Pierwsza opcja odpowiedzialna jest za stworzenie struktury danych do naszego sytemu logowania, natomiast druga usuwa z bazy danych tabele służące do logowania itp. Wybieramy opcję bramkę nr 1. W kolejnym oknie musimy podać connection string do naszego serwera bazy danych oraz login i hasło. W moim przypadku wygląda to w następujący sposób:
+Pierwsza opcja odpowiedzialna jest za stworzenie struktury danych do naszego sytemu logowania, natomiast druga usuwa z bazy danych tabele służące do logowania itp.
+Wybieramy opcję bramkę nr 1. W kolejnym oknie musimy podać connection string do naszego serwera bazy danych oraz login i hasło.
+W moim przypadku wygląda to w następujący sposób:
 
 [![wizzard2](images/wizzard2.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-1/wizzard2.jpg)
 
@@ -42,7 +44,8 @@ Ostatecznie klikamy na przycisk `Next`, a następnie w `Finish` aby dokończyć 
 
 [![wizzard4](images/wizzard4.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-1/wizzard4.jpg)
 
-Mając gotową bazę danych możemy przystąpić do właściwego kodowania. Zacznijmy od stworzenia nowego projektu typu `Silverlight Application`
+Mając gotową bazę danych możemy przystąpić do właściwego kodowania.
+Zacznijmy od stworzenia nowego projektu typu `Silverlight Application`
 
 [![silverlightapp](images/silverlightapp.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-1/silverlightapp.jpg)
 
@@ -50,7 +53,8 @@ po kliknięciu przycisku `OK` włączamy `WCF RIA Service`
 
 [![EnableWCF](images/EnableWCF.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-1/EnableWCF.jpg)
 
-Mając stworzony szkielet aplikacji możemy zabrać się za napisanie własnego `AuthenticationService`. Do projektu webowego (`nazwaprojektu.Web`) dodajmy nowy element typu `Domain Service`.
+Mając stworzony szkielet aplikacji możemy zabrać się za napisanie własnego `AuthenticationService`.
+Do projektu webowego (`nazwaprojektu.Web`) dodajmy nowy element typu `Domain Service`.
 `PPM` na projekt, następnie `Add new item`, w oknie które się otworzy wybieramy `Domain Service`.
 Nadajemu mu nazwę `CustomAuthenticationService.cs`
 
@@ -109,7 +113,7 @@ Mając gotową klasę reprezentującą użytkownika zaimplementujmy w końcu w k
 Po implementacji interfejsu nasz serwis wygląda w następujący sposób:
 
 ```csharp
-[EnableClientAccess()]
+[EnableClientAccess]
 public class CustomAuthenticationService: DomainService, IAuthentication
 {
     public UserDTO GetUser()
@@ -137,8 +141,10 @@ public class CustomAuthenticationService: DomainService, IAuthentication
 Pozostaje nam "tylko" zaimplementować odpowiednie metody. Funkcja która nas najbardziej interesuje to oczywiście funkcja logowania.
 Przy jej implementacji posłuży się mechanizmem znanym z `ASP` mianowicie z `MembershipProviders`.
 Klasa `MembershipProvider` jest to abstrakcyjna klasa posiadająca szereg funkcji mającej na celu walidowanie poprawnego użytkownika, rejestrację itp.
-Stwórzmy zatem własną klasę providera dziedziczącą po klasie `MembershipProvicer`. `.NET` dostarcza nam domyślny provider, którym jest `SqlMembershipProvider`, jest on napisany w taki sposób, aby mógł porozumiewać się z bazą, którą stworzyliśmy na początku.
-Aby wykorzystać wspomnianego wcześniej providera musimy odpowiednio zmodyfikować plik `Web.config`. Po pierwsze dodajemy do niego `ConnectionString` do naszej bazy danych, w moim przypadku będzie to wyglądało w następujący sposób
+Stwórzmy zatem własną klasę providera dziedziczącą po klasie `MembershipProvicer`.
+`.NET` dostarcza nam domyślny provider, którym jest `SqlMembershipProvider`, jest on napisany w taki sposób, aby mógł porozumiewać się z bazą, którą stworzyliśmy na początku.
+Aby wykorzystać wspomnianego wcześniej providera musimy odpowiednio zmodyfikować plik `Web.config`.
+Po pierwsze dodajemy do niego `ConnectionString` do naszej bazy danych, w moim przypadku będzie to wyglądało w następujący sposób
 ```xml
 <connectionStrings>
     <add name="aspnetdbConnectionString" connectionString="Data Source=TOMEKKOMPUTERSQLEXPRESSRC2;Initial Catalog=aspnetdb;Integrated Security=True"
@@ -261,8 +267,10 @@ public UserDTO GetUser()
 }
 ```
 
-Funkcja `Logout` po prostu wywołuje funkcję `SingOut` z klasy `FormsAuthentication`. Natomiast funkcja `GetUser` zwraca zalogowanego użytkownika.
+Funkcja `Logout` po prostu wywołuje funkcję `SingOut` z klasy `FormsAuthentication`.
+Natomiast funkcja `GetUser` zwraca zalogowanego użytkownika.
 W funkcji tej najpierw sprawdzamy czy użytkownik jest zalogowany (do tego celu używamy zmiennej `IsAuthenticated`), a następnie sprawdzamy czy przypadkiem jego sesja nie wygasła.
 W przypadku gdy wszystko jest `OK` zwracamy obiekt typu `UserDTO`, w przeciwnym razie zwracamy `null`.
 
-Podsumowując, udało nam się stworzyć mechanizm logowania. Jak na razie gotowa jest strona serwera. W następnym wpisie pokażę w jaki sposób należy wywołać logowanie od strony klienta. Przedstawię również pomysł w jaki sposób zmieniać providerów przez które użytkownik ma się logować. Może to być przydatne jeżeli chcielibyśmy logować się np. poprzez inne serwisy jak `Google`, `Facebook` itp.
+Podsumowując, udało nam się stworzyć mechanizm logowania. Jak na razie gotowa jest strona serwera.
+W następnym wpisie pokażę w jaki sposób należy wywołać logowanie od strony klienta. Przedstawię również pomysł w jaki sposób zmieniać providerów przez które użytkownik ma się logować. Może to być przydatne jeżeli chcielibyśmy logować się np. poprzez inne serwisy jak `Google`, `Facebook` itp.

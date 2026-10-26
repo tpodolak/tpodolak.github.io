@@ -22,7 +22,8 @@ AutomationElement.RootElement
 
 ```
 
-Mając dostęp do roota możemy następnie poruszać się po drzewie tak aby znaleźć interesujące nas elementy. Załóżmy, że napisaliśmy prostą aplikację `WPF-ową`, która wykonuje podstawowe obliczenia matematyczne (pomysł na prostą aplikację do testowania zaczerpnięty z [tej](http://blog.ganeshzone.net/index.php/2011/08/automated-ui-testing-of-wpf-applications-using-microsoft-ui-automation-library/) strony - kod jednak pisałem po swojemu :D).
+Mając dostęp do roota możemy następnie poruszać się po drzewie tak aby znaleźć interesujące nas elementy.
+Załóżmy, że napisaliśmy prostą aplikację `WPF-ową`, która wykonuje podstawowe obliczenia matematyczne (pomysł na prostą aplikację do testowania zaczerpnięty z [tej](http://blog.ganeshzone.net/index.php/2011/08/automated-ui-testing-of-wpf-applications-using-microsoft-ui-automation-library/) strony - kod jednak pisałem po swojemu :D).
 Wizualnie aplikacja ta przedstawia się w następujący sposób:
 ```xml wrap=false
 <Window x:Class="UIAutomation.Views.MainWindow"
@@ -83,14 +84,17 @@ PropertyCondition
 
 określa ona jaka właściwość kontrolki/aplikacji będzie uwzględniana przy wyszukiwaniu wyniku.
 
-Pierwszym krokiem przy testowaniu aplikacji będzie oczywiście znalezienie głównego okna programu. Mając w solucji stworzony projekt z aplikacją `WPF-ową`, dodajmy drugi projekt - tym razem będzie to projekt typu `ConsoleApplication`.
-Następnie musimy dodać referencję do odpowiednich ddl-ek. Potrzebujemy następujących bibliotek:
+Pierwszym krokiem przy testowaniu aplikacji będzie oczywiście znalezienie głównego okna programu.
+Mając w solucji stworzony projekt z aplikacją `WPF-ową`, dodajmy drugi projekt - tym razem będzie to projekt typu `ConsoleApplication`.
+Następnie musimy dodać referencję do odpowiednich ddl-ek.
+Potrzebujemy następujących bibliotek:
 
 - `UIAutomation.dll`
 - `UIAutomationClient.dll`
 - `UIAutomationType.dll`
 
-Następnie w naszym projekcie konsolowym w metodzie main odpalamy aplikację, którą chcemy testować. W moim przypadku wygląda to w następujący sposób:
+Następnie w naszym projekcie konsolowym w metodzie main odpalamy aplikację, którą chcemy testować.
+W moim przypadku wygląda to w następujący sposób:
 
 ```csharp
 Console.WriteLine("Odpalam aplikacje");
@@ -114,7 +118,8 @@ Jako warunek wyszukiwania podaliśmy obiekt klasy `PropertyCondition`.
 Jako właściwość do porównywania podaliśmy id processu (`AutomationElement.ProcessIdProperty`).
 W drugim przypadku po prostu uzyskujemy dostęp do okna dzięki znajomości jego uchwytu (właściwość `MainWindowHandle` z klasy `Process`).
 Według mnie lepiej skorzystać z funkcji pierwszej, zwłaszcza gdy odpalamy aplikację, która się długo uruchamia.
-W pierwszym przypadku wystarczy zrobić odpowiednią funkcję oczekującą na odpalanie (gdyż funkcja zwróci nam `null` gdy okna jeszcze nie będzie), natomiast druga opcja rzuci nam wyjątek. Oczekiwania na załadowanie okna może wyglądać w następujący sposób
+W pierwszym przypadku wystarczy zrobić odpowiednią funkcję oczekującą na odpalanie (gdyż funkcja zwróci nam `null` gdy okna jeszcze nie będzie), natomiast druga opcja rzuci nam wyjątek.
+Oczekiwania na załadowanie okna może wyglądać w następujący sposób
 
 ```csharp
 AutomationElement mainForm;
@@ -148,8 +153,10 @@ var firstTextbox = mainForm.FindFirst(TreeScope.Descendants, new PropertyConditi
 
 ```
 
-W analogiczny sposób znajdujemy pozostałe przyciski na naszej formie, a następnie postarajmy się wprowadzić do nich jakiś text. W celu interakcji z kontrolkami wykorzystamy tzw. `Patterns`.
-`Patterns` definiują określone funkcjonalności, które wspiera nasza kontrolka. Do najczęściej używanych patterns należą:
+W analogiczny sposób znajdujemy pozostałe przyciski na naszej formie, a następnie postarajmy się wprowadzić do nich jakiś text.
+W celu interakcji z kontrolkami wykorzystamy tzw. `Patterns`.
+`Patterns` definiują określone funkcjonalności, które wspiera nasza kontrolka.
+Do najczęściej używanych patterns należą:
 
 - `SelectionPattern` - używany do manipulacjami kontrolkami wspierającymi zaznaczanie np. `ListBox-ami`
 - `TextPattern` - używany do manipulacjami kontrolkami wspierającymi edycję
@@ -173,7 +180,8 @@ pattern.SetValue("50");
 ```
 
 Mając wprowadzone dane do textbox-ów wypadałoby teraz przeprowadzić obliczenia.
-Zatem musimy w jakiś sposób aby "nacisnąć" jeden z naszych czterech przycisków. Znajdźmy zatem nasze przyciski:
+Zatem musimy w jakiś sposób aby "nacisnąć" jeden z naszych czterech przycisków.
+Znajdźmy zatem nasze przyciski:
 
 ```csharp wrap=false
 var btnAdd = mainForm.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "btnAdd"));
@@ -203,7 +211,8 @@ Console.Write("Dodawanie test OK ? , {0}",value == "100");
 ```
 
 Na koniec najlepiej wrzucić nasz test w jakąś pętle, losowo generować wartości oraz porównywać je z wartościami oczekiwanymi.
-Dobrym pomysłem jest również stworzenie sobie jakiejś klasy pomocniczej, w której zostałyby umieszczone funkcje do wypełniania textbox-ow, klikania w buttony itp - gdyż jak widać dużo kodu jest powtarzalna. Ostatecznie aplikacja testowa może wyglądać w następujący sposób:
+Dobrym pomysłem jest również stworzenie sobie jakiejś klasy pomocniczej, w której zostałyby umieszczone funkcje do wypełniania textbox-ow, klikania w buttony itp - gdyż jak widać dużo kodu jest powtarzalna.
+Ostatecznie aplikacja testowa może wyglądać w następujący sposób:
 
 ```csharp
 class Program

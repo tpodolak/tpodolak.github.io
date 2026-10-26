@@ -36,7 +36,8 @@ Oto przykład wykorzystania `Property Triggera`. W `ResourceDictionary` tworzymy
 </Style>
 ```
 
-Widzimy, że dany trigger jest powiązany z właściwością `IsMouseOver`. W przypadku gdy wartość tej właściwości zostanie ustawiona na `true, tło przycisku zostanie zmienione na czarne.
+Widzimy, że dany trigger jest powiązany z właściwością `IsMouseOver`.
+W przypadku gdy wartość tej właściwości zostanie ustawiona na `true, tło przycisku zostanie zmienione na czarne.
 Natomiast gdy `IsMouseOver` powróci do stanu `false`, tło przycisku wróci do wartości sprzed zmiany.
 
 ### 2\. Data triggers
@@ -53,7 +54,8 @@ Oto przykład wykorzystania `Data Triggera`. W `ResourceDictionary` tworzymy sty
 </Style>
 ```
 
-W tym przypadku nasz trigger reaguje na zmiany właściwości `Text`. Jako, że nie ustawiliśmy źródła bindowania, właściwość `Text` będzie wyszukiwana w `DataContext` danej kontrolki.
+W tym przypadku nasz trigger reaguje na zmiany właściwości `Text`.
+Jako, że nie ustawiliśmy źródła bindowania, właściwość `Text` będzie wyszukiwana w `DataContext` danej kontrolki.
 W przypadku gdy `DataContext` nie zostanie ustawiony, właściwość ta będzie wyszukiwana w kontrolce będącej wyżej w hierarchii.
 W przypadku gdy wartość właściwości `Text` będzie wynosiła `Kolor` tło kontrolki zostanie zmienione na kolor beżowy.
 

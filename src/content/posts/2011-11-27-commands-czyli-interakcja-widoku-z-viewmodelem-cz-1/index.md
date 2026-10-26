@@ -60,7 +60,8 @@ informuje widok o tym czy dana komenda może się wykonać czy też nie - dzięk
 ### 3\. Sposób użycia
 
 Załóżmy, że mamy okno na którym znajduje się przycisk.
-Po naciśnięciu przycisku chcielibyśmy aby wykonała się jakaś czynność. Każdy obiekt typu `Window` oraz `Control` posiada kolekcję `CommandBindings`, która przechowuje wszystkie komendy danego okna.
+Po naciśnięciu przycisku chcielibyśmy aby wykonała się jakaś czynność.
+Każdy obiekt typu `Window` oraz `Control` posiada kolekcję `CommandBindings`, która przechowuje wszystkie komendy danego okna.
 W celu dodania nowej komendy należy zrobić następującą rzecz.
 Po pierwsze musimy stworzyć nową komendę. Robimy to przy pomocy następującego kodu:
 
@@ -79,9 +80,11 @@ Konstruktor takiego obiektu składa się z trzech parametrów:
 
 - `RoutedCommand` - obiekt typu `RoutedCommand`
 - delegat typu `ExecutedRoutedEventHandler` - jest to delegat do funkcji, która ma się wykonać w przypadku gdy dana komenda spełnia warunki do “uruchomienia”
-- delegat typu `CanExecuteRoutedEventHandler` - jest to delegat do funkcji, która sprawdza czy daną komendę można wykonać. W celu zabronienia wykonania komendy należy ustawić argument `ExecutedRoutedEventArgs` `CanExecute` na `false`.
+- delegat typu `CanExecuteRoutedEventHandler` - jest to delegat do funkcji, która sprawdza czy daną komendę można wykonać.
+W celu zabronienia wykonania komendy należy ustawić argument `ExecutedRoutedEventArgs` `CanExecute` na `false`.
 
-Na koniec należy jeszcze zbindować naszą komendę z przyciskiem. Przykładowy kod dodawania komendy może wyglądać w następujący sposób.
+Na koniec należy jeszcze zbindować naszą komendę z przyciskiem.
+Przykładowy kod dodawania komendy może wyglądać w następujący sposób.
 
 ```csharp
 public partial class WatchList : Window

@@ -17,7 +17,8 @@ W oknie, które się pokaże, w drzewie po lewej stronie wybieramy `Test`, a nas
 
 [![Project](images/Project.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/coded-ui-test-tworzenie-testow-ui-przy-pomocy-visual-studio-ultimate/Project.jpg)
 
-Mając stworzony projekt testowy dodajemy do niego nowy `Coded UI Test`. W `Solution Explore-rze` klikamy `PPM` na projekt testowy, a następnie z menu contextowego wybieramy `Coded UI Test`.
+Mając stworzony projekt testowy dodajemy do niego nowy `Coded UI Test`.
+W `Solution Explore-rze` klikamy `PPM` na projekt testowy, a następnie z menu contextowego wybieramy `Coded UI Test`.
 
 [![CodedUITest](images/CodedUITest.png)](http://tpodolak.com/blog/wp-content/uploads/2011/12/coded-ui-test-tworzenie-testow-ui-przy-pomocy-visual-studio-ultimate/CodedUITest.png)
 
@@ -52,11 +53,13 @@ Następnie z menu contextowego wybieramy
 
 [![Generate](images/Generate.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/coded-ui-test-tworzenie-testow-ui-przy-pomocy-visual-studio-ultimate/Generate.jpg)
 
-Otwiera nam się znane już wcześniej okienko nagrywania testu. Jednakże tym razem naciśnijmy przycisk celownika i przeciągnijmy go na textbox-a, w którym ma pojawić się wynik dodawania
+Otwiera nam się znane już wcześniej okienko nagrywania testu.
+Jednakże tym razem naciśnijmy przycisk celownika i przeciągnijmy go na textbox-a, w którym ma pojawić się wynik dodawania
 
 [![AutomationAdding](images/AutomationAdding.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/coded-ui-test-tworzenie-testow-ui-przy-pomocy-visual-studio-ultimate/AutomationAdding.jpg)
 
-Nasz textbox zostanie obramowany, natomiast w prawym dolnym rogu pulpitu pojawi się nowe okno pokazujące propertisy naszego przycisku. Wybierzmy właściwość `Text` ,a następnie naciśnijmy przycisk `Add Assertion`
+Nasz textbox zostanie obramowany, natomiast w prawym dolnym rogu pulpitu pojawi się nowe okno pokazujące propertisy naszego przycisku.
+Wybierzmy właściwość `Text` ,a następnie naciśnijmy przycisk `Add Assertion`
 
 [![Assertion](images/Assertion.jpg)](http://tpodolak.com/blog/wp-content/uploads/2011/12/coded-ui-test-tworzenie-testow-ui-przy-pomocy-visual-studio-ultimate/Assertion.jpg)
 

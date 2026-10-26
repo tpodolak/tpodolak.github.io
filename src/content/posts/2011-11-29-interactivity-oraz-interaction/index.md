@@ -21,8 +21,10 @@ tags:
 Wprowadzają one nowy typ `EventTriggerów`(w `Silverlighcie` nie ma triggerów, natomiast w `WPF-ie` event triggery można praktycznie używać jedynie do animacji) oraz dodatkowo wprowadzają ciekawe sposoby(funkcje) na interakcję widoku z `ViewModelem`.
 
 Pierwszym z tych sposobów jest użycie właściwości `InvokeCommandAction`.
-Jak sama nazwa wskazuje można wywołać komendę z `ViewModelu`. Jaka jest różnica między wywołaniem komendy poprzez `InvokeCommandAction`, a `Command="{Binding CommandName}"`?
-`InvokeCommandAction` ma tą przewagę nad normalnm bindowaniem do property `Command`, że pozwala wywołać daną komendę w odpowiedzi na zajście jakiegoś zdarzenia na widoku. Przykładowe użycie może wyglądać następująco:
+Jak sama nazwa wskazuje można wywołać komendę z `ViewModelu`.
+Jaka jest różnica między wywołaniem komendy poprzez `InvokeCommandAction`, a `Command="{Binding CommandName}"`?
+`InvokeCommandAction` ma tą przewagę nad normalnm bindowaniem do property `Command`, że pozwala wywołać daną komendę w odpowiedzi na zajście jakiegoś zdarzenia na widoku.
+Przykładowe użycie może wyglądać następująco:
 ```xml
 <Button Content="Submit" IsEnabled="{Binding CanSubmit}">
       <i:Interaction.Triggers>
@@ -62,7 +64,8 @@ Zatem jeżeli musimy wywołać jakąś funkcję z parametrami, należy opakować
 
 Kolejnym ciekawym featurem `Interactivity` jest klasa `Behavior`.
 Jest niezastąpiona jeżeli potrzebujemy ingerować w działanie widoku po jakimś zdarzeniu.
-Nie musimy wówczas tworzyć obsługi eventów w code behind. Możemy wyłuskać daną funkcjonalność i zamknąć ją w klasie `Behavior` a następnie doczepić do wszystkich widoków danego typu.
+Nie musimy wówczas tworzyć obsługi eventów w code behind.
+Możemy wyłuskać daną funkcjonalność i zamknąć ją w klasie `Behavior` a następnie doczepić do wszystkich widoków danego typu.
 Załóżmy, że sterujemy `ListBoxem` z poziomu `ViewModelu` (przełączamy `SelectedItem`).
 Możemy zaznaczyć jakiś Item, co jednak jeżeli nasza lista jest bardzo długa,a zaznaczamy ostatni element.
 Na widoku element rzeczywiście się zaznaczył jednak lista się nie przewinęła.

@@ -25,7 +25,8 @@ public InteractionRequest<Confirmation> Request { get; set; }
 Request = new InteractionRequest<Notification>();
 ```
 
-Jak widać za generyczny typ `T` została podstawiona klasa `Notification`. Parametr `T` może przyjmować klasy dziedziczące po klasie `Notification`.
+Jak widać za generyczny typ `T` została podstawiona klasa `Notification`.
+Parametr `T` może przyjmować klasy dziedziczące po klasie `Notification`.
 Domyślnie w `Prismie` są dwie takie klasy:
 
 - `Notification` \- wspomniana już wcześniej, służy do powiadomienia użytkownika o jakimś zdarzeniu
@@ -106,7 +107,6 @@ public IMessageBoxService MessageBoxService
 ```
 
 Oczywiście żeby nasza właściwość została wstrzykniętai, nasz `ViewModel` musi zostać stworzony przy użycia kontenera `IO`.
-ii
 Zauważmy, że właściwość `MessageBoxService` nie jest konkretnym typem, lecz interfejsem.
 Dzięki takiemu podejściu nasza aplikacja wciąż jest w łatwy sposób testowalna oraz `ViewModel` nie ma nic wspólnego z klasami widoku.
 
@@ -117,7 +117,8 @@ Zasada działania klasy, która stworzymy będzie taka sama, jednakże będziemy
 Po pierwsze tak jak poprzednio stwórzmy odpowiedni interfejs - `IModalWindowService`. 
 
 :::warning[UWAGA]
-Przykład `ModalWindowServicu` zostanie zaprezentowany dla `Silverlight-a`, gdyż okna modalne w `silverlighcie` to tak naprawdę okna semi-modalne. Główny wątek się nie zatrzymuje, jednakże użytkownik nie ma możliwości interakcji z oknami będącymi pod aktualnie widocznym oknem. 
+Przykład `ModalWindowServicu` zostanie zaprezentowany dla `Silverlight-a`, gdyż okna modalne w `silverlighcie` to tak naprawdę okna semi-modalne.
+Główny wątek się nie zatrzymuje, jednakże użytkownik nie ma możliwości interakcji z oknami będącymi pod aktualnie widocznym oknem. 
 :::
 
 ```csharp
@@ -216,11 +217,12 @@ public IMessageBoxService MessageBoxService
 }
 ```
 
-Pozostaje nam jedynie kwestia wyjaśnienia w jaki sposób wywołać nasze okno. Nie powinniśmy tworzyć okna w `ViewModelu`, gdyż łamie to zasadę `MVVM-a`.
+Pozostaje nam jedynie kwestia wyjaśnienia w jaki sposób wywołać nasze okno.
+Nie powinniśmy tworzyć okna w `ViewModelu`, gdyż łamie to zasadę `MVVM-a`.
 Dlatego też po raz kolejny skorzystamy z kontenera `IoC`. W kontenerze `IoC` rejestrujemy sobie nasz widok
 
 ```csharp
-_container.RegisterType<IModalView<AddPersonViewModel>,AddPersonView>()
+_container.RegisterType<IModalView<AddPersonViewModel>, AddPersonView>()
 ```
 
 jako, że `ViewModel` jest wstrzykiwany do `View` poprzez `Dependency Injection` należy również w kontenerze zarejestrować odpowiedni typ `ViewModelu` - czyli w tym przypadku `AddPersonViewModel`
@@ -235,4 +237,6 @@ Mając już zarejestrowane w kontenerze wszystkie niezbędne typu możemy wywoł
 ModalDialogService.ShowDialog<EditAllPlayersViewModel>(_container.Resolve<IModalView<AddPersonViewModel>>(), model => {//tutaj jakas logika });
 ```
 
-Obiekt widoku otrzymujemy z kontenera `IoC` wykorzystując funkcję `Resolve`, w miejsce `LambdaExpression` wstawiamy nasze wyrażenie w którym określamy co zrobimy po poprawnym zamknięciu okna. Zauważmy, że ViewModel nie ma żadnych informacji o widoku - kontener nie zwraca nam konkretnego typu lecz interfejs. Dzięki takiemu podejściu nasza aplikacja może być w łatwy sposób testowalna.
+Obiekt widoku otrzymujemy z kontenera `IoC` wykorzystując funkcję `Resolve`, w miejsce `LambdaExpression` wstawiamy nasze wyrażenie w którym określamy co zrobimy po poprawnym zamknięciu okna.
+Zauważmy, że ViewModel nie ma żadnych informacji o widoku - kontener nie zwraca nam konkretnego typu lecz interfejs.
+Dzięki takiemu podejściu nasza aplikacja może być w łatwy sposób testowalna.
