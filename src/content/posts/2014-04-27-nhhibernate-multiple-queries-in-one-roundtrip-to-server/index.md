@@ -29,11 +29,13 @@ This code will execute two queries,each of them in separate roundtrip to the ser
 
 [![SeveralRoundtrips](images/SeveralRoundtrips.png)](http://tpodolak.com/blog/wp-content/uploads/2014/04/nhhibernate-multiple-queries-in-one-roundtrip-to-server/SeveralRoundtrips.png)
 
-This is the most popular way of getting data for multiple tables etc. However it is possible to enhance the code above and execute several queries in only one roundtrip to the database server. NHibernate provides us with three different mechanisms to accomplish this goal:
+This is the most popular way of getting data for multiple tables etc. However it is possible to enhance the code above and execute several queries in only one roundtrip to the database server.
+NHibernate provides us with three different mechanisms to accomplish this goal:
 
 - **MultiQuery**
 
-First way to execute several queries at once is `MultiQuery`. In my opinion this is not very handy mechanism because of the fact, that we must use `HQL`. Here is an example of usage
+First way to execute several queries at once is `MultiQuery`. In my opinion this is not very handy mechanism because of the fact, that we must use `HQL`.
+Here is an example of usage
 
 ```csharp
 var projectQuery = session.CreateQuery("FROM Project as prj where prj.Name= :projectName")
@@ -47,7 +49,8 @@ var multiQueryByIndex = session.CreateMultiQuery( )
                                .Add<Task>( taskQuery );
 ```
 
-As You can see thanks to `CreateMultiQuery` method we are able to aggregate multiple queries. In order to get access to results, we have to execute code below
+As You can see thanks to `CreateMultiQuery` method we are able to aggregate multiple queries.
+In order to get access to results, we have to execute code below
 
 ```csharp
 var result = multiQueryByIndex.List();
@@ -60,7 +63,8 @@ var projects = result[0] as List<Project>;
 var tasks = result[1] as List<Task>;
 ```
 
-If we don't like this approach, the `CreateMultiQuery` method has an overload which allows to give "names" to queries. Thanks to this we can get result of query by its name.
+If we don't like this approach, the `CreateMultiQuery` method has an overload which allows to give "names" to queries.
+Thanks to this we can get result of query by its name.
 
 ```csharp
 var multiQueryByKey = session.CreateMultiQuery( )
@@ -94,7 +98,8 @@ projects = multiCriteriaByKey.GetResult( "project" ) as List<Project>;
 tasks = multiCriteriaByKey.GetResult( "task" ) as List<Task>;
 ```
 
-As You can see the usage of `CreateMultiCriteria` method is pretty consistent with `CreateMultiQuery`. Unfortunately we still have to retrieve data from specific query by index or by query name.
+As You can see the usage of `CreateMultiCriteria` method is pretty consistent with `CreateMultiQuery`.
+Unfortunately we still have to retrieve data from specific query by index or by query name.
 
 - **Future**
 
@@ -105,7 +110,8 @@ var projects = session.QueryOver<Project>().Where(val => val.Name == "Project").
 var tasks = session.QueryOver<Task>().Where(val => val.Name == "First task").Future<Task>();
 ```
 
-As You can see, we can leverage `QueryOver` API and instead of calling `List` we call `Future`. `NHibernate` will aggregate our queries and will execute them once we start to iterate over one of them.
+As You can see, we can leverage `QueryOver` API and instead of calling `List` we call `Future`.
+`NHibernate` will aggregate our queries and will execute them once we start to iterate over one of them.
 
 [![delayedenumerator](images/delayedenumerator.png)](http://tpodolak.com/blog/wp-content/uploads/2014/04/nhhibernate-multiple-queries-in-one-roundtrip-to-server/delayedenumerator.png) 
 

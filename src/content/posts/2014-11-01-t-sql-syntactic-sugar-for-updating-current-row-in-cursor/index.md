@@ -9,7 +9,8 @@ tags:
   - "t-sql"
 ---
 
-I am not a big fan of cursors, however for time to time I have to write one. In my case cursor usually is responsible for some complicated updates. Until yesterday I've been writing my update statements within the cursor the standard way
+I am not a big fan of cursors, however for time to time I have to write one. In my case cursor usually is responsible for some complicated updates.
+Until yesterday I've been writing my update statements within the cursor the standard way
 
 ```sql
 -- cursor code omitted for brevity

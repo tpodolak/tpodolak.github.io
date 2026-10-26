@@ -27,7 +27,8 @@ I was asked to rewrite simple `SQL` query
 SELECT Id,Name,IdProject FROM GL_Task WHERE Name = 'First task' OR Id IN (3,4 /*more id's to come*/)
 ```
 
-using NHibernate's `QueryOver API`. As simple as it may seem, solution for this particular problem is not straightforward. My first (not so clever) attempt was simply combining `WhereRestrictionOn` and `Where` clause
+using NHibernate's `QueryOver API`. As simple as it may seem, solution for this particular problem is not straightforward.
+My first (not so clever) attempt was simply combining `WhereRestrictionOn` and `Where` clause
 
 ```csharp
 var result = session.QueryOver<Task>().Where(val=> val.Name == "First task")
@@ -36,7 +37,8 @@ var result = session.QueryOver<Task>().Where(val=> val.Name == "First task")
                                       .List();
 ```
 
-Of course this query returns wrong data because of the fact, that `NHiberante` by default "joins" queries using `AND` operator. So above query will result in generating something like that
+Of course this query returns wrong data because of the fact, that `NHiberante` by default "joins" queries using `AND` operator.
+So above query will result in generating something like that
 
 ```sql showLineNumbers=false
 SELECT Id,Name,IdProject FROM GL_Task WHERE Name = 'First task' AND Id IN (3,4 /*more id's to come*/)
@@ -54,7 +56,8 @@ var result = session.QueryOver<Task>()
                     .List();
 ```
 
-Although this code generates correct `SQL`, it is hard to use it in case of many `OR` statements. For example, adding one more `OR` force us to write
+Although this code generates correct `SQL`, it is hard to use it in case of many `OR` statements.
+For example, adding one more `OR` force us to write
 
 ```csharp
 var orRestriction = Restrictions.Or(
@@ -70,7 +73,8 @@ var result = session.QueryOver<Task>()
                     .List();
 ```
 
-In my opinion this is a little bit hard to read, so I continued my searching to find more elegant solution. My third attempt was based on `Restrictions.Disjunction`
+In my opinion this is a little bit hard to read, so I continued my searching to find more elegant solution.
+My third attempt was based on `Restrictions.Disjunction`
 
 ```csharp
 var disjunctinos = Restrictions.Disjunction()
@@ -95,7 +99,8 @@ var result = session.QueryOver<Task>()
                     .List();
 ```
 
-However the ultimate solution is to just add `NHibernate.Criterion` namespace and use `IsIn` extension method. This operation simplify our query into single lambda expression
+However the ultimate solution is to just add `NHibernate.Criterion` namespace and use `IsIn` extension method.
+This operation simplify our query into single lambda expression
 
 ```csharp
 var result = session.QueryOver<Task>()
