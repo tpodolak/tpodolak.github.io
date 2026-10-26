@@ -15,7 +15,13 @@ tags:
   - "plugin"
 ---
 
-A couple of weeks ago I wrote a post about creating a mutiselectable datepicker. The idea of creating this component was to use the object inheritance. Today, I would like to show how to create a multiselectable datepicker as a plugin to `Ext.date.Picker`. The code responsible for selecting dates is almost the same, the only thing which must be changed is the component initialization and access to the datepicker component. In order to make a plugin to any `Ext.Component` class, you must implement the `init` method which takes as argument a reference to the component - so let's change the existing code to meet this requirement. We need to rename `initComponent` function to `init`. In addition to, we should delete the `extend` property from our code. After these changes the `init` function looks like this:
+A couple of weeks ago I wrote a post about creating a mutiselectable datepicker.
+The idea of creating this component was to use the object inheritance.
+Today, I would like to show how to create a multiselectable datepicker as a plugin to `Ext.date.Picker`.
+The code responsible for selecting dates is almost the same, the only thing which must be changed is the component initialization and access to the datepicker component.
+In order to make a plugin to any `Ext.Component` class, you must implement the `init` method which takes as argument a reference to the component - so let's change the existing code to meet this requirement.
+We need to rename `initComponent` function to `init`.
+In addition to, we should delete the `extend` property from our code. After these changes the `init` function looks like this:
 
 ```javascript
 init:function(datePicker){
@@ -27,7 +33,9 @@ init:function(datePicker){
 }
 ```
 
-Please notice, that the `init` function takes as an argument the datepicker component - and from now on this is our only way to access this component. The rest of the code also requires some modifications - it's necessary to change all references to the `datepicker` (from the variable `me` to `me.datePicker`). The entire code listing is presented below.
+Please notice, that the `init` function takes as an argument the datepicker component - and from now on this is our only way to access this component.
+The rest of the code also requires some modifications - it's necessary to change all references to the `datepicker` (from the variable `me` to `me.datePicker`).
+The entire code listing is presented below.
 
 ```javascript
 Ext.define('Multiselect', {

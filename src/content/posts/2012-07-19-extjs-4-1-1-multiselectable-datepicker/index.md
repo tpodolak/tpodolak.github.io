@@ -11,7 +11,11 @@ tags:
   - "javascript"
 ---
 
-Recently, I have been given a task to make extjs datepicker allowing for selection of multiple dates. Unfortunately afters hours of searching for some build-in function, it turned out that this kind of functionality is not supported by default. Finaly, I decided to extend datepicker by creating component called `highlightableDatePicker`. I started from creating a class which inhierits from `Ext.picker.Date`. First draft of class looked this way
+Recently, I have been given a task to make extjs datepicker allowing for selection of multiple dates.
+Unfortunately afters hours of searching for some build-in function, it turned out that this kind of functionality is not supported by default.
+Finaly, I decided to extend datepicker by creating component called `highlightableDatePicker`.
+I started from creating a class which inhierits from `Ext.picker.Date`.
+First draft of class looked this way
 
 ```javascript
 Ext.define('HighlightableDatePicker', {
@@ -29,12 +33,14 @@ Ext.define('HighlightableDatePicker', {
 })
 ```
 
-In this class I created additional function `highlightDates` which is responsible for highlighting dates. Moreover, I added some additional config elements:
+In this class I created additional function `highlightDates` which is responsible for highlighting dates.
+Moreover, I added some additional config elements:
 
 - `selectedDates` - object keeping track of dates which should be selected
 - `clsHighlightClass` - `CSS` class defining selected cell style
 
-The most important part of `HighlightableDatepicker` class is function `highlightDates` which is responsible for highlighting dates. The body of this method looks like this
+The most important part of `HighlightableDatepicker` class is function `highlightDates` which is responsible for highlighting dates.
+The body of this method looks like this
 
 ```javascript
 highlightDates: function(){
@@ -54,7 +60,10 @@ highlightDates: function(){
 }
 ```
 
-As You can see, this function simply compares date in cell with dates stored in selectedDates. If there is a match, cell style is modified by adding extra `CSS` class into `class` attribute of cell (see addCls function of Extjs), otherwise `CSS` class responsible for highlighting is removed. Having defind `highlightDates` function,I also had to attach an event handler to `select` event, in order to modify collection of selected dates. This handler looks this way
+As You can see, this function simply compares date in cell with dates stored in selectedDates.
+If there is a match, cell style is modified by adding extra `CSS` class into `class` attribute of cell (see addCls function of Extjs), otherwise `CSS` class responsible for highlighting is removed.
+Having defind `highlightDates` function,I also had to attach an event handler to `select` event, in order to modify collection of selected dates.
+This handler looks this way
 
 ```javascript
 handleSelectionChanged: function(cmp, date){
@@ -78,7 +87,8 @@ initComponent: function() {
 }
 ```
 
-Please, notice that `highlightDates` is called after component is rendered, because there is no rendered cells before that moment. Entire code listing is presented below
+Please, notice that `highlightDates` is called after component is rendered, because there is no rendered cells before that moment.
+Entire code listing is presented below
 
 ```javascript
 Ext.define('HighlightableDatePicker', {

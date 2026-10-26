@@ -38,14 +38,14 @@ More build-in validation types might be found [here](http://www.sencha.com/learn
 Of course, it is possible to define custom validation types, simple example can be found on [Stackoverflow](http://stackoverflow.com/questions/7414115/how-to-add-a-custom-validation-rule-to-a-model-in-sencha-touch).
 Having defined model validation, let's create `ValidatableGrid`plugin.
 The main function of `ValidatableGrid` plugin is function called `validate` which is attached to grid component.
-This function looks this way;
+This function looks this way:
 
 ```javascript
 validate: function(){
        var me = this, view = this.getView(),isValid = true;
        var columnLength = me.columns.length;
        me.getStore().each(function(record,idx){
-           //remove existing validation errors
+           // remove existing validation errors
            for (var j = 0; j < columnLength; j++) {
                var cell = view.getCellByPosition({row: idx, column: j});
                cell.removeCls(me.clsInvalidField);
@@ -68,7 +68,14 @@ validate: function(){
    }
 ```
 
-This function iterates through every model in grid's store and runs validation method. As a result, we get a `validationResult` object which holds information about errors of model. This object has a function `isValid` which returns true if there is no errors or false otherwise. Having checked the model, we have to show errors on the grid. In order to do that, we have to find a cell, in which invalid field is displayed using `getCellByPosition` function. In the last step, we only have to modify `CSS` classes of cell. That is why, I added `x-form-invalid-field` class to show red line in cell and also `data-errorqtip` class to show validation error tooltip. The entire listing looks this way;
+This function iterates through every model in grid's store and runs validation method.
+As a result, we get a `validationResult` object which holds information about errors of model.
+This object has a function `isValid` which returns true if there is no errors or false otherwise.
+Having checked the model, we have to show errors on the grid.
+In order to do that, we have to find a cell, in which invalid field is displayed using `getCellByPosition` function.
+In the last step, we only have to modify `CSS` classes of cell.
+That is why, I added `x-form-invalid-field` class to show red line in cell and also `data-errorqtip` class to show validation error tooltip.
+The entire listing looks this way:
 
 ```javascript
 Ext.define('ValidatableGrid', {
