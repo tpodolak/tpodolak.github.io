@@ -31,39 +31,9 @@ const fakeResult: SearchResult[] = [
 	},
 ];
 
-const MD_QUERY = "(min-width: 768px)";
-const INPUT_HEIGHT = 44; // h-11, the search row
-const GAP_MARGIN = 4; // air above and below the panel when it sits in the gap
-
-const clearGapFit = (panel: HTMLElement) => {
-	panel.style.top = "";
-	panel.style.padding = "";
-};
-
-// On desktop, while the empty space between the navbar and the first post is
-// visible, tighten the panel so the search row fits inside that gap. Once the
-// gap is gone (scrolled, or on mobile) the default placement is used.
-const placePanel = () => {
-	const panel = document.getElementById("search-panel");
-	const navbar = document.getElementById("navbar");
-	const main = document.getElementById("swup-container");
-	if (!panel || !navbar || !main) return;
-	if (!window.matchMedia(MD_QUERY).matches) return clearGapFit(panel);
-
-	const navBottom = navbar.getBoundingClientRect().bottom;
-	const gap = main.getBoundingClientRect().top - navBottom;
-	if (gap < INPUT_HEIGHT) return clearGapFit(panel);
-
-	const parentTop = panel.offsetParent?.getBoundingClientRect().top ?? 0;
-	const margin = Math.min(GAP_MARGIN, (gap - INPUT_HEIGHT) / 2);
-	panel.style.top = `${navBottom - parentTop + margin}px`;
-	panel.style.padding = `${(gap - 2 * margin - INPUT_HEIGHT) / 2}px`;
-};
-
 const togglePanel = () => {
 	const panel = document.getElementById("search-panel");
 	panel?.classList.toggle("float-panel-closed");
-	placePanel();
 };
 
 const setPanelVisibility = (show: boolean, isDesktop: boolean): void => {
@@ -155,19 +125,6 @@ onMount(() => {
 	}
 });
 
-onMount(() => {
-	const onViewportChange = () => {
-		const panel = document.getElementById("search-panel");
-		if (panel && !panel.classList.contains("float-panel-closed")) placePanel();
-	};
-	window.addEventListener("scroll", onViewportChange, { passive: true });
-	window.addEventListener("resize", onViewportChange);
-	return () => {
-		window.removeEventListener("scroll", onViewportChange);
-		window.removeEventListener("resize", onViewportChange);
-	};
-});
-
 $: if (initialized && keywordDesktop) {
 	(async () => {
 		await search(keywordDesktop, true);
@@ -201,7 +158,7 @@ $: if (initialized && keywordMobile) {
 
 <!-- search panel -->
 <div id="search-panel" class="float-panel float-panel-closed search-panel absolute
-top-20 left-4 right-4 md:left-0 md:right-0 shadow-2xl rounded-2xl p-2">
+top-20 left-4 right-4 md:top-[4.75rem] md:left-0 md:right-0 shadow-2xl rounded-2xl p-2 md:p-0.5">
 
     <div id="search-bar-inside" class="flex relative transition-all items-center h-11 rounded-xl
       bg-black/[0.04] hover:bg-black/[0.06] focus-within:bg-black/[0.06]
