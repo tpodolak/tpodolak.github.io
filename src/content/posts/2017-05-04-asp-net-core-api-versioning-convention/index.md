@@ -18,61 +18,74 @@ I've decided to implement versioning by routing which means the `API` will be ac
 
 ```csharp
 "v{version:apiVersion}/[controller]"
-
 ```
 
-The template itself doesn’t give you much, as you also have to add information to the controllers which version of `API` they support. In my case, I decided to go with a version by namespace convention, which means that supported version will be deduced from namespace in which given controller resides. So, in fact, there will be two conventions, one for applying routing and a second one for applying versioning
+The template itself doesn’t give you much, as you also have to add information to the controllers which version of `API` they support.
+In my case, I decided to go with a version by namespace convention, which means that supported version will be deduced from namespace in which given controller resides.
+So, in fact, there will be two conventions, one for applying routing and a second one for applying versioning
 
 ### 3\. Creating conventions.
 
 In order to write an `ASP.NET Core` convention, we have to implement `IApplicationModelConvention` interface. This interface has a single method `Apply` which takes `ApplicationModel` class as an argument. This class gives us access to all of our controllers, actions and other parts of the application. So if we want to apply a routing with versioning for all of the controllers, we can do it in following way
 
 ```csharp
-public void Apply(ApplicationModel application)
+public class ApiVersionRoutePrefixConvention : IApplicationModelConvention
 {
-    foreach (var applicationController in application.Controllers)
-    {
-        foreach (var applicationControllerSelector in applicationController.Selectors)
-        {
-            if (applicationControllerSelector.AttributeRouteModel != null)
-            {
-                var versionedConstraintRouteModel = new AttributeRouteModel
-                {
-                    Template = _versionConstraintTemplate
-                };
+    private readonly string _versionConstraintTemplate;
+    private readonly string _versionedControllerTemplate;
 
-                applicationControllerSelector.AttributeRouteModel =
-                        AttributeRouteModel.CombineAttributeRouteModel(versionedConstraintRouteModel,
-                            applicationControllerSelector.AttributeRouteModel);
-            }
-            else
+    public ApiVersionRoutePrefixConvention()
+    {
+        _versionConstraintTemplate = "v{version:apiVersion}";
+        _versionedControllerTemplate = $"{_versionConstraintTemplate}/[controller]";
+    }
+
+    public void Apply(ApplicationModel application)
+    {
+        foreach (var applicationController in application.Controllers)
+        {
+            foreach (var applicationControllerSelector in applicationController.Selectors)
             {
-                applicationControllerSelector.AttributeRouteModel = new AttributeRouteModel
+                if (applicationControllerSelector.AttributeRouteModel != null)
                 {
-                    Template = _versionedControllerTemplate
-                };
+                    var versionedConstraintRouteModel = new AttributeRouteModel
+                    {
+                        Template = _versionConstraintTemplate
+                    };
+
+                    applicationControllerSelector.AttributeRouteModel =
+                            AttributeRouteModel.CombineAttributeRouteModel(versionedConstraintRouteModel,
+                                applicationControllerSelector.AttributeRouteModel);
+                }
+                else
+                {
+                    applicationControllerSelector.AttributeRouteModel = new AttributeRouteModel
+                    {
+                        Template = _versionedControllerTemplate
+                    };
+                }
             }
         }
     }
 }
-
 ```
 
-As you can see we iterate through all of the `Selectors` and then apply new route model to them. If selector already had a route attribute applied we combine two attributes together. Once our convention is applied our actions will be accessible with following routing prefix
+As you can see we iterate through all of the `Selectors` and then apply new route model to them.
+If selector already had a route attribute applied we combine two attributes together. Once our convention is applied our actions will be accessible with following routing prefix
 
 ```csharp
 "v{version:apiVersion}/[controller]" 
-
 ```
 
 or via
 
 ```csharp
-"v{version:apiVersion}/previous`route`for_controller"
-
+"v{version:apiVersion}/previous_route_for_controller"
 ```
 
-Having our routing ready now it is time to add versioning information to our controllers. Once again it will be done via application model convention. The version of the controller will be deduced from the namespace given controller is located in.
+Having our routing ready now it is time to add versioning information to our controllers.
+Once again it will be done via application model convention.
+The version of the controller will be deduced from the namespace given controller is located in.
 
 ```csharp
 public class ApiVersionByNamespaceConvention : IApplicationModelConvention
@@ -82,7 +95,7 @@ public class ApiVersionByNamespaceConvention : IApplicationModelConvention
         foreach (var controllerModel in application.Controllers)
         {
             var version = DeduceControllerVersion(controllerModel);
-            var builder = new ControllerApiVersionConventionBuilder();
+            var builder = new ControllerApiVersionConventionBuilder<ControllerModel>();
             builder.HasApiVersion(new ApiVersion(version, 0));
             builder.ApplyTo(controllerModel);
         }
@@ -99,16 +112,14 @@ public class ApiVersionByNamespaceConvention : IApplicationModelConvention
         return version;
      }
 }
-
 ```
 
 As you can see I iterate through all of the controller models of our application, then check the version of controller based on its namespace and finally with
 
-```javascript
-var builder = new ControllerApiVersionConventionBuilder();
+```csharp
+var builder = new ControllerApiVersionConventionBuilder<ControllerModel>();
 builder.HasApiVersion(new ApiVersion(version, 0));
 builder.ApplyTo(controllerModel);
-
 ```
 
 I am able to inform the framework which version of `API` given controller supports.
@@ -123,7 +134,6 @@ services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
 });
-
 ```
 
 And of course, we have to add newly created conventions to list of application conventions
@@ -131,12 +141,11 @@ And of course, we have to add newly created conventions to list of application c
 ```csharp
 services.AddMvc(options =>
 {
-    options.Conventions.Remove();
-    options.Conventions.Remove();
+    options.Conventions.Remove<ApiVersionConvention>();
+    options.Conventions.Remove<ImplicitControllerVersionConvention>();
     options.Conventions.Add(new ApiVersionRoutePrefixConvention());
     options.Conventions.Add(new ApiVersionByNamespaceConvention());
 });
-
 ```
 
 Note that I removed `ApiVersionConvention` and `ImplicitControllerVersionConvention` with simple extension method `Remove<T>`
@@ -144,10 +153,10 @@ Note that I removed `ApiVersionConvention` and `ImplicitControllerVersionConvent
 ```csharp
 public static class CollectionExtensions
 {
-    public static void Remove(this IList conventionsCollection)
+    public static void Remove<T>(this IList<IApplicationModelConvention> conventionsCollection)
             where T : IApplicationModelConvention
     {
-        var conventions = conventionsCollection.OfType().ToList();
+        var conventions = conventionsCollection.OfType<T>().ToList();
 
         foreach (var convention in conventions)
         {
@@ -155,7 +164,6 @@ public static class CollectionExtensions
         }
     }
 }
-
 ```
 
 to make sure that only my convention is responsible for API versioning.

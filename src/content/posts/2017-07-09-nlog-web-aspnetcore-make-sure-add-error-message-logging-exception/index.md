@@ -8,30 +8,33 @@ tags:
   - "nlog"
 ---
 
-I've been using `NLog` for quite some time already, and it was a natural choice to use it in the `ASP.NET Core` projects as well. I've configured the logger using [this](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-\(csproj---vs2017\)) tutorial and everything seemed to be working fine. Unfortunately, after some time we've noticed that for some reasons some of the errors are not logged. We've taken a deeper look at our code base and we've found couple logs being written as follows
+I've been using `NLog` for quite some time already, and it was a natural choice to use it in the `ASP.NET Core` projects as well.
+I've configured the logger using [this](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-\(csproj---vs2017\)) tutorial and everything seemed to be working fine.
+Unfortunately, after some time we've noticed that for some reasons some of the errors are not logged.
+We've taken a deeper look at our code base and we've found couple logs being written as follows
 
 ```csharp
 _logger.LogError(exception.HResult, exception, string.Empty); 
 _logger.LogCritical(exception.HResult, exception, string.Empty);
-
 ```
 
-This piece of code works perfectly fine with `ASP.NET Core` console logger but it seems it doesn’t for `NLog`. We double checked that with following piece of code
+This piece of code works perfectly fine with `ASP.NET Core` console logger but it seems it doesn’t for `NLog`.
+We double checked that with following piece of code
 
 ```csharp
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<ValuesController> _logger;
         
-    public ValuesController(ILogger logger)
+    public ValuesController(ILogger<ValuesController> logger)
     {
         _logger = logger;
     }
 
     // GET api/values
     [HttpGet]
-    public IEnumerable Get()
+    public IEnumerable<string> Get()
     {
         var exception = new Exception();
         _logger.LogTrace("Log trace");
@@ -44,7 +47,6 @@ public class ValuesController : Controller
         return new string[] {"value1", "value2"};
     }
 }
-
 ```
 
 And as you can see in the picture below, no errors have been reported
@@ -56,7 +58,6 @@ Changing the error message to any message (even the one containing only white sp
 ```csharp
  _logger.LogError(exception.HResult, exception, " "); 
  _logger.LogCritical(exception.HResult, exception, " " ); 
-
 ```
 
 fixed the problem.

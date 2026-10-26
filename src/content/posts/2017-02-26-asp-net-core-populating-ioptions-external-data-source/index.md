@@ -9,7 +9,9 @@ tags:
 
 ### 1\. Introduction
 
-In `ASP.NET Core` `web.config` is no longer a proper place for storing application settings. New framework introduces the concept of a json based configuration and the default file which stores the settings now is `appsettings.json`. Here is a quick tutorial how to use new features.
+In `ASP.NET Core` `web.config` is no longer a proper place for storing application settings.
+New framework introduces the concept of a json based configuration and the default file which stores the settings now is `appsettings.json`.
+Here is a quick tutorial how to use new features.
 
 ### 2\. Reading configuration
 
@@ -30,10 +32,10 @@ Let's assume that our `appsettings.json` file looks as follows.
         "FlexDaysOut": 3
     }
 }
-
 ```
 
-Thanks to `ConfigurationBuilder` we can parse this config and later on materialize sections or entire file into strongly typed configuration classes. Let's say we want to parse `AvailabilitySearchOptions` node to following class
+Thanks to `ConfigurationBuilder` we can parse this config and later on materialize sections or entire file into strongly typed configuration classes.
+Let's say we want to parse `AvailabilitySearchOptions` node to following class
 
 ```csharp
 public class AvailabilitySearchOptions
@@ -46,12 +48,11 @@ public class AvailabilitySearchOptions
 
     public TimeSpan MinimumDepartureTime { get; set; }
 }
-
 ```
 
 We can achieve that with following steps. First of all, we need to read entire configuration
 
-```csharp
+```csharp wrap=false
 public IConfigurationRoot Configuration { get; }
 
 public Startup(IHostingEnvironment env)
@@ -63,31 +64,32 @@ public Startup(IHostingEnvironment env)
                         .AddEnvironmentVariables();
     Configuration = builder.Build();
 }
-
 ```
 
 And in the next step we have to register `IOptions<AvailabilitySearchOptions>` in the container using `services.Configure<TOptions>(IConfiguration section)` method
 
-```csharp
+```csharp wrap=false
+
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
 {
     // Add framework services.
     services.AddMvc();
-    services.Configure(Configuration.GetSection("AvailabilitySearchOptions"));  
+    services.Configure<AvailabilitySearchOptions>(Configuration.GetSection("AvailabilitySearchOptions"));  
 }
-
 ```
 
-Note `Configuration.GetSection("AvailabilitySearchOptions")` passed as argument to `services.Configure` method. From now on we can access `AvailabilitySearchOptions` settings via `IOptions<AvailabilitySearchOptions>` interface, which you can easily inject into your classes.
+Note `Configuration.GetSection("AvailabilitySearchOptions")` passed as argument to `services.Configure` method.
+From now on we can access `AvailabilitySearchOptions` settings via `IOptions<AvailabilitySearchOptions>` interface, which you can easily inject into your classes.
 
-```csharp
+```csharp wrap=false
+
 [Route("api/[controller]")]
 public class OptionsController : Controller
 {
-    private readonly IOptions availabilitySearchOptions;
+    private readonly IOptions<AvailabilitySearchOptions> availabilitySearchOptions;
 
-    public OptionsController(IOptions availabilitySearchOptions)
+    public OptionsController(IOptions<AvailabilitySearchOptions> availabilitySearchOptions)
     {
         this.availabilitySearchOptions = availabilitySearchOptions;
     }
@@ -97,20 +99,22 @@ public class OptionsController : Controller
         return availabilitySearchOptions.Value;
     }
 }
-
 ```
 
 ### 3\. Populating `IOptions<T>` from external data source
 
-From time to time, reading configuration just from `JSON` file might not be enough and for instance you would like to add additional configuration read from some external data source. Fortunately you don't have to resign from the `IOptions<T>` class as it is possible to read additional data for literally any other source thanks to `IConfigureOptions<T>` class. All we have to do is to create a setup class which implements `IConfigureOptions<T>` interface
+From time to time, reading configuration just from `JSON` file might not be enough and for instance you would like to add additional configuration read from some external data source.
+Fortunately you don't have to resign from the `IOptions<T>` class as it is possible to read additional data for literally any other source thanks to `IConfigureOptions<T>` class.
+All we have to do is to create a setup class which implements `IConfigureOptions<T>` interface
 
-```csharp
-public class AvailabilitySearchOptionsSetupService : IConfigureOptions
+```csharp wrap=false
+
+public class AvailabilitySearchOptionsSetupService : IConfigureOptions<AvailabilitySearchOptions>
 {
-    private readonly ILogger logger;
+    private readonly ILogger<AvailabilitySearchOptionsSetupService> logger;
     private readonly IReservationSettingsService reservationSettingsService;
 	
-    public AvailabilitySearchOptionsSetupService(ILogger logger ,IReservationSettingsService reservationSettingsService)
+    public AvailabilitySearchOptionsSetupService(ILogger<AvailabilitySearchOptionsSetupService> logger ,IReservationSettingsService reservationSettingsService)
     {
         this.logger = logger;
         this.reservationSettingsService = reservationSettingsService;
@@ -118,25 +122,24 @@ public class AvailabilitySearchOptionsSetupService : IConfigureOptions
 	
     public void Configure(AvailabilitySearchOptions options)
     {
-        this.logger.LogInformation($"Calling first {typeof(IConfigureOptions)} service");
+        this.logger.LogInformation($"Calling first {typeof(IConfigureOptions<AvailabilitySearchOptions>)} service");
         options.MinimumConnectionTime = reservationSettingsService.GetMinimumConnectionTime();
     }
 }
-
 ```
 
 And then registering this class in our container
 
-```csharp
+```csharp wrap=false
+
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
 {
     // Add framework services.
     services.AddMvc();
-    services.Configure(Configuration.GetSection("AvailabilitySearchOptions"));
+    services.Configure<AvailabilitySearchOptions>(Configuration.GetSection("AvailabilitySearchOptions"));
     services.AddSingleton<IConfigureOptions<AvailabilitySearchOptions>, AvailabilitySearchOptionsSetupService>();
- }
-
+}
 ```
 
 From now on, when value of `IOptions<AvailabilitySearchOptions>` is accessed for very first time, `Configure` method from `AvailabilitySearchOptionsSetupService` will be called and you will be able to set additional values for your settings. Note that values from `appsettings.json` will already be there. In addition, it is possible to have multiple implementations of `IConfigureOptions<T>` so if you want your setup to be split into multiple classes you are good to go.
