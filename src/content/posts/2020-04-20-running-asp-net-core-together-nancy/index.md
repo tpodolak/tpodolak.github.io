@@ -10,11 +10,11 @@ tags:
 
 ### 1\. Introduction
 
-Our current _API_ runs on [Nancy](https://github.com/NancyFx/Nancy) which in my opinion is past its prime. Recent news from the [GitHub](https://github.com/NancyFx/Nancy/issues/3010) issue tracker seems to confirm that thesis, that is why we started looking for a migration path from Nancy based _API_ to _ASP.NET Core_. Because the codebase is quite large we didn't want to do a _Big Bang Rewrite_ but instead of that, we wanted to gradually replace old _API_ with a new one, so both of them can coexist next to each other.
+Our current `API` runs on [Nancy](https://github.com/NancyFx/Nancy) which in my opinion is past its prime. Recent news from the [GitHub](https://github.com/NancyFx/Nancy/issues/3010) issue tracker seems to confirm that thesis, that is why we started looking for a migration path from Nancy based `API` to `ASP.NET Core`. Because the codebase is quite large we didn't want to do a `Big Bang Rewrite` but instead of that, we wanted to gradually replace old `API` with a new one, so both of them can coexist next to each other.
 
 ### 2\. Legacy API
 
-Before I jump into implementation, here is a sample _Nancy API_ with two endpoints - _products_ and _variants_
+Before I jump into implementation, here is a sample `Nancy API` with two endpoints - `products` and `variants`
 
 ```csharp
 public class Startup
@@ -31,7 +31,6 @@ public class Startup
         app.UseOwin(owin => owin.UseNancy());
     }
 }
-
 ```
 
 ```csharp
@@ -39,14 +38,13 @@ public sealed class ProductsNancyModule : NancyModule
 {
     public ProductsNancyModule()
     {
-        Get("products", args => Response.AsJson(new List
+        Get("products", args => Response.AsJson(new List<Product>
         {
             new Product(Guid.NewGuid().ToString(), "First product from nancy"),
             new Product(Guid.NewGuid().ToString(), "Second product from nancy")
         }));
     }
 }
-
 ```
 
 ```csharp
@@ -54,28 +52,26 @@ public sealed class VariantsNancyModule : NancyModule
 {
     public VariantsNancyModule()
     {
-        Get("variants", args => Response.AsJson(new List
+        Get("variants", args => Response.AsJson(new List<Variant>
         {
             new Variant(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "first variant from nancy"),
             new Variant(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "second variant from nancy")
         }));
     }
 }
-
 ```
 
-The goal is to replace _products_ endpoint with _ASP.NET Core_ implementation while _variants_ endpoint should still be served by _Nancy_
+The goal is to replace `products` endpoint with `ASP.NET Core` implementation while `variants` endpoint should still be served by `Nancy`
 
-### 3\. Combining Nancy with _ASP.NET Core_
+### 3\. Combining Nancy with `ASP.NET Core`
 
-The solution is based on [branching](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1#branch-the-middleware-pipeline) the pipeline feature which is available starting from _ASP.NET Core_ 2.1. Long story short - it is possible to configure different pipelines for different route paths thanks to
+The solution is based on [branching](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1#branch-the-middleware-pipeline) the pipeline feature which is available starting from `ASP.NET Core` 2.1. Long story short - it is possible to configure different pipelines for different route paths thanks to
 
 ```csharp
-public static IApplicationBuilder Map(this IApplicationBuilder app, PathString pathMatch, Action configuration)
-
+public static IApplicationBuilder Map(this IApplicationBuilder app, PathString pathMatch, Action<IApplicationBuilder> configuration)
 ```
 
-method. Having that in mind we can \`Map\` _products_ path to run through _ASP.NET Core_ pipeline whereas the rest would go through _Nancy_.
+method. Having that in mind we can \`Map\` `products` path to run through `ASP.NET Core` pipeline whereas the rest would go through `Nancy`.
 
 ```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
@@ -101,27 +97,28 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         appBuilder.UseOwin(options => options.UseNancy());
     });
 }
-
 ```
+
 
 ```csharp
 [ApiController]
 public class ProductsController : ControllerBase
 {
     [HttpGet("/products")]
-    public List Get()
+    public List<Product> Get()
     {
-        return new List
+        return new List<Product>
         {
             new Product(Guid.NewGuid().ToString(), "First product from asp net core"),
             new Product(Guid.NewGuid().ToString(), "Second product from asp net core")
         };
     }
 }
-
 ```
 
-At this point we are almost there, however running request through _Map_ pipeline will remove the path prefix, meaning that our controller would be accessible under _/_ path instead of _products_. In order to bypass this limitation we have to restore original prefix with _RewriteMiddleware_. Once we put it all together, now we are able to replace multiple _Nancy_ endpoints with _ASP.NET Core_ ones using following piece of code
+At this point we are almost there, however running request through `Map` pipeline will remove the path prefix, meaning that our controller would be accessible under `/` path instead of `products`.
+In order to bypass this limitation we have to restore original prefix with `RewriteMiddleware`.
+Once we put it all together, now we are able to replace multiple `Nancy` endpoints with `ASP.NET Core` ones using following piece of code
 
 ```csharp
 // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -134,7 +131,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // we still want to access the resource under old url, so we need to add the branch path back to the route
             var rewriteOptions = new RewriteOptions().AddRewrite(
-                "(?.*)",
+                "(?<Path>.*)",
                 $"{path}/${{Path}}",
                 skipRemainingRules: true);
             appBuilder.UseRewriter(rewriteOptions);
@@ -147,7 +144,8 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         appBuilder.UseOwin(options => options.UseNancy());
     });
 }
-
 ```
 
-![](images/NancyCore.gif) Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/RunningAspNetCoreTogetherWithNancy)
+![](images/NancyCore.gif)
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/RunningAspNetCoreTogetherWithNancy)

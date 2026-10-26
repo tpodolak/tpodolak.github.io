@@ -7,7 +7,8 @@ tags:
   - "docker"
 ---
 
-During the process of moving a Scala-based API to .NET Core, we encountered an interesting localization issue when running our code in a docker container based on an alpine image. The code itself was doing a currency formatting based on some culture. It looked more or less as below
+During the process of moving a Scala-based `API` to `.NET Core`, we encountered an interesting localization issue when running our code in a docker container based on an alpine image.
+The code itself was doing a currency formatting based on some culture. It looked more or less as below
 
 ```csharp
 [Route("api/[controller]")]
@@ -15,7 +16,7 @@ During the process of moving a Scala-based API to .NET Core, we encountered an i
 public class PriceController : ControllerBase
 {
     [HttpGet]
-    public ActionResult Get(string cultureCode = "de-DE")
+    public ActionResult<object> Get(string cultureCode = "de-DE")
     {
         var cultureInfo = CultureInfo.CreateSpecificCulture(cultureCode);
         var price = 10m;
@@ -33,11 +34,11 @@ public class PriceController : ControllerBase
 We also had some integration tests for that piece of logic
 
 ```csharp
-public class PriceTests : IClassFixture>
+public class PriceTests : IClassFixture<WebApplicationFactory<Startup>>
 {
-    private readonly WebApplicationFactory _factory;
+    private readonly WebApplicationFactory<Startup> _factory;
 
-    public PriceTests(WebApplicationFactory factory)
+    public PriceTests(WebApplicationFactory<Startup> factory)
     {
         _factory = factory;
     }
@@ -52,11 +53,12 @@ public class PriceTests : IClassFixture>
         var content = await httpResponseMessage.Content.ReadAsStringAsync();
         var jObject = JObject.Parse(content);
 
-        jObject["currencySymbol"].ToObject().Should().Be("€");
+        jObject["currencySymbol"].ToObject<string>().Should().Be("€");
     }
 }
 ```
-The tests were run during a CI build in a container with an image defined as below
+The tests were run during a `CI` build in a container with an image defined as below
+
 ```docker
 # Builder image
 FROM mcr.microsoft.com/dotnet/core/sdk:2.1.700-alpine AS builder
@@ -92,8 +94,9 @@ WORKDIR /app
 ENTRYPOINT ["dotnet", "AlpineMissingCurrencySymbol.dll"]
 COPY --from=builder /sln/dist .
 ```
-At this point, we were sure that everything works fine, as the tests were green and everything was also working correctly on our local machines. However, after deployment to a testing environment, we started getting invalid currency symbols
-```bash
+At this point, we were sure that everything works fine, as the tests were green and everything was also working correctly on our local machines.
+However, after deployment to a testing environment, we started getting invalid currency symbols
+```bash frame=none showLineNumbers=false
 curl localhost:8080/api/price 
 { 
   "price": 10, 
@@ -101,7 +104,9 @@ curl localhost:8080/api/price
   "currencySymbol": "¤" 
 }
 ```
-As you can see the response contains ¤ (invariant currency symbol) instead of expected €. It took us some time to figure this out but finally, it turned out that aspnet:2.1.11-alpine image(the one we used for running the application) contrary to the SDK image(used for building and running tests) is missing icu-libs package. In default conditions, the application should throw the following exception during the startup
+As you can see the response contains `¤` (invariant currency symbol) instead of expected `€`.
+It took us some time to figure this out but finally, it turned out that `aspnet:2.1.11-alpine` image(the one we used for running the application) contrary to the `SDK` image(used for building and running tests) is missing `icu-libs` package.
+In default conditions, the application should throw the following exception during the startup
 
 ```csharp
 FailFast:
@@ -117,19 +122,23 @@ Couldn't find a valid ICU package installed on the system. Set the configuration
    at System.AppDomain.InitializeCompatibilityFlags()
    at System.AppDomain.Setup(System.Object)
 ```
-However, aspnet:2.1.11-alpine image has the DOTNET_SYSTEM_GLOBALIZATION_INVARIANT flag set to true by default, so the missing package was not validated during a startup. After all, in order to fix the issue, we had to install the icu-libs package and also set the DOTNET_SYSTEM_GLOBALIZATION_INVARIANT back to false. This was done by these two lines in Dockerfile
+
+However, `aspnet:2.1.11-alpine` image has the `DOTNET_SYSTEM_GLOBALIZATION_INVARIANT` flag set to `true` by default, so the missing package was not validated during a startup.
+After all, in order to fix the issue, we had to install the icu-libs package and also set the `DOTNET_SYSTEM_GLOBALIZATION_INVARIANT` back to `false`.
+This was done by these two lines in `Dockerfile`
+
 ```docker
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false 
 RUN apk add --no-cache icu-libs 
-``````
+```
 
 Once the lines were added the application started working as expected
-```bash
+```bash frame=none showLineNumbers=false
 curl localhost:8080/api/price 
 { 
   "price": 10, 
   "formattedPrice": "10,00 €", 
   "currencySymbol": "€" 
-} 
+}
 ```
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AlpineMissingCurrencySymbol)

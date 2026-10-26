@@ -10,7 +10,7 @@ tags:
 
 ### 1\. Introduction
 
-From time to time it might happen, that you need to test certain parts of your _ASP.NET Core_ configuration without hitting publicly visible business-related controllers. For instance, in my case, I wanted to make sure that my _ASP.NET Core API_ behavior is consistent with the original _API_ written in _Nancy_. As you might expect there are quite a lot of differences between both of the frameworks, so let's focus on testing one thing, namely non-nullable reference type handling. Long story short, in order to have the same behavior in _ASP.NET Core_ as in _Nancy_ I had to add the following line of configuration
+From time to time it might happen, that you need to test certain parts of your `ASP.NET Core` configuration without hitting publicly visible business-related controllers. For instance, in my case, I wanted to make sure that my `ASP.NET Core API` behavior is consistent with the original `API` written in `Nancy`. As you might expect there are quite a lot of differences between both of the frameworks, so let's focus on testing one thing, namely non-nullable reference type handling. Long story short, in order to have the same behavior in `ASP.NET Core` as in `Nancy` I had to add the following line of configuration
 
 ```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
@@ -19,14 +19,17 @@ public void ConfigureServices(IServiceCollection services)
     services.AddControllers(opts => opts.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
         .AddNewtonsoftJson();
 }
-
 ```
 
-This one prevents _ASP.NET Core_ from marking non-nullable reference type properties in request as required. Having that configuration ready, I wanted to test it with an end to end test. Because there was no business-related logic yet, I needed to figure out the way of adding _API_ controllers to my application directly from the integration tests. Here is how you can achieve that.
+This one prevents `ASP.NET Core` from marking non-nullable reference type properties in request as required.
+Having that configuration ready, I wanted to test it with an end to end test.
+Because there was no business-related logic yet, I needed to figure out the way of adding `API` controllers to my application directly from the integration tests.
+Here is how you can achieve that.
 
 ### 2\. Accessing ApplicationPartManager from integration tests
 
-_ASP.NET Core_ is able to compose your _API_ from different parts thanks to _ApplicationPartManager_. By default, you don't use it directly but rather with _IMvcBuilder AddApplicationPart_ extension method while setting up your application
+`ASP.NET Core` is able to compose your `API` from different parts thanks to `ApplicationPartManager`.
+By default, you don't use it directly but rather with `IMvcBuilder AddApplicationPart` extension method while setting up your application
 
 ```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
@@ -36,20 +39,20 @@ public void ConfigureServices(IServiceCollection services)
         .AddApplicationPart(typeof(SomeClass).Assembly)
         .AddNewtonsoftJson();
 }
-
 ```
 
-However, there is no easy way of getting _IMvcBuidler_ from the integration tests(at least I didn't find a proper way of doing that without tampering too much with the original application pipeline) so we need to access _ApplicationPartManager_ directly. Inspecting the source code of the framework you will find that _ApplicationPartManager_ can be retrieved directly from _IServiceCollection_ with following [code](https://github.com/dotnet/aspnetcore/blob/3.0/src/Mvc/Mvc.Core/src/DependencyInjection/MvcCoreServiceCollectionExtensions.cs#L74)
+However, there is no easy way of getting `IMvcBuidler` from the integration tests(at least I didn't find a proper way of doing that without tampering too much with the original application pipeline) so we need to access `ApplicationPartManager` directly.
+Inspecting the source code of the framework you will find that `ApplicationPartManager` can be retrieved directly from `IServiceCollection` with following [code](https://github.com/dotnet/aspnetcore/blob/3.0/src/Mvc/Mvc.Core/src/DependencyInjection/MvcCoreServiceCollectionExtensions.cs#L74)
 
 ```csharp
 private static ApplicationPartManager GetApplicationPartManager(IServiceCollection services)
 {
-    var manager = GetServiceFromCollection(services);
+    var manager = GetServiceFromCollection<ApplicationPartManager>(services);
     if (manager == null)
     {
         manager = new ApplicationPartManager();
 
-        var environment = GetServiceFromCollection(services);
+        var environment = GetServiceFromCollection<IWebHostEnvironment>(services);
         var entryAssemblyName = environment?.ApplicationName;
         if (string.IsNullOrEmpty(entryAssemblyName))
         {
@@ -62,22 +65,21 @@ private static ApplicationPartManager GetApplicationPartManager(IServiceCollecti
     return manager;
 }
 
-private static T GetServiceFromCollection(IServiceCollection services)
+private static T GetServiceFromCollection<T>(IServiceCollection services)
 {
     return (T)services
         .LastOrDefault(d => d.ServiceType == typeof(T))
         ?.ImplementationInstance;
 }
-
 ```
 
-Applying similar code to the _WebApplicationFactory_ will allow us to add controllers directly from tests
+Applying similar code to the `WebApplicationFactory` will allow us to add controllers directly from tests
 
 ```csharp
 [Fact]
 public async Task DoesNotReturnBadRequest_WhenNonNullableTypeHasNoValue_FirstAttempt()
 {
-    var webApplicationFactory = new WebApplicationFactory()
+    var webApplicationFactory = new WebApplicationFactory<Startup>()
         .WithWebHostBuilder(
             builder => builder.ConfigureServices(services =>
             {
@@ -98,7 +100,7 @@ public async Task DoesNotReturnBadRequest_WhenNonNullableTypeHasNoValue_FirstAtt
 
     httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
     var rawContent = await httpResponseMessage.Content.ReadAsStringAsync();
-    var result = JsonConvert.DeserializeObject(rawContent);
+    var result = JsonConvert.DeserializeObject<Request>(rawContent);
 
     result.Should().BeEquivalentTo(expectedResponse);
 }
@@ -119,24 +121,27 @@ public class Request
 
     public string OtherId { get; set; }
 }
-
 ```
 
 ### 3\. Handling private controllers
 
-The solution presented below works nice, however it has couple of drawbacks. First of all, it only discovers public non-nested controllers. Second of all, it will always add all controllers from given assembly - which potentially might affect other integration tests. In order to get rid of these drawbacks, we need to tell _ApplicationPartManager_ to include only selected controllers. We can achieve that by adding additional _IApplicationFeatureProvider<ControllerFeature>_ to the list of _FeatureProviders_.
+The solution presented below works nice, however it has couple of drawbacks.
+First of all, it only discovers public non-nested controllers.
+Second of all, it will always add all controllers from given assembly - which potentially might affect other integration tests.
+In order to get rid of these drawbacks, we need to tell `ApplicationPartManager` to include only selected controllers.
+We can achieve that by adding additional `IApplicationFeatureProvider<ControllerFeature>` to the list of `FeatureProviders`.
 
 ```csharp
-public class ExternalControllersFeatureProvider : IApplicationFeatureProvider
+public class ExternalControllersFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
 {
     private readonly Type[] _controllers;
 
     public ExternalControllersFeatureProvider(params Type[] controllers)
     {
-        _controllers = controllers ?? Array.Empty();
+        _controllers = controllers ?? Array.Empty<Type>();
     }
 
-    public void PopulateFeature(IEnumerable parts, ControllerFeature feature)
+    public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
     {
         foreach (var controller in _controllers)
         {
@@ -148,7 +153,7 @@ public class ExternalControllersFeatureProvider : IApplicationFeatureProvider
 [Fact]
 public async Task DoesNotReturnBadRequest_WhenNonNullableTypeHasNoValue()
 {
-    var webApplicationFactory = new WebApplicationFactory()
+    var webApplicationFactory = new WebApplicationFactory<Startup>()
         .WithWebHostBuilder(
             builder => builder.ConfigureServices(services =>
             {
@@ -160,7 +165,6 @@ public async Task DoesNotReturnBadRequest_WhenNonNullableTypeHasNoValue()
             }));
 // rest of the code omitted for brevity
 }
-
 ```
 
 Putting it all together and applying some refactoring we will end up with following code
@@ -187,16 +191,16 @@ internal static class WebHostBuilderExtensions
         return partManager;
     }
 
-    private class ExternalControllersFeatureProvider : IApplicationFeatureProvider
+    private class ExternalControllersFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
     {
         private readonly Type[] _controllers;
 
         public ExternalControllersFeatureProvider(params Type[] controllers)
         {
-            _controllers = controllers ?? Array.Empty();
+            _controllers = controllers ?? Array.Empty<Type>();
         }
 
-        public void PopulateFeature(IEnumerable parts, ControllerFeature feature)
+        public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
             foreach (var controller in _controllers)
             {
@@ -211,7 +215,7 @@ public class MvcOptionsConfigurationTests
     [Fact]
     public async Task DoesNotReturnBadRequest_WhenNonNullableTypeHasNoValue()
     {
-        var webApplicationFactory = new WebApplicationFactory()
+        var webApplicationFactory = new WebApplicationFactory<Startup>()
             .WithWebHostBuilder(
                 builder => builder.WithAdditionalControllers(typeof(MvcOptionsTestController)));
 
@@ -225,7 +229,7 @@ public class MvcOptionsConfigurationTests
 
         httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         var rawContent = await httpResponseMessage.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject(rawContent);
+        var result = JsonConvert.DeserializeObject<Request>(rawContent);
 
         result.Should().BeEquivalentTo(expectedResponse);
     }
@@ -247,7 +251,6 @@ public class MvcOptionsConfigurationTests
         public string OtherId { get; set; }
     }
 }
-
 ```
 
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCoreAddingControllersInIntegrationTests)
