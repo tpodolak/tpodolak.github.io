@@ -15,7 +15,9 @@ tags:
 
 ### 1\. Introduction
 
-Although `ECMAScript6` has not been officially released yet, we can play around with new language features today. There are tools such as `Traceur` or `Babel` which are able to convert `ECMAScript6` into `ECMASciprt5`, thus we are able to run the code in every browser. So let's try to run the snippet below, which leverages [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)using those tools
+Although `ECMAScript6` has not been officially released yet, we can play around with new language features today.
+There are tools such as `Traceur` or `Babel` which are able to convert `ECMAScript6` into `ECMASciprt5`, thus we are able to run the code in every browser.
+So let's try to run the snippet below, which leverages [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) using those tools
 
 ```javascript
 (function () {
@@ -75,7 +77,8 @@ return gulp.src('app/*.js')
            .pipe(gulp.dest('dest'));
 ```
 
-Having our result file ready, now we can add a script tag in html pointing to `app.all.js`. However at this point in the runtime we will get an error.
+Having our result file ready, now we can add a script tag in html pointing to `app.all.js`.
+However at this point in the runtime we will get an error.
 
 ```text frame="none" showLineNumbers=false
 $traceurRuntime is not defined
@@ -116,7 +119,8 @@ Quick look at the generated `app.all.js` file reveals the problem
 
 ```
 
-Transpiled code has references to `$traceurRuntime` objects, so in order to make our code work, we have to add additional script tag pointing to `traceur-runtime.js`. You can easily get the sources with `bower`, just run in console
+Transpiled code has references to `$traceurRuntime` objects, so in order to make our code work, we have to add additional script tag pointing to `traceur-runtime.js`.
+You can easily get the sources with `bower`, just run in console
 
 ```bash frame="none" showLineNumbers=false
 npm install bower --save-dev
@@ -128,7 +132,8 @@ Now everything should work and in console we'll get expected result
 
 [![ECMAScript6 today](images/result.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/result.png)
 
-As you could see in example above `Traceur` generates overcomplicated code which makes debugging of the original sources (using source maps) a painful process. Just take a look at the following screenshot
+As you could see in example above `Traceur` generates overcomplicated code which makes debugging of the original sources (using source maps) a painful process.
+Just take a look at the following screenshot
 
 [![ECMAScript6 today](images/SourceMapTraceur.png)](http://tpodolak.com/blog/wp-content/uploads/2015/04/using-ecmascript6-today/SourceMapTraceur.png)
 

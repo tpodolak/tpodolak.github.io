@@ -11,7 +11,8 @@ tags:
   - "javascript"
 ---
 
-One of the features I miss the most in `AngularJS` is ability to easy unsubscribe event handlers. There is no convenience function opposed to `$on`, so in order to unsubscribe event, we have to call method returned by `$on` function
+One of the features I miss the most in `AngularJS` is ability to easy unsubscribe event handlers.
+There is no convenience function opposed to `$on`, so in order to unsubscribe event, we have to call method returned by `$on` function
 
 ```javascript
 (function () {
@@ -31,7 +32,10 @@ One of the features I miss the most in `AngularJS` is ability to easy unsubscrib
 }());
 ```
 
-However in my opinion this approach fails in real life scenarios, because usually we are subscribed to more than one event - thus we have to have multiple local variables for detaching listeners. Fortunately `AngularJS` provides an easy way to extend existing services with some new functionalities - we can achieve that by using `$provide` service. This service exposes [`decorator`](https://docs.angularjs.org/api/auto/service/$provide#decorator) method, which is able to intercept creation of any service, so we are able to augment it with some new functions. The best moment to call `$provide.decorator` method is during module configuration, thanks to this approach we are sure that our custom logic is invoked before module is started.
+However in my opinion this approach fails in real life scenarios, because usually we are subscribed to more than one event - thus we have to have multiple local variables for detaching listeners.
+Fortunately `AngularJS` provides an easy way to extend existing services with some new functionalities - we can achieve that by using `$provide` service.
+This service exposes [`decorator`](https://docs.angularjs.org/api/auto/service/$provide#decorator) method, which is able to intercept creation of any service, so we are able to augment it with some new functions.
+The best moment to call `$provide.decorator` method is during module configuration, thanks to this approach we are sure that our custom logic is invoked before module is started.
 
 ```javascript
 angular.module('app.common', [])
@@ -61,7 +65,8 @@ function extendRootScope($delegate) {
 }
 ```
 
-Because I passed `'$rootScope'` as a first argument of `$provide.decorator` method, the `$delegate` parameter in `extendRootScope` function is actually a `$rootScope` service. Now having access to the service I can augment it with my custom logic for detaching event handlers.
+Because I passed `'$rootScope'` as a first argument of `$provide.decorator` method, the `$delegate` parameter in `extendRootScope` function is actually a `$rootScope` service.
+Now having access to the service I can augment it with my custom logic for detaching event handlers.
 
 ```javascript
 /*ngInject*/

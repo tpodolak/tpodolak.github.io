@@ -22,7 +22,9 @@ var webClient = new CustomWebClient
             };
 ```
 
-In this example the `Settings` property is assigned with new instance of `CustomWebClientSettings` class. However for time to time we only want to change particular property of given nested property and leave rest of the object intact. Of course we can write it usual way
+In this example the `Settings` property is assigned with new instance of `CustomWebClientSettings` class.
+However for time to time we only want to change particular property of given nested property and leave rest of the object intact.
+Of course we can write it usual way
 
 ```csharp
 // we assume that CustomWebClient initialized Settings property in constructor
@@ -40,6 +42,7 @@ var webClient = new CustomWebClient
             };
 ```
 
-Note that there is no `new` keyword in the assignment of `Settings` property, which means that the `Settings` object is updated with the values of properties in braces. Of course this syntax can be safely used only if the nested property(in this case `Settings`) is initialized up front in constructor, otherwise you will get `NullReferenceException`.
+Note that there is no `new` keyword in the assignment of `Settings` property, which means that the `Settings` object is updated with the values of properties in braces.
+Of course this syntax can be safely used only if the nested property(in this case `Settings`) is initialized up front in constructor, otherwise you will get `NullReferenceException`.
 
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/NestedPropertiesInitialization)

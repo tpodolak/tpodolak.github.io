@@ -23,7 +23,10 @@ There are couple of ways of injecting dependencies into `AngularJS` components. 
 })();
 ```
 
-However this technique fails in real life scenarios, because for production we usually (or rather always) minify and uglify javascript files. Uglify proces renames our variables and due to the fact that dependencies are resolved by name, AngularJS is not able to find appropriate services, directives etc. To overcome this limitation, we can enclose our function definition into an array, and specify dependencies as a string literals. Our original code becomes then
+However this technique fails in real life scenarios, because for production we usually (or rather always) minify and uglify javascript files.
+Uglify proces renames our variables and due to the fact that dependencies are resolved by name, AngularJS is not able to find appropriate services, directives etc.
+To overcome this limitation, we can enclose our function definition into an array, and specify dependencies as a string literals.
+Our original code becomes then
 
 ```javascript
 (function () {
@@ -34,7 +37,8 @@ However this technique fails in real life scenarios, because for production we u
 })();
 ```
 
-Although this works fine even after minifying and uglifiyng js files, for me this code is hard to read. That is why I like to use yet another technique. This technique leverages variable hoisting and `$inject` property
+Although this works fine even after minifying and uglifiyng js files, for me this code is hard to read.
+That is why I like to use yet another technique. This technique leverages variable hoisting and `$inject` property
 
 ```javascript
 (function(){
@@ -56,7 +60,13 @@ shellController.$inject= ['$scope','$http']
 
 ```
 
-It is even possible to enhance a bit this example and make it a little less error prone. With the current implementation we have to make sure that order of properties in `$inject` array is the same as in function declaration. It is easy to keep track of that if we have just a couple of dependencies, but it might be a bit of a pain if we start to add, remove or edit them. Fortunately we can automate this task and basically autogenerate `$inject` array. In order to do that I like to use `Gulp` (although it is also possible to use `Grunt`). First of all we have to install `Gulp`. There is great tutorial how to do that in [here](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md). Having `Gulp` on board we have to install additional packages: `gulp-rename` and `gulp-ng-annotate`. In order to do that type into command line
+It is even possible to enhance a bit this example and make it a little less error prone.
+With the current implementation we have to make sure that order of properties in `$inject` array is the same as in function declaration.
+It is easy to keep track of that if we have just a couple of dependencies, but it might be a bit of a pain if we start to add, remove or edit them.
+Fortunately we can automate this task and basically autogenerate `$inject` array. In order to do that I like to use `Gulp` (although it is also possible to use `Grunt`).
+First of all we have to install `Gulp`. There is great tutorial how to do that in [here](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md).
+Having `Gulp` on board we have to install additional packages: `gulp-rename` and `gulp-ng-annotate`.
+In order to do that type into command line
 
 ```bash frame="none" showLineNumbers=false
 npm install gulp-ng-annotate --save-dev
