@@ -11,7 +11,8 @@ tags:
   - "typescript"
 ---
 
-I wanted to improve a code quality of my `TypeScript` project, so I decided to add linting to my gulp build process. My original build task looked pretty straightforward
+I wanted to improve a code quality of my `TypeScript` project, so I decided to add linting to my gulp build process.
+My original build task looked pretty straightforward
 
 ```javascript
 function buildTypeScript() {
@@ -37,11 +38,15 @@ and according to `gulp-tslint` [manual](https://www.npmjs.com/package/gulp-tslin
 
 ```
 
-This works fine until you start using type definitions (d.ts files) from external resources (which is the usual way of combining `TypeScript` with existing `JavaScript` libraries). Usually these files have different code styling rules than our own, which means that our build will fail.
+This works fine until you start using type definitions (d.ts files) from external resources (which is the usual way of combining `TypeScript` with existing `JavaScript` libraries).
+Usually these files have different code styling rules than our own, which means that our build will fail.
 
 [![buildfail](images/buildfail.png)](http://tpodolak.com/blog/wp-content/uploads/2015/06/gulp-exluding-type-definitions-files-from-typescript-linting/buildfail.png)
 
-There are couple of ways of solving this problem. The obvious one is to split the task into two separate tasks, one for linting and one for building, but in my opinion a much cleaner way is to use [`gulp-filter`](https://www.npmjs.com/package/gulp-filter). `Gulp-filter` has an ability to filter the stream on the fly, but what is more interesting it can also restore it to previous unfiltered state. Using these two features we can filter the stream from d.ts files before linting process begins and then restore the stream and pass it to `TypeScript` compiler. We can do it with two additional lines of code. Improved build script is presented below
+There are couple of ways of solving this problem. The obvious one is to split the task into two separate tasks, one for linting and one for building, but in my opinion a much cleaner way is to use [`gulp-filter`](https://www.npmjs.com/package/gulp-filter).
+`Gulp-filter` has an ability to filter the stream on the fly, but what is more interesting it can also restore it to previous unfiltered state.
+Using these two features we can filter the stream from d.ts files before linting process begins and then restore the stream and pass it to `TypeScript` compiler.
+We can do it with two additional lines of code. Improved build script is presented below
 
 ```javascript
 function buildTypeScript() {

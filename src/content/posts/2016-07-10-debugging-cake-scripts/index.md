@@ -7,7 +7,11 @@ tags:
   - "cake"
 ---
 
-We've been using [Cake](http://cakebuild.net/) in our project for quite some time and it has been working great. However for time to time lack of debugging support was really annoying for me. Fortunately it seems that these times are gone now. During [NDC Oslo 2016](https://vimeo.com/171704581) [Gary Ewan Park](https://github.com/gep13) showed that it is possible to attach debugger to the build process. Here are the steps to achieve that.
+We've been using [Cake](http://cakebuild.net/) in our project for quite some time and it has been working great.
+However for time to time lack of debugging support was really annoying for me.
+Fortunately it seems that these times are gone now.
+During [NDC Oslo 2016](https://vimeo.com/171704581) [Gary Ewan Park](https://github.com/gep13) showed that it is possible to attach debugger to the build process.
+Here are the steps to achieve that.
 
 Let's assume that we have following simple cake script.
 
@@ -20,7 +24,6 @@ Task("Default")
 });
 
 RunTarget(target);
-
 ```
 
 In order to make the debugging possible it is necessary to add `#break` preprocessor directive to the task we want the debugger to stop.
@@ -35,7 +38,6 @@ Task("Default")
 });
 
 RunTarget(target);
-
 ```
 
 This operation doesn't affect the default build process, so if you run in console

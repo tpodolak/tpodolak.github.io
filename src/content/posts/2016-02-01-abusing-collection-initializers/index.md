@@ -9,7 +9,7 @@ tags:
   - "net-4-0"
 ---
 
-Most of .NET developers are familiar with collection initializers syntax. Long story short, this language feature allows you to replace this ugly syntax
+Most of `.NET` developers are familiar with collection initializers syntax. Long story short, this language feature allows you to replace this ugly syntax
 
 ```csharp
 var numbers = new List<int>();
@@ -26,7 +26,9 @@ with much shorter and cleaner one
 var numbers = new List<int> { 1, 2, 3, 4 };
 ```
 
-The more interesting thing is the fact that you can leverage this syntax not only for build-in collections but also for your custom classes. In order to do that your class must implement `IEnumerable` interface and expose public `Add` method. Let's assume that we have some real case scenario and we have class which looks like that
+The more interesting thing is the fact that you can leverage this syntax not only for build-in collections but also for your custom classes.
+In order to do that your class must implement `IEnumerable` interface and expose public `Add` method.
+Let's assume that we have some real case scenario and we have class which looks like that
 
 ```csharp
 public class StatusMessages : IEnumerable<StatusMessage>
@@ -66,7 +68,8 @@ public class StatusMessage
 }
 ```
 
-This is a simple wrapper over the List. At this moment we can't use collection initializer when constructing objects of this classs. However by adding method `Add`
+This is a simple wrapper over the List. At this moment we can't use collection initializer when constructing objects of this classs.
+However by adding method `Add`
 
 ```csharp
 public class StatusMessages : IEnumerable<StatusMessage>

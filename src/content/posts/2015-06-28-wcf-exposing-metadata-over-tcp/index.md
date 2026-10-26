@@ -21,7 +21,8 @@ I think that everyone who has ever been working with `WCF` knows that we can ena
 </behaviors>
 ```
 
-Up until yesterday the build in solution works fine for me. However recently I've had to expose metadata over `TCP` protocol. `ServiceMetadataBehavior` doesn't have something like `TcpGetEnabled` property so in order to expose metadata over other protocols (in my case `TCP`) it is necessary to add custom `MEX` endpoint.
+Up until yesterday the build in solution works fine for me. However recently I've had to expose metadata over `TCP` protocol.
+`ServiceMetadataBehavior` doesn't have something like `TcpGetEnabled` property so in order to expose metadata over other protocols (in my case `TCP`) it is necessary to add custom `MEX` endpoint.
 
 ```xml
 <system.serviceModel>
@@ -41,11 +42,14 @@ Up until yesterday the build in solution works fine for me. However recently I'v
 </system.serviceModel>
 ```
 
-The endpoint configuration has to have a specific binding - in my case `mexTcpBinding` (there are of course `MEX` bindings available for other protocols). What is more, the contract has to be set to `IMetadataExchange`. The address value is up to us, we can use full blown address as well as leverage base address. At this point if we run service we will get the exception
+The endpoint configuration has to have a specific binding - in my case `mexTcpBinding` (there are of course `MEX` bindings available for other protocols).
+What is more, the contract has to be set to `IMetadataExchange`. The address value is up to us, we can use full blown address as well as leverage base address.
+At this point if we run service we will get the exception
 
 [![Exception](images/Exception.png)](http://tpodolak.com/blog/wp-content/uploads/2015/06/wcf-exposing-metadata-over-tcp/Exception.png)
 
-Even though we added custom endpoint for metadata exchange we still have to use `ServiceMetadataBehavior`. This time however we can skip `httpGetEnabled` property
+Even though we added custom endpoint for metadata exchange we still have to use `ServiceMetadataBehavior`.
+This time however we can skip `httpGetEnabled` property
 
 ```xml
 <!-- rest of the config -->

@@ -12,7 +12,9 @@ tags:
 
 ### 1\. Problem
 
-Everyone who has ever had to analyze logs from production environment knows, that quite often it is not an easy task. Usually application flow is deduced by log entries matched by thread id, which is problematic when you deal with multithreading scenarios. Say for example we have following piece of code
+Everyone who has ever had to analyze logs from production environment knows, that quite often it is not an easy task.
+Usually application flow is deduced by log entries matched by thread id, which is problematic when you deal with multithreading scenarios.
+Say for example we have following piece of code
 
 ```csharp
 public class HomeController : Controller
@@ -173,10 +175,9 @@ private void HandleEndRequest(object sender, EventArgs e)
 
     Logger.Info($"Request completed with status code: {httpContext.Response.StatusCode} ");
 }
-
 ```
 
-After these changes our log file finally looks OK
+After these changes our log file finally looks `OK`
 
 ```log wrap=false showLineNumbers=false
 TimeStamp=2016-07-03 12:41:35.7292 CorrelationId=b322d1fa-47b2-4582-b7a9-c9463b7c0a47 Level=INFO Message=About to start GET / request
