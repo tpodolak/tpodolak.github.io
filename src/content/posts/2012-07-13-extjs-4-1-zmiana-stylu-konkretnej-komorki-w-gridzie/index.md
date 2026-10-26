@@ -6,9 +6,8 @@ categories:
   - "grid"
   - "renderer"
 tags: 
-  - "extjs-4-1-1"
+  - "extjs"
   - "grid"
-  - "renderer"
 ---
 
 Witam Dzisiejszy post nie będzie związany z platformą `.NET`, lecz z javascriptowym frameworkiem `Extjs` w wersji `4.1`.

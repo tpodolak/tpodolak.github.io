@@ -7,10 +7,10 @@ categories:
   - "silverlight"
   - "wpf"
 tags: 
-  - "commandbehaviors"
   - "prism"
   - "silverlight"
   - "wpf"
+  - "commands"
 ---
 
 Analizując wcześniejsze przykłady pokazujące użycie `DelegateCommand` można odnieść wrażenie, że mimo tego iż są one bardzo użyteczne, ich użycie jest niestety bardzo ograniczone.

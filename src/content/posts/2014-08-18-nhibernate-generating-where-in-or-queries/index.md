@@ -9,12 +9,9 @@ categories:
   - "queryover"
   - "restrictions"
 tags: 
-  - "net"
-  - "c"
-  - "disjunction"
+  - "dotnet"
+  - "csharp"
   - "nhibernate"
-  - "queryover"
-  - "restrictions"
 ---
 
 Let's assume that we have a simple table `GL_Task` which looks like this

@@ -5,9 +5,9 @@ categories:
   - "expressiontree"
   - "inotifypropertychanged"
 tags: 
-  - "expressiontree"
+  - "expression-trees"
   - "inotifypropertychanged"
-  - "lambdaexpression"
+  - "lambda-expressions"
 ---
 
 Interfejs `INotifyPropertyChangedPropertyChanged` znany jest prawdopodobnie każdemu programiście `C#`.

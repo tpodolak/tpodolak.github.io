@@ -6,8 +6,8 @@ categories:
   - "c"
   - "unittest"
 tags: 
-  - "net"
-  - "c"
+  - "dotnet"
+  - "csharp"
   - "unittest"
 ---
 

@@ -6,8 +6,8 @@ categories:
   - "c"
   - "code-analysis"
 tags: 
-  - "net"
-  - "c"
+  - "dotnet"
+  - "csharp"
   - "code-analysis"
 ---
 

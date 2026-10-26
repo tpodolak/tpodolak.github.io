@@ -7,8 +7,7 @@ categories:
   - "mvc"
 tags: 
   - "asp-net-mvc"
-  - "modalwindow"
-  - "mvc"
+  - "modal-window"
 ---
 
 Ostatnimi czasy w pracy eksperymentujemy z `ASP.NET MVC`. Jednym z problemów na jakie natknąłem się poznając tą technologię było utworzenie okien modalnych.

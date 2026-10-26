@@ -8,10 +8,8 @@ categories:
   - "walidacja"
   - "wpf"
 tags: 
-  - "idataerrorinfo"
-  - "inotifyerrorinfo"
   - "silverlight"
-  - "walidacja"
+  - "validation"
   - "wpf"
 ---
 

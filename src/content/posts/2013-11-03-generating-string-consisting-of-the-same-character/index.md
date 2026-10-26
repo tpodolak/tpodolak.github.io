@@ -2,9 +2,8 @@
 title: "Generating string consisting of the same character"
 published: 2013-11-03T14:45:00.000Z
 categories: 
-  - "string"
+  - "csharp"
 tags: 
-  - "string"
 ---
 
 Recently I've been asked by friend of mine, how to generate string consisting of 50 commas.

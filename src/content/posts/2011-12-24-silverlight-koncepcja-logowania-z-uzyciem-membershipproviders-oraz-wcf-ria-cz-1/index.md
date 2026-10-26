@@ -9,7 +9,6 @@ categories:
 tags: 
   - "authentication"
   - "authorization"
-  - "membershipprovider"
   - "silverlight"
 ---
 

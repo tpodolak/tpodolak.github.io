@@ -9,7 +9,6 @@ categories:
 tags: 
   - "globalization"
   - "localization"
-  - "r"
   - "resharper"
 ---
 

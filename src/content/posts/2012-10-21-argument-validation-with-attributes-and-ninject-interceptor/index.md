@@ -10,12 +10,11 @@ categories:
   - "ninject-extensions"
   - "validation"
 tags: 
-  - "net"
+  - "dotnet"
   - "attributes"
-  - "c"
+  - "csharp"
   - "interceptor"
   - "ninject"
-  - "ninject-extensions"
   - "validation"
 ---
 

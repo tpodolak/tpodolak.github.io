@@ -9,8 +9,7 @@ categories:
   - "webstorm"
 tags: 
   - "asp-net-mvc"
-  - "chrom"
-  - "debugger"
+  - "chrome"
   - "debugging"
   - "webstorm"
 ---

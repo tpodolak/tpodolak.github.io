@@ -6,7 +6,6 @@ categories:
   - "entity-framework"
   - "migration"
 tags: 
-  - "ef"
   - "entity-framework"
   - "migration"
 ---

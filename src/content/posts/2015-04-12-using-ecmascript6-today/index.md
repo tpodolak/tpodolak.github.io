@@ -8,7 +8,7 @@ categories:
   - "traceur"
 tags: 
   - "babel"
-  - "ecmascript6"
+  - "ecmascript-6"
   - "javascript"
   - "traceur"
 ---

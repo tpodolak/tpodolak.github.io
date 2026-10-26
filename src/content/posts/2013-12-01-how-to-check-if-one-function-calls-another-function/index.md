@@ -6,8 +6,7 @@ categories:
   - "crawler"
   - "function"
 tags: 
-  - "c"
-  - "crawler"
+  - "csharp"
 ---
 
 An application which I'm currently developing has quite complicated authorization system.

@@ -8,9 +8,8 @@ categories:
   - "sql"
   - "visual-studio"
 tags: 
-  - "ef"
   - "entity-framework"
-  - "mssql"
+  - "sql-server"
   - "sql"
   - "visual-studio"
 ---

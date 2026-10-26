@@ -6,7 +6,6 @@ categories:
   - "nlog"
 tags: 
   - "logging"
-  - "mappeddiagnosticslogicalcontext"
   - "nlog"
 ---
 

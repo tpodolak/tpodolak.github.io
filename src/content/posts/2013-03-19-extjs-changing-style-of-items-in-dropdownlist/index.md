@@ -6,9 +6,8 @@ categories:
   - "template"
   - "xtemplate"
 tags: 
-  - "extjs-4-1-1"
+  - "extjs"
   - "template"
-  - "xtemplate"
 ---
 
 I've recently been asked to create `ComboBox` with custom styled `drop-down` list.

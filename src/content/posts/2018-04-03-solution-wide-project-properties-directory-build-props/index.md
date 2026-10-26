@@ -4,7 +4,7 @@ published: 2018-04-03T08:00:14.000Z
 categories: 
   - "net"
 tags: 
-  - "net"
+  - "dotnet"
   - "msbuild"
 ---
 

@@ -9,10 +9,8 @@ categories:
   - "plugins"
   - "validation"
 tags: 
-  - "ext-panel-grid"
-  - "extjs-4-1-1"
   - "grid"
-  - "plugin"
+  - "extjs"
   - "validation"
 ---
 

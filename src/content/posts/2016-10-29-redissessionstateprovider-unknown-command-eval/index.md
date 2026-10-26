@@ -6,7 +6,7 @@ categories:
   - "asp-net-mvc"
   - "redis"
 tags: 
-  - "net"
+  - "dotnet"
   - "asp-net-mvc"
   - "redis"
 ---

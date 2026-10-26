@@ -7,9 +7,8 @@ categories:
   - "fluentnhibernate"
   - "nhibernate"
 tags: 
-  - "c"
-  - "eventlisteners"
-  - "fluentnhibernate"
+  - "csharp"
+  - "fluent-nhibernate"
   - "nhibernate"
 ---
 

@@ -5,9 +5,8 @@ categories:
   - "net"
   - "c"
 tags: 
-  - "net"
-  - "c"
-  - "stringbuilder"
+  - "dotnet"
+  - "csharp"
 ---
 
 Today just quick tip about `StringBuilder` I used to remove last character(s) from `StringBuilder` using `Remove` method.

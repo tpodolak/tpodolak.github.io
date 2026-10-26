@@ -9,8 +9,6 @@ categories:
   - "wpf"
 tags: 
   - "commands"
-  - "commanmanager"
-  - "icommand"
   - "silverlight"
   - "wpf"
 ---

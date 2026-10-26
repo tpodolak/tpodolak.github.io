@@ -4,7 +4,7 @@ published: 2017-12-17T15:23:23.000Z
 categories: 
   - "c"
 tags: 
-  - "c"
+  - "csharp"
 ---
 
 This post is just a quick reminder for me to put a bit more attention to conditional statements combined with a null-propagation operator. Nothing too fancy but I tend to overlook this when doing code review. Starting from C# 6 we can simplify accessing members of an object which might be `null` thanks to `?.` operator. For my perspective it is particularly useful within `if` statements, however, you have to be aware of how compiler rewrites the code under the hood otherwise, it is easy to introduce a bug. Consider following scenario

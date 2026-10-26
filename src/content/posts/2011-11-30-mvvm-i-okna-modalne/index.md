@@ -5,7 +5,7 @@ categories:
   - "modalwindow"
   - "mvvm"
 tags: 
-  - "modalwindow"
+  - "modal-window"
   - "mvvm"
 ---
 

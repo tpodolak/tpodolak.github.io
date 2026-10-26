@@ -2,11 +2,9 @@
 title: "Definiowanie własnego operatora rzutowania"
 published: 2012-02-26T21:54:00.000Z
 categories: 
-  - "c"
-  - "explict"
+  - "csharp"
 tags: 
-  - "c"
-  - "cast"
+  - "operator"
 ---
 
 Ostatnio modyfikując mój kod stanąłem przed problemem rzutowania obiektu typu `MembershipUser`(z namespaca `System.Web.Security`) na mój własny typ `UserDTO`.

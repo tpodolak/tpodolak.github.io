@@ -7,7 +7,6 @@ categories:
   - "viewmodel"
   - "wpf"
 tags: 
-  - "bindingcommand"
   - "commands"
   - "viewmodel"
   - "wpf"

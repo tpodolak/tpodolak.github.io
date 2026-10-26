@@ -8,11 +8,10 @@ categories:
   - "silverlight"
   - "wpf"
 tags: 
-  - "compositecommand"
-  - "delegatecommand"
   - "prism"
   - "silverlight"
   - "wpf"
+  - "commands"
 ---
 
 ### 1\. DelegateCommands

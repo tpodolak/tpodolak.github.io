@@ -7,10 +7,8 @@ categories:
   - "customactionresult"
   - "pdfacionresult"
 tags: 
-  - "actionresult"
   - "asp-net-mvc"
-  - "customactionresult"
-  - "pdfacionresult"
+  - "pdf"
 ---
 
 ### 1\. Introduction

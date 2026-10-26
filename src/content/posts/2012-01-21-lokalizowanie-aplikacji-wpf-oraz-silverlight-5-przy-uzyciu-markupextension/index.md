@@ -8,8 +8,7 @@ categories:
   - "wpf"
 tags: 
   - "localization"
-  - "markupextension"
-  - "silverlight5"
+  - "silverlight"
   - "wpf"
 ---
 

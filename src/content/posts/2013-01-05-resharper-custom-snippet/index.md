@@ -10,8 +10,8 @@ categories:
   - "templates"
   - "unittest"
 tags: 
-  - "net"
-  - "c"
+  - "dotnet"
+  - "csharp"
   - "nunit"
   - "resharper"
   - "snippet"

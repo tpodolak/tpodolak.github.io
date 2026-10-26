@@ -6,9 +6,8 @@ categories:
   - "extjs-4-1-1"
   - "resize"
 tags: 
-  - "ext-panel-grid"
-  - "extjs-4-1-1"
-  - "resize"
+  - "grid"
+  - "extjs"
 ---
 
 Recently I've encountered annoying problem with `Extjs` grid.

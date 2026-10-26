@@ -7,7 +7,6 @@ categories:
   - "javascript"
   - "winjs"
 tags: 
-  - "authenticateandcontinue"
   - "javascript"
   - "winjs"
 ---

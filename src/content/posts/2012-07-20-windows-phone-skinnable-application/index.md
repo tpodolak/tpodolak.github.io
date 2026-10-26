@@ -8,7 +8,7 @@ categories:
   - "themes"
   - "windows-phone"
 tags: 
-  - "c"
+  - "csharp"
   - "silverlight"
   - "skins"
   - "themes"

@@ -5,12 +5,9 @@ categories:
   - "ext-panel-grid"
   - "extjs-4-1-1"
   - "plugin"
-  - "vertical-header"
 tags: 
-  - "ext-panel-grid"
-  - "extjs-4-1-1"
-  - "plugin"
-  - "vertical-header"
+  - "grid"
+  - "extjs"
 ---
 
 `Extjs` doesn't provide us with any build-in mechanism for flipping text vertically in grid's header.

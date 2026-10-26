@@ -5,14 +5,10 @@ categories:
   - "datepicker"
   - "ext-picker-date"
   - "extjs-4-1-1"
-  - "multiselect"
   - "plugin"
 tags: 
   - "datepicker"
-  - "ext-picker-date"
-  - "extjs-4-1-1"
-  - "multiselect"
-  - "plugin"
+  - "extjs"
 ---
 
 A couple of weeks ago I wrote a post about creating a mutiselectable datepicker.

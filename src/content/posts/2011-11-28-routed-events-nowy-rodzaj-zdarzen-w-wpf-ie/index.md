@@ -8,10 +8,6 @@ categories:
   - "tunelling"
   - "wpf"
 tags: 
-  - "bubbling"
-  - "events"
-  - "routedevent"
-  - "tunelling"
   - "wpf"
 ---
 

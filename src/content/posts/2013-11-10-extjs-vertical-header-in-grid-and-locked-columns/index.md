@@ -7,9 +7,8 @@ categories:
   - "plugin"
   - "vertical-header"
 tags: 
-  - "ext-panel-grid"
-  - "extjs-4-2"
-  - "plugin"
+  - "grid"
+  - "extjs"
   - "vertical-header"
 ---
 

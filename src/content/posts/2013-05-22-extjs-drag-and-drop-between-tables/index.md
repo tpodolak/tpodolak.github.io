@@ -6,7 +6,7 @@ categories:
   - "extjs-4-1-1"
 tags: 
   - "drag-and-drop"
-  - "extjs-4-1-1"
+  - "extjs"
 ---
 
 `Extjs` framework provides us with two helper classes responsible for performing `drag-drop` operation:  

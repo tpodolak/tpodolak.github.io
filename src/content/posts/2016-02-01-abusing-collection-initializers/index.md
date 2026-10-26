@@ -5,8 +5,8 @@ categories:
   - "net"
   - "net-4-0"
 tags: 
-  - "net"
-  - "net-4-0"
+  - "dotnet"
+  - "dotnet-framework-4-0"
 ---
 
 Most of `.NET` developers are familiar with collection initializers syntax. Long story short, this language feature allows you to replace this ugly syntax

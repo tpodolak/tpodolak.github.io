@@ -7,10 +7,8 @@ categories:
   - "c"
   - "fluentnhibernate"
 tags: 
-  - "automapper"
-  - "automappings"
-  - "c"
-  - "fluentnhibernate"
+  - "csharp"
+  - "fluent-nhibernate"
 ---
 
 ### 1\. Introduction

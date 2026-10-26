@@ -6,8 +6,7 @@ categories:
   - "r"
   - "resharper"
 tags: 
-  - "c"
-  - "r"
+  - "csharp"
   - "resharper"
 ---
 

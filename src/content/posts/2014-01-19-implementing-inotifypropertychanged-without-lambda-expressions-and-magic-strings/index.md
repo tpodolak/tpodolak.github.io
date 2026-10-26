@@ -7,9 +7,8 @@ categories:
   - "callermembername"
   - "inotifypropertychanged"
 tags: 
-  - "net-4-5"
-  - "c"
-  - "callermembername"
+  - "dotnet-framework-4-5"
+  - "csharp"
   - "inotifypropertychanged"
 ---
 

@@ -5,8 +5,8 @@ categories:
   - "c"
   - "dynamic"
 tags: 
-  - "net-4-0"
-  - "c"
+  - "dotnet-framework-4-0"
+  - "csharp"
   - "dynamic"
 ---
 

@@ -5,8 +5,8 @@ categories:
   - "net"
   - "c"
 tags: 
-  - "net"
-  - "c"
+  - "dotnet"
+  - "csharp"
 ---
 
 I think most of developers are familiar with the object syntax initializer, which basically allows you to set up values of properties just like that

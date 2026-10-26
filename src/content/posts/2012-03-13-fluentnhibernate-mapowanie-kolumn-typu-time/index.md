@@ -6,8 +6,8 @@ categories:
   - "mssql"
   - "nhibernate"
 tags: 
-  - "fluentnhibernate"
-  - "mssql"
+  - "fluent-nhibernate"
+  - "sql-server"
   - "nhibernate"
 ---
 Ostatnio napotkałem na dość ciekawy wyjątek podczas wykonywania `NHibernatowego` inserta. W bazie danych mam prostą tabelę

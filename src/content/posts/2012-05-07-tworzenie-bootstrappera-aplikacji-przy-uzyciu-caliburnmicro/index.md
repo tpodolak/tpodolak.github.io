@@ -8,9 +8,9 @@ categories:
   - "windows-phone"
   - "wpf"
 tags: 
-  - "caliburnmicro"
+  - "caliburn-micro"
   - "mvvm"
-  - "silverlight5"
+  - "silverlight"
   - "windows-phone"
   - "wpf"
 ---

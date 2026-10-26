@@ -7,8 +7,6 @@ categories:
   - "triggers"
   - "wpf"
 tags: 
-  - "datatrigger"
-  - "trigery"
   - "triggers"
   - "wpf"
 ---

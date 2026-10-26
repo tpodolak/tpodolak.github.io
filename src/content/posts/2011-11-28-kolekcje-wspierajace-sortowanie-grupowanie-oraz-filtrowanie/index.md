@@ -6,8 +6,6 @@ categories:
   - "pagedcollectionview"
   - "wpf"
 tags: 
-  - "listcollectionview"
-  - "pagedcollectionview"
   - "wpf"
 ---
 

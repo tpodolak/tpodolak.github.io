@@ -7,8 +7,7 @@ categories:
   - "javascript"
 tags: 
   - "datepicker"
-  - "extjs-4-1-1"
-  - "javascript"
+  - "extjs"
 ---
 
 Recently, I have been given a task to make extjs datepicker allowing for selection of multiple dates.

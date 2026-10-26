@@ -6,7 +6,6 @@ categories:
   - "iasyncresult"
 tags: 
   - "async-await"
-  - "iasyncresult"
 ---
 
 Even though in my current project we use `.NET 4.5` we still have lots of references to internal libraries targeting `.NET 4.0`.

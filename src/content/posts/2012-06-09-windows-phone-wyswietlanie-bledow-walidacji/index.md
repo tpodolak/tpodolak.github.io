@@ -7,11 +7,9 @@ categories:
   - "walidacja"
   - "windows-phone"
 tags: 
-  - "datatemplate"
+  - "data-template"
   - "validation"
-  - "walidacja"
   - "windows-phone"
-  - "wp7"
 ---
 
 Kilka miesięcy temu w [tym](http://tpodolak.com/blog/2011/11/28/walidacja) poście przedstawiałem różne sposoby walidacji jakie są dostępne na platformie `Silverlight`.

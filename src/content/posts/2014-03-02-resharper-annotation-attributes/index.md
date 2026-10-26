@@ -8,8 +8,7 @@ categories:
   - "resharper"
 tags: 
   - "attributes"
-  - "c"
-  - "r"
+  - "csharp"
   - "resharper"
 ---
 

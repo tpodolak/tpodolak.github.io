@@ -4,7 +4,7 @@ published: 2011-12-03T15:10:00.000Z
 categories: 
   - "uiautomation"
 tags: 
-  - "uiautomation"
+  - "ui-automation"
 ---
 
 Biblioteka `Microsoft UI Automation` ujrzała światło dzienne wraz z premierą `.NET 3.0` - jednakże pozostała ona w cieniu swoich większych braci `WPF` oraz `WPF`, które również zostały wprowadzone do `Frameworka 3.0`.

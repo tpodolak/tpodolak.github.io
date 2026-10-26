@@ -5,7 +5,7 @@ categories:
   - "datatemplate"
   - "windows-phone"
 tags: 
-  - "datatemplate"
+  - "data-template"
   - "windows-phone"
 ---
 

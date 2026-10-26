@@ -7,10 +7,9 @@ categories:
   - "tpl"
   - "unobservedtaskexception"
 tags: 
-  - "net-4-0"
-  - "net-4-5"
+  - "dotnet-framework-4-0"
+  - "dotnet-framework-4-5"
   - "tpl"
-  - "unobservedtaskexception"
 ---
 
 ### 1\. Introduction
