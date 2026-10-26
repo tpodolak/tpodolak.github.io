@@ -15,7 +15,14 @@ tags:
 ---
 
 Kilka miesięcy temu w [tym](http://tpodolak.com/blog/2011/11/28/walidacja) poście przedstawiałem różne sposoby walidacji jakie są dostępne na platformie `Silverlight`.
-Jako, że ostatnio mam więcej czasu aby pisać jakieś proste aplikacje pod `Windows Phonem` potrzebowałem mechanizmu walidacji działającego pod tą platformą. Według `MSDN-a` wszystkie metody walidacji przedstawione we wspomnianym wcześniej poście powinny działać. Niestety po przerzuceniu mechanizmu z `Silverlighta` na `Windows Phona` okazało się, że błędy walidacji nie zostają wyświetlone na interfejsie. Po przeszukaniu kilku for oraz blogów dowiedziałem się, że przyczyną takiego stanu rzeczy jest brak obsługi reakcji na błędy w templacie `TextBoxów` (i innych elementów typu input). Zatem aby wyświetlić błędy walidacji, pozostaje nam zmodyfikować istniejący template `TextBox-a`. Zacznijmy od wyciągnięcia standardowego templatu TextBox-a z Windows Phona. W tym celu możemy użyć aplikacji `Expression Blend`. Otwórzmy w niej jakikolwiek projekt typu `Windows Phone Application`, w którym na kontrolce mamy naniesionego Textboxa. W moim przypadku, po wczytaniu projektu do `Blenda` ekran wygląda w następujący sposób
+Jako, że ostatnio mam więcej czasu aby pisać jakieś proste aplikacje pod `Windows Phonem` potrzebowałem mechanizmu walidacji działającego pod tą platformą.
+Według `MSDN-a` wszystkie metody walidacji przedstawione we wspomnianym wcześniej poście powinny działać.
+Niestety po przerzuceniu mechanizmu z `Silverlighta` na `Windows Phona` okazało się, że błędy walidacji nie zostają wyświetlone na interfejsie.
+Po przeszukaniu kilku for oraz blogów dowiedziałem się, że przyczyną takiego stanu rzeczy jest brak obsługi reakcji na błędy w templacie `TextBoxów` (i innych elementów typu input).
+Zatem aby wyświetlić błędy walidacji, pozostaje nam zmodyfikować istniejący template `TextBox-a`.
+Zacznijmy od wyciągnięcia standardowego templatu TextBox-a z Windows Phona.
+W tym celu możemy użyć aplikacji `Expression Blend`. Otwórzmy w niej jakikolwiek projekt typu `Windows Phone Application`, w którym na kontrolce mamy naniesionego Textboxa.
+W moim przypadku, po wczytaniu projektu do `Blenda` ekran wygląda w następujący sposób
 
 [![blend](images/blend.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/06/windows-phone-wyswietlanie-bledow-walidacji/blend.jpg)
 
@@ -23,7 +30,8 @@ Następnie zaznaczamy w `Blendzie` `TextBox-a` i z opcji znajdujących się w le
 
 [![BlendTemplateExtraction](images/BlendTemplateExtraction.png)](http://tpodolak.com/blog/wp-content/uploads/2012/06/windows-phone-wyswietlanie-bledow-walidacji/BlendTemplateExtraction.png)
 
-W oknie, które się pojawi klikamy `OK`. Następnie możemy przejść do widoku `XAML-a`, w sekcji `phone:PhoneApplicationPage.Resources` powinien pojawić się nam nowy styl wyglądający w ten sposób
+W oknie, które się pojawi klikamy `OK`.
+Następnie możemy przejść do widoku `XAML-a`, w sekcji `phone:PhoneApplicationPage.Resources` powinien pojawić się nam nowy styl wyglądający w ten sposób
 
 ```xml wrap=false
 <ControlTemplate x:Key="PhoneDisabledTextBoxTemplate" TargetType="TextBox">
@@ -121,7 +129,11 @@ W oknie, które się pojawi klikamy `OK`. Następnie możemy przejść do widoku
 </ControlTemplate>
 ```
 
-W ten oto sposób udało nam się wydobyć domyślny styl oraz template `TextBoxa` w `Windows Phonie`. W kolejnym kroku musimy zmodyfikować ten template w taki sposób, aby zaczął reagować na zmiany stanu walidacji. Zacznijmy od sprawdzenia jakie stany wizualne może obsługiwać `TextBox`. W tym celu musimy przeglądnąć metadane `TextBoxa` - możemy to zrobić klikając `PPM` na klasie `TextBox-a` i wybierając `Go To Definition`. Naszym oczom powinno ukazać się coś takiego.
+W ten oto sposób udało nam się wydobyć domyślny styl oraz template `TextBoxa` w `Windows Phonie`.
+W kolejnym kroku musimy zmodyfikować ten template w taki sposób, aby zaczął reagować na zmiany stanu walidacji.
+Zacznijmy od sprawdzenia jakie stany wizualne może obsługiwać `TextBox`.
+W tym celu musimy przeglądnąć metadane `TextBoxa` - możemy to zrobić klikając `PPM` na klasie `TextBox-a` i wybierając `Go To Definition`.
+Naszym oczom powinno ukazać się coś takiego.
 
 [![validationstates](images/validationstates.png)](http://tpodolak.com/blog/wp-content/uploads/2012/06/windows-phone-wyswietlanie-bledow-walidacji/validationstates.png)
 
@@ -133,8 +145,13 @@ Widzimy, że klasa `TextBox` jest opatrzona atrybutami `TemplateVisualState`, na
 [TemplateVisualState(GroupName = "ValidationStates", Name = "InvalidUnfocused")\]
 ```
 
-Mówią nam one, że w przypadku gdy wystąpią błędy walidacji nasza kontrolka przechodzi w stan `InvalidFocused` lub `InvalidUnfocused`. Natomiast, w przypadku gdy nie ma błędów znajduje się ona w stanie `Valid`. Analizując kod domyślnego templatu `TextBoxa` widzimy, że stany z grupy `ValidationStates` nie są obsługiwane - czas zatem to zmienić. Po pierwsze do templatu musimy dorzucić elementy, które będą wyświetlały błędy walidacji. Zmieńmy zatem opakowujący wszystko element `Grid` na `StackPanel`, a następnie dodajmy element typu `TextBlock` oraz `Border`.
-Elementy wyświetlające błędy walidacji musimy umieścić w jednym kontenerze z elementami odpowiadającymi za wyświetlanie tekstu. Zatem musimy je opakować w `Grida`. Po zastosowaniu powyższych wskazówek nasz template będzie wyglądał w następujący sposób
+Mówią nam one, że w przypadku gdy wystąpią błędy walidacji nasza kontrolka przechodzi w stan `InvalidFocused` lub `InvalidUnfocused`.
+Natomiast, w przypadku gdy nie ma błędów znajduje się ona w stanie `Valid`.
+Analizując kod domyślnego templatu `TextBoxa` widzimy, że stany z grupy `ValidationStates` nie są obsługiwane - czas zatem to zmienić.
+Po pierwsze do templatu musimy dorzucić elementy, które będą wyświetlały błędy walidacji.
+Zmieńmy zatem opakowujący wszystko element `Grid` na `StackPanel`, a następnie dodajmy element typu `TextBlock` oraz `Border`.
+Elementy wyświetlające błędy walidacji musimy umieścić w jednym kontenerze z elementami odpowiadającymi za wyświetlanie tekstu.
+Zatem musimy je opakować w `Grida`. Po zastosowaniu powyższych wskazówek nasz template będzie wyglądał w następujący sposób
 
 ```xml
 <StackPanel>
@@ -159,7 +176,12 @@ Elementy wyświetlające błędy walidacji musimy umieścić w jednym kontenerze
 </StackPanel>
 ```
 
-Dodanie elementów wyświetlających błędy to nie wszystko, musimy jeszcze określić kiedy nasze elementy mają być widoczne. W chwili obecnej ich właściwość `Visibility` jest ustawiona na `Collapsed`. Zatem elementy te nie będą widoczne, jak również nie będą zajmowały miejsca na interfejsie. Jak już wcześniej wspomniałem kontrolka `TextBoxa` w przypadku wystąpienia błędów walidacji przejdzie do stanów `InvalidFocused` lub `InvalidUnfocused`. Pozostaje nam zatem zareagować na przejście kontrolki w te stany i odpowiednio zmodyfikować właściwość `Visibility` bordera oraz textblocka. W tym celu posłużymy się `VisualStateManagerem` oraz animacjami. Do naszego templatu dodajmy następujący wpis
+Dodanie elementów wyświetlających błędy to nie wszystko, musimy jeszcze określić kiedy nasze elementy mają być widoczne.
+W chwili obecnej ich właściwość `Visibility` jest ustawiona na `Collapsed`.
+Zatem elementy te nie będą widoczne, jak również nie będą zajmowały miejsca na interfejsie.
+Jak już wcześniej wspomniałem kontrolka `TextBoxa` w przypadku wystąpienia błędów walidacji przejdzie do stanów `InvalidFocused` lub `InvalidUnfocused`.
+Pozostaje nam zatem zareagować na przejście kontrolki w te stany i odpowiednio zmodyfikować właściwość `Visibility` bordera oraz textblocka.
+W tym celu posłużymy się `VisualStateManagerem` oraz animacjami. Do naszego templatu dodajmy następujący wpis
 ```xml wrap=false
 <VisualStateGroup x:Name="ValidationStates">
                                 <VisualState x:Name="Valid" >
@@ -195,7 +217,8 @@ Dodanie elementów wyświetlających błędy to nie wszystko, musimy jeszcze okr
 </VisualStateGroup>
 ```
 
-W ten oto sposób zdefiniwaliśmy w `XAML-u` grupę (`VisualStateGroup`) o nazwie `ValidationStates` - zauważmy, że nazwa grupy jest taka sama jak nazwa grupy z atrybutów klasy `TextBox`. Dodaliśmy również trzy stany wizualne (`VisualState`), których nazwy również odpowiadają nazwą zdefiniowanym w atrubytach klasy `TextBox`.
+W ten oto sposób zdefiniwaliśmy w `XAML-u` grupę (`VisualStateGroup`) o nazwie `ValidationStates` - zauważmy, że nazwa grupy jest taka sama jak nazwa grupy z atrybutów klasy `TextBox`.
+Dodaliśmy również trzy stany wizualne (`VisualState`), których nazwy również odpowiadają nazwą zdefiniowanym w atrubytach klasy `TextBox`.
 Od tej chwili gdy kontrolka TextBoxa będzie posiadała błędy walidacji, zostanie odpalona animacja zmieniająca właściwość `Visibility` bordera `ValidationBorder` oraz `TextBlocka` `ValidationMessage` na `Visible`.
 Ostatecznie cały gotowy template będzie wyglądał w następujący sposób
 

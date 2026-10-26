@@ -9,7 +9,8 @@ tags:
   - "cast"
 ---
 
-Ostatnio modyfikując mój kod stanąłem przed problemem rzutowania obiektu typu `MembershipUser`(z namespaca `System.Web.Security`) na mój własny typ `UserDTO`. Klasa UserDTO nie wyróżnia się niczym specjalnym i wygląda następująco
+Ostatnio modyfikując mój kod stanąłem przed problemem rzutowania obiektu typu `MembershipUser`(z namespaca `System.Web.Security`) na mój własny typ `UserDTO`.
+Klasa UserDTO nie wyróżnia się niczym specjalnym i wygląda następująco
 
 ```csharp
 public class UserDTO : UserBase
@@ -22,7 +23,8 @@ public class UserDTO : UserBase
 }
 ```
 
-Podejściem dość oczywistym w takim przypadku jest utworzenie odpowiedniego konstruktora w klasie `UserDTO`, przyjmującego jako parametr obiekt typu `MembershipUser`. Jednakże można również utworzyć własny operator rzutowania, dzięki któremu zapis
+Podejściem dość oczywistym w takim przypadku jest utworzenie odpowiedniego konstruktora w klasie `UserDTO`, przyjmującego jako parametr obiekt typu `MembershipUser`.
+Jednakże można również utworzyć własny operator rzutowania, dzięki któremu zapis
 
 ```csharp
  

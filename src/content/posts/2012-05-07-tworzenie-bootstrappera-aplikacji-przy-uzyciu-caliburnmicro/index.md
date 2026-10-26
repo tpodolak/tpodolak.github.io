@@ -15,15 +15,20 @@ tags:
   - "wpf"
 ---
 
-Witam po długiej przerwie. W dzisiejszym wpisie postaram się krótko opisać w jaki sposób stworzyć bootstrapper aplikacji przy użyciu `CaliburnMicro`. Ponadto przedstawię w jaki sposób skonfigurować bootstrapper w taki sposób, aby `Caliburn` wykorzystywał nasz własny kontener `IOC`.
+Witam po długiej przerwie. W dzisiejszym wpisie postaram się krótko opisać w jaki sposób stworzyć bootstrapper aplikacji przy użyciu `CaliburnMicro`.
+Ponadto przedstawię w jaki sposób skonfigurować bootstrapper w taki sposób, aby `Caliburn` wykorzystywał nasz własny kontener `IOC`.
 
 ### 1\. Wstęp
 
-`CaliburnMicro` jest to framework `MVVM`, który w znacznym stopniu ułatwia i przyśpiesza pisanie aplikacji pod `WPF`,`Silverlight`,`WindowsPhone` oraz `WinRT`. Zdecydowałem się poznać ten framework z uwagi na jego przenośność na różne platformy. Wcześniej całkiem sporo czasu poświęciłem `Prismowi`, jednakże z powodu licznych problemów z jego działaniem pod `WindowsPhonem` chciałem spróbować czegoś nowego.
+`CaliburnMicro` jest to framework `MVVM`, który w znacznym stopniu ułatwia i przyśpiesza pisanie aplikacji pod `WPF`,`Silverlight`,`WindowsPhone` oraz `WinRT`.
+Zdecydowałem się poznać ten framework z uwagi na jego przenośność na różne platformy.
+Wcześniej całkiem sporo czasu poświęciłem `Prismowi`, jednakże z powodu licznych problemów z jego działaniem pod `WindowsPhonem` chciałem spróbować czegoś nowego.
 
 ### 2\. Bootstrapper - Silverlight
 
-Bootstrapper jest to ogólnie rzecz biorąc klasa inicjalizująca całą aplikację. W trakcie odpalania bootstrappera na ogół konfiguruje się kontener `IOC`(rejestruje wszystkie potrzebne typu), inicjalizuje się połączenie z serverem, oraz odpala się główne okno aplikacji - tzw. `Shella`. Dlatego też musimy odchudzić plik App.xaml.cs i zostawić w nim jedynie konstruktor wraz z wywołaniem funkcji `InitializeComponents`
+Bootstrapper jest to ogólnie rzecz biorąc klasa inicjalizująca całą aplikację.
+W trakcie odpalania bootstrappera na ogół konfiguruje się kontener `IOC`(rejestruje wszystkie potrzebne typu), inicjalizuje się połączenie z serverem, oraz odpala się główne okno aplikacji - tzw. `Shella`.
+Dlatego też musimy odchudzić plik `App.xaml.cs` i zostawić w nim jedynie konstruktor wraz z wywołaniem funkcji `InitializeComponents`
 
 ```csharp
 public partial class App : Application
@@ -35,7 +40,10 @@ public partial class App : Application
 }
 ```
 
-Zacznijmy od utworzenia nowego projektu typu `SilverlightApplication`, do którego dodajemy referencje do dll-ek `Cliburna`. Możemy to zrobić poprzez `NuGetta` (niestety u mnie one nie działały :D), jak również możemy je ściągnąć z oficjalnej strony [projektu](http://caliburnmicro.codeplex.com/releases/view/81466). Następnie stwórzmy główne okno aplikacji(wspomnianego wcześniej `Shella`) oraz jego `viewmodel`. W tym celu dodajemy do projektu `Silverlight User Control` o nazwie `ShellView`
+Zacznijmy od utworzenia nowego projektu typu `SilverlightApplication`, do którego dodajemy referencje do dll-ek `Cliburna`.
+Możemy to zrobić poprzez `NuGetta` (niestety u mnie one nie działały :D), jak również możemy je ściągnąć z oficjalnej strony [projektu](http://caliburnmicro.codeplex.com/releases/view/81466).
+Następnie stwórzmy główne okno aplikacji(wspomnianego wcześniej `Shella`) oraz jego `viewmodel`.
+W tym celu dodajemy do projektu `Silverlight User Control` o nazwie `ShellView`
 
 [![ShellView](images/ShellView.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/05/tworzenie-bootstrappera-aplikacji-przy-uzyciu-caliburnmicro/ShellView.jpg)
 
@@ -72,7 +80,8 @@ namespace Client.Silverlight
 ```
 
 Klasa `Bootstrapper` jest to klasa dostarczona przez `CaliburnMicro`, generyczny parametr `T` określa nam `viewmodel` na podstawie którego framework będzie wyszukiwał odpowiedni widok `shella` ze swojego wbudowanego kontenera `IOC` (`Caliburn` podczas uruchomienia aplikacji rejestruje dostępne typu w kontenerze).
-Zgodnie z domyślną konwencją, `CaliburnMicro` jako główne okno aplikacji ustawi widok, który nazywać się będzie `ShellView`. W celu odpalenia naszego `bootstrappera` musimy jeszcze umieścić go w zasobach aplikacji.
+Zgodnie z domyślną konwencją, `CaliburnMicro` jako główne okno aplikacji ustawi widok, który nazywać się będzie `ShellView`.
+W celu odpalenia naszego `bootstrappera` musimy jeszcze umieścić go w zasobach aplikacji.
 Zmodyfikujmy zatem plik `App.xaml` aby wyglądał w następujący sposób
 
 ```xml
@@ -138,8 +147,8 @@ Zatem funkcja `Configure` powinna od teraz wyglądać tak
 ```csharp
 protected override void Configure()
 {
-    IOCContainer.Bind<ShellView,ShellView>();
-    IOCContainer.Bind<ShellViewModel,ShellViewModel>();
+    IOCContainer.Bind<ShellView, ShellView>();
+    IOCContainer.Bind<ShellViewModel, ShellViewModel>();
 }
 ```
 
@@ -161,12 +170,14 @@ Od tej pory, za każdym razem gdy użyjemy mechanizmów `Caliburna` do bindowani
 
 ### 2.2 Własna konwencja wyszukiwania widoków
 
-W przedstawionym powyżej przykładzie bootstrappera, nasz bootstrapper korzystał z domyślnej konwencji rozwiązywania widoków na podstawie viewmodeli (do `ShellViewModel` został dopasowany widok `ShellView`). Czasem jednak konwencja ta, nie pasuje do konwencji przyjętej w danym projekcie. Sam biorę udział w projekcie, w którym widoki w kontenerze są rejestrowane następujący sposób
+W przedstawionym powyżej przykładzie bootstrappera, nasz bootstrapper korzystał z domyślnej konwencji rozwiązywania widoków na podstawie viewmodeli (do `ShellViewModel` został dopasowany widok `ShellView`).
+Czasem jednak konwencja ta, nie pasuje do konwencji przyjętej w danym projekcie.
+Sam biorę udział w projekcie, w którym widoki w kontenerze są rejestrowane następujący sposób
 ```csharp
-IOCContainer.Bind<IView<ViewModel>,View>
+IOCContainer.Bind<IView<ViewModel>, View>
 ```
 
-Czy zatem oznacza to, że nie mogę korzystać już mechanizmów `Caliburna` i musze zrezygnować chociażby z bootstrappera? Oczywiście,że nie.
+Czy zatem oznacza to, że nie mogę korzystać już mechanizmów `Caliburna` i musze zrezygnować chociażby z bootstrappera? Oczywiście, że nie.
 Framework dostarcza nam możliwość zdefiniowania własnej konwencji wyszukiwania widoków na podstawie viewmodeli.
 W celu zastąpienia domyślnej konwencji musimy podpiąć się pod propercję `LocateForModelType` znajdującą się w klasie `ViewLocator` i zdefiniować własną funkcję wyszukującą widok na podstawie viewmodelu.
 W moim przypadku wygląda to w następujący sposób
@@ -189,7 +200,8 @@ Po odnalezieniu typu widoku, wywołujemy funkcję `ViewLocator.GetOrCreateViewTy
 
 ### 3. Bootstrapper - Windows Phone
 
-W przypadku bootstrappera dla `Windows Phona` sytuacja wygląda odrobinę inaczej. W celu utworzenia własnego bootstrappera musimy rozszerzyć klasę `PhoneBootstrapper`.
+W przypadku bootstrappera dla `Windows Phona` sytuacja wygląda odrobinę inaczej.
+W celu utworzenia własnego bootstrappera musimy rozszerzyć klasę `PhoneBootstrapper`.
 Utwórzmy zatem nowy projekt typu `Windows Phone Application`, oraz dodajmy do niego nową kontrolkę typu `Windows Phone Portrait Page`.
 
 [![ShellViewPortrait](images/ShellViewPortrait.jpg)]()

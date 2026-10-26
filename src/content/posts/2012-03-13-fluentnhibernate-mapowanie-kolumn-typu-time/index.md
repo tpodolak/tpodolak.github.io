@@ -51,7 +51,8 @@ Niestety ku mojemu zaskoczeniu próbując zapisać do bazy obiekt typu `Appointm
 
 [![Exception](images/Exception-1024x358.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/03/fluentnhibernate-mapowanie-kolumn-typu-time/Exception.jpg)
 
-Mówiąc szczerze wyjątek ten niewiele mi powiedział, zwłaszcza, że zapytanie wygenerowane przez `NHibernata` (przechwycone w `NHibernateProfilerze`) wyglądało jak najbardziej poprawnie. Jednakże zapytanie przechwycone przez `SqlProfilera` wyglądało w następujący sposób
+Mówiąc szczerze wyjątek ten niewiele mi powiedział, zwłaszcza, że zapytanie wygenerowane przez `NHibernata` (przechwycone w `NHibernateProfilerze`) wyglądało jak najbardziej poprawnie.
+Jednakże zapytanie przechwycone przez `SqlProfilera` wyglądało w następujący sposób
 
 ```sql
 exec sp_executesql N'INSERT INTO [Appointment] (Name,StartDate,Duration) VALUES (@p0,@p1,@p2); 
