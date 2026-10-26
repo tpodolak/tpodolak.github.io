@@ -11,13 +11,16 @@ tags:
 
 ### 1\. Introduction
 
-[Boxstarter](http://boxstarter.org/) is a great tool for configuring your machine without any user interaction. I've been using it for a while now, however recently I've noticed that for no apparent reason it wasn't able to finish the execution of provisioning script as it stuck in infinite reboot loop. Is was quite frustrating for me, that is why I've decided to investigate the problem. Here are my findings.
+[Boxstarter](http://boxstarter.org/) is a great tool for configuring your machine without any user interaction.
+I've been using it for a while now, however recently I've noticed that for no apparent reason it wasn't able to finish the execution of provisioning script as it stuck in infinite reboot loop.
+Is was quite frustrating for me, that is why I've decided to investigate the problem. Here are my findings.
 
 ### 2\. Detecting pending reboots
 
-If you dive into `Boxstarter` source code you will notice that script responsible for checking if reboot is necessary uses [Get-PendingReboot](https://github.com/mwrock/boxstarter/blob/master/Boxstarter.Bootstrapper/Get-PendingReboot.ps1) cmdlet. By default `Boxstarter` doesn’t export it, so if you want to see what it does you have to add following line in your `Boxstarer` script
+If you dive into `Boxstarter` source code you will notice that script responsible for checking if reboot is necessary uses [Get-PendingReboot](https://github.com/mwrock/boxstarter/blob/master/Boxstarter.Bootstrapper/Get-PendingReboot.ps1) cmdlet.
+By default `Boxstarter` doesn’t export it, so if you want to see what it does you have to add following line in your `Boxstarer` script
 
-```powershell frame=none
+```powershell frame=none showLineNumbers=false
 Import-Module (Join-Path $Boxstarter.BaseDir Boxstarter.Bootstrapper\Get-PendingReboot.ps1) -global -DisableNameChecking
 
 ```
@@ -56,7 +59,6 @@ function Clear-Known-Pending-Renames($ignoredRenames){
         Write-BoxstarterMessage "Updated pending reboot $(Get-PendingReboot | Out-String)"
     }
 }
-
 ```
 
 As you can see I am taking current value of `PendingFileRenameOperations` and remove the entries which I know that will stay there forever. Calling that function as the very first step of my installation script solved the problem and I was able to successfully restore my machine from `Boxstarter` script

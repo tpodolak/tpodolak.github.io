@@ -11,14 +11,20 @@ tags:
 
 ### 1\. Introduction
 
-A while ago I wrote an [article](//tpodolak.com/blog/2016/07/05/nlog-tracking-flow-of-requests-using-mappeddiagnosticslogicalcontext/) about using `MappedDiagnosticsLogicalContext` for tracking request flow in your application. As we are moving our project to `ASP.NET Core`, I wanted to keep that functionality in place. Unfortunately, `MDLC` layout renderer is not available in that framework anymore(when targeting `.NET Core`). Luckily, there are two other renderers which can be used as a replacement:
+A while ago I wrote an [article](//tpodolak.com/blog/2016/07/05/nlog-tracking-flow-of-requests-using-mappeddiagnosticslogicalcontext/) about using `MappedDiagnosticsLogicalContext` for tracking request flow in your application.
+As we are moving our project to `ASP.NET Core`, I wanted to keep that functionality in place.
+Unfortunately, `MDLC` layout renderer is not available in that framework anymore(when targeting `.NET Core`).
+Luckily, there are two other renderers which can be used as a replacement:
 
 - `aspnet-traceidentifier`
 - `aspnet-item`
 
 ### 2\. Configuring NLog
 
-Before I dig into details of layout renderers mentioned above, we have to configure `ASP.NET Core` to use `NLog` as a logger. First of all, we need to grab `NLog.Web.AspNetCore` `NuGet` package. Once the package is installed we have to manually add `NLog.config` to the project (the file won't be added automatically by `NuGet` installer). The next step is to configure `NLog` with our config, then configure `NLogWeb` and finally register `NLog` in `LoggingFactory`. All of these steps should be done in `Startup` class.
+Before I dig into details of layout renderers mentioned above, we have to configure `ASP.NET Core` to use `NLog` as a logger.
+First of all, we need to grab `NLog.Web.AspNetCore` `NuGet` package. Once the package is installed we have to manually add `NLog.config` to the project (the file won't be added automatically by `NuGet` installer).
+The next step is to configure `NLog` with our config, then configure `NLogWeb` and finally register `NLog` in `LoggingFactory`.
+All of these steps should be done in `Startup` class.
 
 ```csharp
 public class Startup
@@ -39,10 +45,10 @@ public class Startup
         // rest of the code omitted for brevity
     }
 }	
-
 ```
 
-The final step required for `NLog` to work is to register `HttpContextAccessor` in `IoC` container of your choice. If you use the build one, you can do it like that
+The final step required for `NLog` to work is to register `HttpContextAccessor` in `IoC` container of your choice.
+If you use the build one, you can do it like that
 
 ```csharp
 public class Startup
@@ -50,16 +56,16 @@ public class Startup
     // rest of the code omitted for brevity
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddSingleton();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     }
     // rest of the code omitted for brevity
 }
-
 ```
 
 ### 3\. Using aspnet-traceidentifier renderer
 
-`Aspnet-traceidentifier` layout renderer allows you to obtain value of `TraceIdentifier` property from current `HttpContext`. `TraceIdentifier` is basically unique id which identifies the request. The renderer can be used as follows
+`Aspnet-traceidentifier` layout renderer allows you to obtain value of `TraceIdentifier` property from current `HttpContext`.
+`TraceIdentifier` is basically unique id which identifies the request. The renderer can be used as follows
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 	<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
@@ -79,7 +85,6 @@ public class Startup
 	    <logger name="*" minlevel="Debug" writeTo="File" />
 	  </rules>
 </nlog>
-
 ```
 
 From now on (without any additional configuration) every log entry logged (once `HttpContext` is created), will contain `TraceIdentifier`.
@@ -107,15 +112,17 @@ TimeStamp=2017-02-15 23:10:52.3672 Level=DEBUG TraceId= Message=Connection id "0
 
 ### 4\. Using aspnet-item renderer
 
-If for some reasons we don’t like to use `TraceIdentifier` as our CorrelationId, we can leverage `aspnet-item` renderer, which basically allows you to read data from `HttpContext.Items` collection. However in that case, we are responsible for providing and storing unique identifier of request in HttpContext.Items. Fortunately it is pretty straightforward to do with custom middleware.
+If for some reasons we don’t like to use `TraceIdentifier` as our CorrelationId, we can leverage `aspnet-item` renderer, which basically allows you to read data from `HttpContext.Items` collection.
+However in that case, we are responsible for providing and storing unique identifier of request in `HttpContext.Items`.
+Fortunately it is pretty straightforward to do with custom middleware.
 
 ```csharp
 public class LoggingMiddleware
 {
-    private readonly ILogger logger;
+    private readonly ILogger<LoggingMiddleware> logger;
     private readonly RequestDelegate next;
 	
-    public LoggingMiddleware(ILogger logger, RequestDelegate next)
+    public LoggingMiddleware(ILogger<LoggingMiddleware> logger, RequestDelegate next)
     {
         this.logger = logger;
         this.next = next;
@@ -131,7 +138,6 @@ public class LoggingMiddleware
         logger.LogInformation($"Request completed with status code: {context.Response.StatusCode} ");
     }
 }
-
 ```
 
 Of course we have to also use this middleware in our application so we have to add following line
@@ -197,8 +203,8 @@ namespace Microsoft.AspNetCore.Http
 {
     public class HttpContextAccessor : IHttpContextAccessor
     {
-        private AsyncLocal<HttpContext> _httpContextCurrent = new AsyncLocal<HttpContext>();	
-
+        private AsyncLocal<HttpContext> _httpContextCurrent = new AsyncLocal<HttpContext>();
+	
         public HttpContext HttpContext
         {
             get
@@ -211,8 +217,7 @@ namespace Microsoft.AspNetCore.Http
             }
         }
     }
-}    
-
+}
 ```
 
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCoreLoggingWithCorrelationId)

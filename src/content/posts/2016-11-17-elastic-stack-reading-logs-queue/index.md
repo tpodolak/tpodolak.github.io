@@ -11,13 +11,16 @@ tags:
 
 ### 1\. Introduction
 
-In my previous post, I've shown how to configure `Logstash` to parse logs from files. This is pretty useful however if your application is deployed on multiple servers, you usually log to some kind of central log storage - in my case to queue, `RabbitMQ` to be more specific. In this post, I will show how to configure `Logstash` so it reads the logs from that queue.
+In my previous post, I've shown how to configure `Logstash` to parse logs from files. This is pretty useful however if your application is deployed on multiple servers, you usually log to some kind of central log storage - in my case to queue, `RabbitMQ` to be more specific.
+In this post, I will show how to configure `Logstash` so it reads the logs from that queue.
 
 ### 2\. Preparing queue
 
-Before we move to `Logstash` configuration, first of all, we have to prepare `RabbitMQ` test instance. If you don't have `RabbitMQ` yet, go to [this](https://www.rabbitmq.com/download.html) website and install the queue. Once installation is done, go to the installation folder (`C:\\Program Files\\RabbitMQ Server\\rabbitmq\server-3.6.5\\sbin` in my case) and run in console
+Before we move to `Logstash` configuration, first of all, we have to prepare `RabbitMQ` test instance.
+If you don't have `RabbitMQ` yet, go to [this](https://www.rabbitmq.com/download.html) website and install the queue.
+Once installation is done, go to the installation folder (`C:\Program Files\RabbitMQ Server\rabbitmq\server-3.6.5\sbin` in my case) and run in console
 
-```bash frame=none
+```bash frame=none showLineNumbers=false
 rabbitmq-plugins.bat enable rabbitmq_management
 
 ```
@@ -53,11 +56,14 @@ input {
 
 ```
 
-As you can see we will be consuming messages from `MyAppLogginQueue` which is deployed on `localhost`. For `password` and `user` properties use your own credentials. That is basically it, so now it is time to see if everything is working.
+As you can see we will be consuming messages from `MyAppLogginQueue` which is deployed on `localhost`.
+For `password` and `user` properties use your own credentials. That is basically it, so now it is time to see if everything is working.
 
 ### 4\. Testing coniguration
 
-In order to test the configuration you have to run the `Elasticsearch`, `Kibana` and use new config for `Logstash`. I've shown how to do it in one of my [recent post](http://tpodolak.com/blog/2016/11/02/getting-started-elastic-stack/) . For sending messages to the queue I will just use `RabbitMQ` management website `API`. The `API` exposes
+In order to test the configuration you have to run the `Elasticsearch`, `Kibana` and use new config for `Logstash`.
+I've shown how to do it in one of my [recent post](http://tpodolak.com/blog/2016/11/02/getting-started-elastic-stack/).
+For sending messages to the queue I will just use `RabbitMQ` management website `API`. The `API` exposes
 
 ```text
 api/exchanges/%2F/{exchange_name}/publish
@@ -86,7 +92,7 @@ endpoint accepting `POST` verbs which can be used for publishing messages to giv
 
 and I will be sending it to
 
-```text
+```text showLineNumbers=false
 http://localhost:15672/api/exchanges/%2F/logger/publish
 
 ```
