@@ -11,6 +11,7 @@ import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
+import ShareLinks from "../../components/ShareLinks.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 import {render} from "astro:content"
@@ -25,6 +26,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry)
+const postUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 
 const { remarkPluginFrontmatter } = await render(entry)
 
@@ -108,6 +110,8 @@ const jsonLd = {
             </Markdown>
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.id} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
+
+            <ShareLinks postTitle={entry.data.title} postUrl={postUrl}  />
 
         </div>
     </div>

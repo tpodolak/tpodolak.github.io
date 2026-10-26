@@ -1,0 +1,77 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	postTitle: string;
+	postUrl: string;
+}
+
+const { postTitle, postUrl } = Astro.props;
+const encodedUrl = encodeURIComponent(postUrl);
+const encodedTitle = encodeURIComponent(postTitle);
+
+const shareLinks = [
+	{
+		name: "X",
+		label: "Share this post on X",
+		external: true,
+		icon: "fa6-brands:x-twitter",
+		href: `https://x.com/intent/post?url=${encodedUrl}&text=${encodedTitle}`,
+	},
+	{
+		name: "Bluesky",
+		label: "Share this post on Bluesky",
+		external: true,
+		icon: "fa6-brands:bluesky",
+		href: `https://bsky.app/intent/compose?text=${encodeURIComponent(`${postTitle} ${postUrl}`)}`,
+	},
+	{
+		name: "Facebook",
+		label: "Share this post on Facebook",
+		external: true,
+		icon: "fa6-brands:facebook",
+		href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+	},
+	{
+		name: "WhatsApp",
+		label: "Share this post via WhatsApp",
+		external: true,
+		icon: "fa6-brands:whatsapp",
+		href: `https://wa.me/?text=${encodeURIComponent(`${postTitle} ${postUrl}`)}`,
+	},
+	{
+		name: "Telegram",
+		label: "Share this post via Telegram",
+		external: true,
+		icon: "fa6-brands:telegram",
+		href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`,
+	},
+	{
+		name: "Email",
+		label: "Share this post via email",
+		icon: "fa6-solid:envelope",
+		href: `mailto:?subject=${encodedTitle}&body=${encodeURIComponent(`${postTitle}\n\n${postUrl}`)}`,
+		external: false,
+	}
+];
+---
+
+<section aria-label="Share this post" class="mt-8 border-t border-[var(--line-divider)] pt-5 onload-animation">
+	<div class="flex justify-center">
+		<div class="flex flex-wrap items-center justify-center gap-2">
+			{shareLinks.map((social) => (
+				<a
+					href={social.href}
+					title={social.label}
+					aria-label={social.label}
+					target={social.external === false ? undefined : "_blank"}
+					rel={social.external === false ? undefined : "noopener noreferrer"}
+					class="flex size-9 items-center justify-center rounded-lg border border-black/10 text-black/60 transition hover:border-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] hover:text-[var(--primary)] dark:border-white/10 dark:text-white/60 dark:hover:text-[var(--primary)]"
+				>
+					<Icon name={social.icon} class="text-lg" />
+					<span class="sr-only">{social.name}</span>
+				</a>
+			))}
+		</div>
+	</div>
+</section>
