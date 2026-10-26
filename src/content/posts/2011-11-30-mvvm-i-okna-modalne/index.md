@@ -116,9 +116,9 @@ Do pokazywania widoków(jako okien) z poziomu `ViewModelu` posłużmy się podob
 Zasada działania klasy, która stworzymy będzie taka sama, jednakże będziemy musieli odrobinę poszerzyć jej funkcjonalność.
 Po pierwsze tak jak poprzednio stwórzmy odpowiedni interfejs - `IModalWindowService`. 
 
-> [!WARNING]
-> Przykład `ModalWindowServicu` zostanie zaprezentowany dla `Silverlight-a`, gdyż okna modalne w `silverlighcie` to tak naprawdę okna semi-modalne. Główny wątek się nie zatrzymuje, jednakże użytkownik nie ma możliwości interakcji z oknami będącymi pod aktualnie widocznym oknem. 
-
+:::warning[UWAGA]
+Przykład `ModalWindowServicu` zostanie zaprezentowany dla `Silverlight-a`, gdyż okna modalne w `silverlighcie` to tak naprawdę okna semi-modalne. Główny wątek się nie zatrzymuje, jednakże użytkownik nie ma możliwości interakcji z oknami będącymi pod aktualnie widocznym oknem. 
+:::
 
 ```csharp
 public interface IModalDialogService

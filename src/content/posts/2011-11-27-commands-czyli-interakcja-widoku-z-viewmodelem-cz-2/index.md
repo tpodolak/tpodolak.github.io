@@ -15,17 +15,17 @@ tags:
   - "wpf"
 ---
 
-Tak jak wspomniałem w poprzednim wpisie, tym razem zajmiemy się tworzeniem własnej klasy implantującej interfejs ICommand .
+Tak jak wspomniałem w poprzednim wpisie, tym razem zajmiemy się tworzeniem własnej klasy implantującej interfejs `ICommand`.
 
-### 1\. Implementacja interfejsu ICommand - WPF
+### 1\. Implementacja interfejsu `ICommand` - `WPF`
 
-Klasa implementująca ICommand może wyglądać w następujący sposób
+Klasa implementująca `ICommand` może wyglądać w następujący sposób
 
 ```csharp
 public class DelegateCommand : ICommand
 {
-    private Action execute;
-    private Func canExecute;
+    private Action<object> execute;
+    private Func<object, bool> canExecute;
     
     public event EventHandler CanExecuteChanged
     {
@@ -39,7 +39,7 @@ public class DelegateCommand : ICommand
         }
     }
     
-    public DelegateCommand(Action execute, Func canExecute)
+    public DelegateCommand(Action<object> execute, Func<object, bool> canExecute)
     {
         this.execute = execute;
         this.canExecute = canExecute;
@@ -57,8 +57,13 @@ public class DelegateCommand : ICommand
         execute((object)parameter);
     }
 }
+```
 
-Klasa DelegateCommand przyjmuje w konstruktorze dwa parametry - delegaty do funkcji. Pierwszy z nich jest to delegat do funkcji, która ma się wykonać, gdy komenda może zostać wykonana.Drugi natomiast jest to delegat do funkcji, która sprawdza czy dana komenda może zostać wykonana.Ważnym elementem jest tutaj następujący kawałek kodu :
+Klasa `DelegateCommand` przyjmuje w konstruktorze dwa parametry - delegaty do funkcji. Pierwszy z nich jest to delegat do funkcji, która ma się wykonać, gdy komenda może zostać wykonana.
+Drugi natomiast jest to delegat do funkcji, która sprawdza czy dana komenda może zostać wykonana.
+Ważnym elementem jest tutaj następujący kawałek kodu:
+
+```csharp
 public event EventHandler CanExecuteChanged
 {
     add
@@ -70,36 +75,44 @@ public event EventHandler CanExecuteChanged
         CommandManager.RequerySuggested -= value;
     }
 }
+```
 
-który podłącza naszą klasę do WPF-owego systemu komend.
+który podłącza naszą klasę do `WPF-owego` systemu komend.
+
 Teraz wystarczy w ViewModelu stworzyć obiekt typu DelegateCommand przekazać do niego odpowiednie funkcje, a następnie zbindować go do widoku. Może to wyglądać w następujący sposób:
 
-    ViewModel
-public ICommand AddCommand { get; set;}
+- `ViewModel`
+    ```csharp
+    public ICommand AddCommand { get; set;}
 
-public WatchListViewModel()
-{
-    AddCommand = new DelegateCommand(val => Add(), val => CanAdd());
-}
+    public WatchListViewModel()
+    {
+        AddCommand = new DelegateCommand(val => Add(), val => CanAdd());
+    }
+    ```
 
-    Widok (XAML)
+- Widok (`XAML`)
+    ```xml
+    <Button Command="{Binding AddCommand}"/>
+    ```
 
-2. Implementacja interfejsu ICommand Silverlight
-Przedstawiony powyżej przykład skompiluje się jedynie w aplikacji WPF-owej. Silverlight niestety nie posiada CommandManagera, dlatego też gdy chcemy używać komend właśnie w tej technologii musimy zmodyfikować nasz kod na następujący:
+### 2. Implementacja interfejsu `ICommand` `Silverlight`
+Przedstawiony powyżej przykład skompiluje się jedynie w aplikacji `WPF-owej`. `Silverlight` niestety nie posiada `CommandManagera`, dlatego też gdy chcemy używać komend właśnie w tej technologii musimy zmodyfikować nasz kod na następujący:
+```csharp
 public class DelegateCommand : ICommand
 {
     public event EventHandler CanExecuteChanged;
-    private Action execute;
-    private Func canExecute;
+    private Action<object> execute;
+    private Func<object, bool> canExecute;
     private bool previousState;
     
-    public DelegateCommand(Action execute, Func canExecute)
+    public DelegateCommand(Action<object> execute, Func<object, bool> canExecute)
     {
         this.execute = execute;
         this.canExecute = canExecute;
     }
     
-    public DelegateCommand(Action execute)
+    public DelegateCommand(Action<object> execute)
     {
         this.execute = execute;
     }
@@ -130,19 +143,34 @@ public class DelegateCommand : ICommand
             CanExecuteChanged(this, EventArgs.Empty);
     }
 }
+```
 
 Jak widać w funkcji
-public bool CanExecute(object parameter)
 
-sami musimy zadbać o wywołanie zdarzenia
+```csharp
+public bool CanExecute(object parameter)
+```
+
+sami musimy zadbać o wywołanie zdarzenie
+
+```csharp
 public event EventHandler CanExecuteChanged;
 
-Ponadto dopisana została funkcja
+```
+Ponadto dopisana została funkcja 
+
+```csharp
 public void RaiseCanExecute()
+```
 
 funkcję tą musimy wywoływać zawsze gdy zmieni się jakaś właściwość, która ma mieć wpływ na stan przycisku zbindowanego do naszej komendy.
-3. Przykład
-Załóżmy,że na widoku mamy przycisk edytuj, który powinien być aktywny tylko i wyłącznie wtedy, gdy zaznaczono jakiś element na gridzie. Przycisk ten jest zbindowany do komendy EditCommand. Jak już wcześniej wspomniano, z powodu braku w Silverlighcie CommandManagera sami musimy wywołać zdarzenie informujące o potrzebie zmiany stanu przycisku. Dlatego też, w ViewModelu została stworzona właściwość SelectedItem
+
+### 3. Przykład
+Załóżmy, że na widoku mamy przycisk edytuj, który powinien być aktywny tylko i wyłącznie wtedy, gdy zaznaczono jakiś element na gridzie.
+Przycisk ten jest zbindowany do komendy `EditCommand`. Jak już wcześniej wspomniano, z powodu braku w `Silverlighcie` `CommandManagera` sami musimy wywołać zdarzenie informujące o potrzebie zmiany stanu przycisku.
+Dlatego też, w `ViewModelu` została stworzona właściwość `SelectedItem`
+
+```csharp
 public Department SelectedItem
 {
     get { return selectedItem; }
@@ -153,12 +181,15 @@ public Department SelectedItem
         EditCommand.RaiseCanExecute();
     }
 }
-
-która reaguje na zmiany zaznaczenia na gridzie. W chwili, gdy zaznaczenie się zmienia, wywoływany jest seter z tej właściwości, w którym to wywołujemy funkcję EditCommand.RaiseCanExecute(). Dzięki czemu informujemy kontrolkę o ewentualnej potrzebie zmiany jej stanu.
-4. Podsumowanie
-Komendy w bardzo prosty i wygodny sposób pozwalają nam wywoływać metody bezpośrednio z ViewModelu. Niestety mają one również swoje ograniczenia:
-
-    reagują jedynie na zdarzenie Click,
-    można je wykorzystać jedynie na kontrolkach dziedziczących po klasie ButtonBase oraz kontrolkach typu MenuItem
-
 ```
+
+która reaguje na zmiany zaznaczenia na gridzie.
+W chwili, gdy zaznaczenie się zmienia, wywoływany jest seter z tej właściwości, w którym to wywołujemy funkcję `EditCommand.RaiseCanExecute`.
+Dzięki czemu informujemy kontrolkę o ewentualnej potrzebie zmiany jej stanu.
+
+### 4. Podsumowanie
+Komendy w bardzo prosty i wygodny sposób pozwalają nam wywoływać metody bezpośrednio z `ViewModelu`. Niestety mają one również swoje ograniczenia:
+
+- reagują jedynie na zdarzenie `Click`,
+- można je wykorzystać jedynie na kontrolkach dziedziczących po klasie `ButtonBase` oraz kontrolkach typu `MenuItem`
+

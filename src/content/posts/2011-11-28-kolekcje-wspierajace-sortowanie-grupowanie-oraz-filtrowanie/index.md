@@ -13,37 +13,48 @@ tags:
 
 ### 1\. ListViewCollection (WPF)
 
-ListViewCollection jest to kolekcja wprowadzona do WPF-a, która wspiera sortowanie, grupowanie oraz filtrowanie. Kolekcję taką tworzymy w następujący sposób
+`ListViewCollection` jest to kolekcja wprowadzona do `WPF-a`, która wspiera sortowanie, grupowanie oraz filtrowanie.
+Kolekcję taką tworzymy w następujący sposób
 
 ```csharp
-List palyerList = new Player { new Player(),new Player()};
-public ListViewCollection PlayerListCollectionView {get;set;}
-ListViewCollection PlayerListCollectionView= new ListViewCollection(playerList);
-
+List<Player> palyerList = new Player { new Player(),new Player()};
+public ListViewCollection<Player> PlayerListCollectionView {get;set;}
+ListViewCollection<Player> PlayerListCollectionView= new ListViewCollection<Player>(playerList);
 ```
 
-czyli po prostu w konstruktorze przesyłamy obiekt implementujący interfejs IEnumerable **Filtrowanie** W celu przefiltrowania kolekcji wystarczy podać odpowiedni obiekt typu Predicate(czyli tak naprawdę wystarczy napisać funkcję zwracającą bool oraz przyjmującą w parametrze obiekt). Załóżmy, że chcemy pokazać na widoku jedynie tych graczy, który nazywają się "Tomek". W tym celu wystarczy, że zrobimy coś takiego:
+czyli po prostu w konstruktorze przesyłamy obiekt implementujący interfejs `IEnumerable`
+
+**Filtrowanie**
+
+W celu przefiltrowania kolekcji wystarczy podać odpowiedni obiekt typu `Predicate`(czyli tak naprawdę wystarczy napisać funkcję zwracającą `bool` oraz przyjmującą w parametrze obiekt). Załóżmy, że chcemy pokazać na widoku jedynie tych graczy, który nazywają się `Tomek`.
+W tym celu wystarczy, że zrobimy coś takiego:
 
 ```csharp
-PlayerListCollectionView.Filter = val => { return (val as Player).Name.ToLower() == “tomek”;  }
-
+PlayerListCollectionView.Filter = val => { return (val as Player).Name.ToLower() == "tomek"; }
 ```
 
-po zaaplikowaniu predicata widok zbindowany do danej listy automatycznie się odświeży. W razie czego można zawsze wymusić oświeżenie przez wywołanie funkcji
+po zaaplikowaniu predicata widok zbindowany do danej listy automatycznie się odświeży.
+W razie czego można zawsze wymusić oświeżenie przez wywołanie funkcji
 
 ```csharp
 PlayerListCollectionView.Refresh();
-
 ```
 
-**Grupowanie** Kolekcja ListViewCollection wspiera również grupowanie. W celu pogrupowania listy po jakimś elemencie wystarczy do naszej listy dorzucić tzw. group description. Odbywa się to w taki sposób:
+**Grupowanie**
+
+Kolekcja `ListViewCollection` wspiera również grupowanie.
+W celu pogrupowania listy po jakimś elemencie wystarczy do naszej listy dorzucić tzw. `group description`. Odbywa się to w taki sposób:
 
 ```csharp
 PlayerListCollectionView.GroupDescriptions.Add(new PropertyGroupDescription { PropertyName = "Name" }
-
 ```
 
-Po dodaniu PropertyGroupDescription widok automatycznie pogrupuje nam elementy po danych właściwościach. **Sortowanie** Nasza kolekcja wspiera również sortowanie. W celu posortowania wystarczy stworzyć obiekt implementujący interfjes IComparer, a następnie przypisać go do właściwości CustomSort
+Po dodaniu `PropertyGroupDescription` widok automatycznie pogrupuje nam elementy po danych właściwościach.
+
+**Sortowanie**
+
+Nasza kolekcja wspiera również sortowanie.
+W celu posortowania wystarczy stworzyć obiekt implementujący interfjes `IComparer`, a następnie przypisać go do właściwości `CustomSort`
 
 ```csharp
 public class PlayerComparer : IComparer
@@ -59,19 +70,20 @@ public class PlayerComparer : IComparer
 }
 
 PlayerListCollectionView.CustomSort = new PlayerComparer ()
-
 ```
 
 po takiej akcji widok automatycznie się odświeży i pokaże posortowane dane.
 
 ### 2\. PagedCollectionView (Silverlight)
 
-PagedCollectionView jest to uboższa wersja ListCollectionView z WPF-a. Grupowanie oraz filtrowanie dobywa się w ten sam sposób, jednakże sortowanie zostało w znaczny sposób utrudnione. Sortować możemy jedynie po właściwościach, nie możemy stworzyć własnego comparera, który zostałby użyty do wykonania operacji sortowania. Wykonanie operacji może wyglądać w następujący sposób:
+`PagedCollectionView` jest to uboższą wersja `ListCollectionView` z `WPF-a`.
+Grupowanie oraz filtrowanie dobywa się w ten sam sposób, jednakże sortowanie zostało w znaczny sposób utrudnione.
+Sortować możemy jedynie po właściwościach, nie możemy stworzyć własnego comparera, który zostałby użyty do wykonania operacji sortowania.
+Wykonanie operacji może wyglądać w następujący sposób:
 
 ```csharp
 PlayerPagedCollection.SortDescriptions.Clear();
 PlayerPagedCollection.SortDescriptions.Add(new System.ComponentModel.SortDescription("Name", ListSortDirection.Ascending));
-
 ```
 
-W tym wypadku nasza kolekcja zostanie posortowana po właściwości "Name"
+W tym wypadku nasza kolekcja zostanie posortowana po właściwości `Name`

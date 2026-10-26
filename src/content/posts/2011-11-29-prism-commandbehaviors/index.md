@@ -13,18 +13,22 @@ tags:
   - "wpf"
 ---
 
-Analizując wcześniejsze przykłady pokazujące użycie DelegateCommand można odnieść wrażenie, że mimo tego iż są one bardzo użyteczne,ich użycie jest niestety bardzo ograniczone. Jedynie niektóre komponenty WPF-a i Silverlight-a mają właściwość Command do której można zbindować nasz obiekt DelegateCommand.Ponadto właściwość ta reaguje jedynie na wybrane zahardcodowane w kontrolce zdarzenie (zdarzenie Click). Co w przypadku gdybyśmy chcieli zareagować np. na zdarzenie MouseMove za pomocą komendy? Nasz problem możemy rozwiązać poprzez:
+Analizując wcześniejsze przykłady pokazujące użycie `DelegateCommand` można odnieść wrażenie, że mimo tego iż są one bardzo użyteczne, ich użycie jest niestety bardzo ograniczone.
+Jedynie niektóre komponenty `WPF-a` i `Silverlight-a` mają właściwość `Command` do której można zbindować nasz obiekt `DelegateCommand`.
+Ponadto właściwość ta reaguje jedynie na wybrane zahardcodowane w kontrolce zdarzenie (zdarzenie `Click`).
+Co w przypadku gdybyśmy chcieli zareagować np. na zdarzenie `MouseMove` za pomocą komendy? Nasz problem możemy rozwiązać poprzez:
 
-- Interactivity
-- Interactions
-- CommandBehaviors
+- `Interactivity`
+- `Interactions`
+- `CommandBehaviors`
 
-W tym poście zostanie przedstawione rozwiązanie trzecie - CommandBehaviors
+W tym poście zostanie przedstawione rozwiązanie trzecie - `CommandBehaviors`
 
-Pierwszą rzeczą jaką należy zrobić w celu stworzenia komendy reagującej na inne zdarzenie niż Click jest stworzenie klasy dziedziczącej po CommandBehaviorBase. Załóżmy, że zrobimy komendę reagującą na zdarzenie MouseMove
+Pierwszą rzeczą jaką należy zrobić w celu stworzenia komendy reagującej na inne zdarzenie niż `Click` jest stworzenie klasy dziedziczącej po `CommandBehaviorBase`.
+Załóżmy, że zrobimy komendę reagującą na zdarzenie `MouseMove`
 
 ```csharp
-public class MouseMoveCommandBehavior : CommandBehaviorBase
+public class MouseMoveCommandBehavior : CommandBehaviorBase<Control>
 {
     private MouseOutCommandBehavior(Control control) : base(control)
     {
@@ -34,10 +38,12 @@ public class MouseMoveCommandBehavior : CommandBehaviorBase
         };
     }
 }
-
 ```
 
-Piersza część już za nami, ale pojawia się teraz pytanie jak z tego skorzystać. Żeby mieć możliwość użycia powyżej klasy wykorzytamy attached dependency property. Musimy sobie stworzyć pomocniczą statyczną klasę, w której to zarejestrujemy nasze właściwości. Zacznijmy od zarejestrowania dependency property o nazwie Command \- do tego obiektu będziemy bindowali komendy z ViewModelu (komendy reagujące na zdarzenie MouseMove)
+Piersza część już za nami, ale pojawia się teraz pytanie jak z tego skorzystać.
+Żeby mieć możliwość użycia powyżej klasy wykorzytamy attached dependency property.
+Musimy sobie stworzyć pomocniczą statyczną klasę, w której to zarejestrujemy nasze właściwości.
+Zacznijmy od zarejestrowania dependency property o nazwie `Command` \- do tego obiektu będziemy bindowali komendy z `ViewModelu` (komendy reagujące na zdarzenie `MouseMove`)
 
 ```csharp
 public static class MouseMove 
@@ -55,10 +61,10 @@ public static class MouseMove
     public static readonly DependencyProperty CommandProperty =
             DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(MouseMove), new PropertyMetadata(OnSetCustomCommandCallback));
 }
-
 ```
 
-zauważmy, że podłączyliśmy event handlera reagującego na zmianę naszej nowo stworzonej właściwości Command. Funkcja OnSetCustomCommandCallback wygląda następująco:
+zauważmy, że podłączyliśmy event handlera reagującego na zmianę naszej nowo stworzonej właściwości `Command`.
+Funkcja `OnSetCustomCommandCallback` wygląda następująco:
 
 ```csharp
 private static void OnSetCustomCommandCallback(DependencyObject dep, DependencyPropertyChangedEventArgs e)
@@ -70,10 +76,10 @@ private static void OnSetCustomCommandCallback(DependencyObject dep, DependencyP
         behavior.Command = e.NewValue as ICommand;
     }
 }
-
 ```
 
-Funkcja ta po prostu w razie potrzeby tworzy nowy obiekt typu MouseMoveCommandBehavior (gdy ktoś zbinduje komende) i dopina go do naszej kontrolki. Pomocnicza funkcja GetorCreateMouseMoveBehavior wygląda tak:
+Funkcja ta po prostu w razie potrzeby tworzy nowy obiekt typu `MouseMoveCommandBehavior` (gdy ktoś zbinduje komende) i dopina go do naszej kontrolki.
+Pomocnicza funkcja `GetorCreateMouseMoveBehavior` wygląda tak:
 
 ```csharp
 private static MouseMoveCommandBehavior GetorCreateMouseMoveBehavior(Control listBox)
@@ -87,10 +93,9 @@ private static MouseMoveCommandBehavior GetorCreateMouseMoveBehavior(Control lis
     }
     return behavior;
 }
-
 ```
 
-Obiekt rejestrowany poprzez funkcję GetorCreateMouseMoveBehavior jest dopinany do kolejnej attached property, która również została zadeklarowana w tym pliku
+Obiekt rejestrowany poprzez funkcję `GetorCreateMouseMoveBehavior` jest dopinany do kolejnej attached property, która również została zadeklarowana w tym pliku
 
 ```csharp
 public static MouseMoveCommandBehavior GetMouseMoveBehavior(DependencyObject obj)
@@ -105,10 +110,10 @@ public static void SetMouseMoveBehavior(DependencyObject obj, MouseMoveCommandBe
 
 public static readonly DependencyProperty MouseMoveBehaviorProperty =
     DependencyProperty.RegisterAttached("MouseMoveBehavior", typeof(MouseMoveCommandBehavior), typeof(MouseMove), null );
-
 ```
 
-Mając zdefiniowane wszystkie powyższe właściwości możemy już wykorzystać naszą komendę. Jednakże przydałoby się dodać jeszcze jedną właściwość (opcjonalnie), mianowicie właściwość CommandParameters
+Mając zdefiniowane wszystkie powyższe właściwości możemy już wykorzystać naszą komendę.
+Jednakże przydałoby się dodać jeszcze jedną właściwość (opcjonalnie), mianowicie właściwość `CommandParameters`
 
 ```csharp
 public static object GetCommandParametr(DependencyObject obj)
@@ -122,11 +127,11 @@ public static void SetCommandParametr(DependencyObject obj, object value)
 }
 
 public static readonly DependencyProperty CommandParametrProperty =
-    DependencyProperty.RegisterAttached("CommandParametr", typeof(object), typeof(MouseMove), new PropertyMetadata(OnSetCustomCommandParameterCallback));
-
+    DependencyProperty.RegisterAttached("CommandParametr", typeof(object), typeof(MouseMove), new PropertyMetadata(OnSetCustomCommandParameterCallback));`
 ```
 
-W tym propertisie również reagujemy na przypisnie obiektu.Handler OnSetCustomCommandParameterCallback wygląda następująco
+W tym propertisie również reagujemy na przypisnie obiektu.
+Handler `OnSetCustomCommandParameterCallback` wygląda następująco
 
 ```csharp
 private static void OnSetCustomCommandParameterCallback(DependencyObject dep,DependencyPropertyChangedEventArgs e)
@@ -138,16 +143,21 @@ private static void OnSetCustomCommandParameterCallback(DependencyObject dep,Dep
             behavior.CommandParameter = e.NewValue;
     }
 }
-
 ```
 
-Mając już zdefiniowane wszystkie niezbędne właściwości możemy użyć ich w XAML-u. Po pierwsze musimy dodać alias do namespaca gdzie znajduje się nasza statycza klasa MouseMove. W moim przypadku wygląda to następująco:
+Mając już zdefiniowane wszystkie niezbędne właściwości możemy użyć ich w `XAML-u`.
+Po pierwsze musimy dodać alias do namespaca gdzie znajduje się nasza statycza klasa `MouseMove`.
+W moim przypadku wygląda to następująco:
 
 ```csharp
 xmlns:AttachedCommands="clr-namespace:MainModule.Commands"
-
 ```
 
-Następnie bindujemy jakąś kontrolkę do naszego attached property Command. Wygląda to w następujący sposób:
+Następnie bindujemy jakąś kontrolkę do naszego attached property `Command`. Wygląda to w następujący sposób:
+```xml
+<Button Name="txtButton" Grid.Column="2" AttachedCommands:MouseMove.Command="{Binding SomeCommandFromViewModel}"></Button>
+```
 
-Od teraz za każdym razem jak najedziemy na txtButton wywoła się komenda SomeCommandFromViewModel. Podsumowując trzeba się całkiem sporo napisać żeby zmusić do działania CommandBehaviors . W następnym poście przedstawię dwa sposoby na osiągnięcie tego samego efektu mniejszym kosztem.
+Od teraz za każdym razem jak najedziemy na `txtButton` wywoła się komenda `SomeCommandFromViewModel`.
+Podsumowując trzeba się całkiem sporo napisać żeby zmusić do działania `CommandBehaviors` .
+W następnym poście przedstawię dwa sposoby na osiągnięcie tego samego efektu mniejszym kosztem.
