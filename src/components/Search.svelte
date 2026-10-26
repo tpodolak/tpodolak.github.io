@@ -158,7 +158,7 @@ $: if (initialized && keywordMobile) {
 
 <!-- search panel -->
 <div id="search-panel" class="float-panel float-panel-closed search-panel absolute
-top-20 left-4 right-4 md:top-[4.75rem] md:left-0 md:right-0 shadow-2xl rounded-2xl p-2 md:p-0.5">
+top-20 left-4 right-4 md:!top-[4.75rem] md:left-0 md:right-0 shadow-2xl rounded-2xl p-2 md:p-0.5">
 
     <div id="search-bar-inside" class="flex relative transition-all items-center h-11 rounded-xl
       bg-black/[0.04] hover:bg-black/[0.06] focus-within:bg-black/[0.06]
