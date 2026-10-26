@@ -20,11 +20,12 @@ public Flight GetFirstPossibleFlight(Availability availability)
     // more magic in here
      return availability.Flights.First();
 }
-
 ```
 
 At a glance everything seems to be ok, we make sure that `Flight` collection is not accessed if it is `null`, however simple test shows that this method has a bug.
+
 ```csharp
+[Fact]
 public void GetFirstPossibleFlight_ReturnsNull_WhenFlightsCollectionIsEmpty()
 {
     var availability = new Availability
@@ -33,22 +34,23 @@ public void GetFirstPossibleFlight_ReturnsNull_WhenFlightsCollectionIsEmpty()
     };
             
     var subject = new AvailabilityScanner();
- 
+
     var result = subject.GetFirstPossibleFlight(availability);
- 
+
     result.Should().BeNull();
 }
 ```
 
 [![debugger](images/FailedTest.png)](http://tpodolak.com/blog/wp-content/uploads/2011/12/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-2/debugger.jpg)
 
-We protected the code from `NullReferenceException` in if statement, however we failed on the return statement. This happens because our original code is rewritten by compiler as [follows](https://sharplab.io/#v2:CYLg1APgAgDABFAjAFgNwFgBQsGIHQAyAlgHYCOG2AzAgExwCCAbgIZEA2LARh0QC4BPAMoBjFiRIBTAE5YA3ljhKENAGLsiAcwAWfOAHFJfVUWkBnPgAUA9mbNEu7Seq26AFMzaceGwXBasHNy8ggCUisoKmMoxcEQAZnBuAV7BvgJ4Ljp8ZgD8eAwkAm6hcAC8ZXDxLOxmkuHRsUpRTU1QAOxwJACu7OyUrXAAvhGDSqNjAPSTcAC21tKScyyaRCJxJHDaMpITMR3+gd4hGVm6ZpmmFiUDyiOY91hQNFD0Z3zyWI/UdIxHafwBJ9GkpnnBiBYADzvAB8cHeZjgcjgmiMqDgdT46PuQyAA=)
+We protected the code from `NullReferenceException` in if statement, however we failed on the return statement.
+This happens because our original code is rewritten by compiler as [follows](https://sharplab.io/#v2:CYLg1APgAgDABFAjAFgNwFgBQsGIHQAyAlgHYCOG2AzAgExwCCAbgIZEA2LARh0QC4BPAMoBjFiRIBTAE5YA3ljhKENAGLsiAcwAWfOAHFJfVUWkBnPgAUA9mbNEu7Seq26AFMzaceGwXBasHNy8ggCUisoKmMoxcEQAZnBuAV7BvgJ4Ljp8ZgD8eAwkAm6hcAC8ZXDxLOxmkuHRsUpRTU1QAOxwJACu7OyUrXAAvhGDSqNjAPSTcAC21tKScyyaRCJxJHDaMpITMR3+gd4hGVm6ZpmmFiUDyiOY91hQNFD0Z3zyWI/UdIxHafwBJ9GkpnnBiBYADzvAB8cHeZjgcjgmiMqDgdT46PuQyAA=)
 
 ```csharp
 public Flight GetFirstPossibleFlight(Availability availability)
 {
-    List expr_07 = availability.Flights;
-    bool flag = expr`07 != null && !expr`07.Any();
+    List<Flight> expr_07 = availability.Flights;
+    bool flag = expr_07 != null && !expr_07.Any<Flight>();
     Flight result;
     if (flag)
     {
@@ -56,12 +58,15 @@ public Flight GetFirstPossibleFlight(Availability availability)
     }
     else
     {
-        result = availability.Flights.First();
+        result = availability.Flights.First<Flight>();
     }
     return result;
 }
 ```
-Now it is clearly visible that we have to satisfy both of the conditions in order to return `null`. Fortunately, you still can use one-liner and have a bug-free code, the one thing which is needed is an additional null-coalescing operator in the if statement.
+
+Now it is clearly visible that we have to satisfy both of the conditions in order to return `null`.
+Fortunately, you still can use one-liner and have a bug-free code, the one thing which is needed is an additional null-coalescing operator in the if statement.
+
 ```csharp
 public Flight GetFirstPossibleFlight(Availability availability)
 {            
@@ -78,8 +83,8 @@ Now the compiler will rewrite the code in a [following way](https://sharplab.io/
 ```csharp
 public Flight GetFirstPossibleFlight(Availability availability)
 {
-    List expr_07 = availability.Flights;
-    bool flag = expr`07 == null || !expr`07.Any();
+    List<Flight> expr_07 = availability.Flights;
+    bool flag = expr_07 == null || !expr_07.Any<Flight>();
     Flight result;
     if (flag)
     {
@@ -87,7 +92,7 @@ public Flight GetFirstPossibleFlight(Availability availability)
     }
     else
     {
-        result = availability.Flights.First();
+        result = availability.Flights.First<Flight>();
     }
     return result;
 }

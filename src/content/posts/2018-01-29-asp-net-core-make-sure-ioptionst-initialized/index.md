@@ -9,7 +9,8 @@ tags:
 
 ### 1\. Introduction
 
-As most people know `IOptions<T>` is a convenient way of handling configuration options in your application. Even though I've been using it for quite some time, last week I was unpleasantly surprised by a production bug caused by wrong usage of this mechanism.
+As most people know `IOptions<T>` is a convenient way of handling configuration options in your application.
+Even though I've been using it for quite some time, last week I was unpleasantly surprised by a production bug caused by wrong usage of this mechanism.
 
 ### 2\. Problem
 
@@ -19,10 +20,10 @@ Let's say we have a simple controller which depends on two instances of `IOption
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
-    private readonly IOptions _paymentOptions;
-    private readonly IOptions _notificationOptions;
+    private readonly IOptions<PaymentOptions> _paymentOptions;
+    private readonly IOptions<NotificationOptions> _notificationOptions;
 
-    public ValuesController(IOptions paymentOptions, IOptions notificationOptions)
+    public ValuesController(IOptions<PaymentOptions> paymentOptions, IOptions<NotificationOptions> notificationOptions)
     {
         _paymentOptions = paymentOptions ?? throw new ArgumentNullException(nameof(paymentOptions));
         _notificationOptions = notificationOptions ?? throw new ArgumentNullException(nameof(notificationOptions));
@@ -30,7 +31,7 @@ public class ValuesController : Controller
 
     // GET api/values
     [HttpGet]
-    public IEnumerable Get()
+    public IEnumerable<string> Get()
     {
         var notificationOptions = _notificationOptions.Value;
         var paymentOptions = _paymentOptions.Value;
@@ -38,7 +39,6 @@ public class ValuesController : Controller
         return new string[] {"value1", "value2"};
     }
 }
-
 ```
 
 Then we add only `IOptions` in Startup class - `IOptions<PaymentOptoins>`
@@ -52,16 +52,20 @@ public class Startup
     {
         services.AddOptions();
         services.AddMvc();
-        services.Configure(Configuration.GetSection("PaymentOptions"));
+        services.Configure<PaymentOptions>(Configuration.GetSection("PaymentOptions"));
     }
       // Rest of the code omitted for brevity
 }
-
 ```
 
-Now, when we run the app and hit one of the endpoints in `ValuesController` I was expecting to get an exception, as I didn't register `IOptions<NotificationOptions>`. Surprisingly for me, the application was running normally and `IOptions<NotificationOptions>` was created with the new instance of `NotificationOptions` class(with all the properties defaulted). [![](images/NotInitialized.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/NotInitialized.png) In order to find out why it behaves like that we have to take a look how services responsible for handling `IOptions<T>` are registered in the container.
+Now, when we run the app and hit one of the endpoints in `ValuesController` I was expecting to get an exception, as I didn't register `IOptions<NotificationOptions>`.
+Surprisingly for me, the application was running normally and `IOptions<NotificationOptions>` was created with the new instance of `NotificationOptions` class(with all the properties defaulted).
 
-```csharp
+[![](images/NotInitialized.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/NotInitialized.png)
+
+In order to find out why it behaves like that we have to take a look how services responsible for handling `IOptions<T>` are registered in the container.
+
+```csharp wrap=false
 public static IServiceCollection AddOptions(this IServiceCollection services)
 {
     if (services == null)
@@ -74,28 +78,28 @@ public static IServiceCollection AddOptions(this IServiceCollection services)
     services.TryAdd(ServiceDescriptor.Singleton(typeof (IOptionsMonitorCache<>), typeof (OptionsCache<>)));
     return services;
 }
-
 ```
 
 As you can see `AddOptions` method registers open generics for (among others) `IOptions<>` which means that you don’t have to register specific types of `IOptions<T>`, however, you are responsible for its configuration with
 
 ```csharp
-services.Configure(Configuration.GetSection("Section"));
-
+services.Configure<T>(Configuration.GetSection("Section"));
 ```
 
 I was always convinced that `services.Configure` registers and configure `IOptions<T>` but apparently, I was wrong.
 
 ### 3\. Ensuring initialization
 
-As these kind of errors are rather difficult to catch(at least in case of our application) I wanted to minimize the risk of doing the same bug again. The idea was to make sure that at least one `IConfigureOptions<T>` or `IPostConfigureOptions<T>` service is registered in the container (as these are the services which are responsible for setting the values of T class). My first approach was to replace default `OptionsFactory<T>` with a custom one
+As these kind of errors are rather difficult to catch(at least in case of our application) I wanted to minimize the risk of doing the same bug again.
+The idea was to make sure that at least one `IConfigureOptions<T>` or `IPostConfigureOptions<T>` service is registered in the container (as these are the services which are responsible for setting the values of `T` class).
+My first approach was to replace default `OptionsFactory<T>` with a custom one
 
 ```csharp
-public class ValidatableOptionsFactory : OptionsFactory where TOptions : class, new()
+public class ValidatableOptionsFactory<TOptions> : OptionsFactory<TOptions> where TOptions : class, new()
 {
     private static readonly string NamespacePrefix = typeof(Program).Namespace.Split('.').First();
 
-    public ValidatableOptionsFactory(IEnumerable> setups, IEnumerable> postConfigures)
+    public ValidatableOptionsFactory(IEnumerable<IConfigureOptions<TOptions>> setups, IEnumerable<IPostConfigureOptions<TOptions>> postConfigures)
             : base(setups, postConfigures)
     {
         if (typeof(TOptions).Namespace.StartsWith(NamespacePrefix) && setups.Any() == false && postConfigures.Any() == false)
@@ -114,15 +118,19 @@ public class Startup
         services.AddOptions();
     }
 }
-
 ```
 
-This method works fine (although probably needs smarter `TOptions` filter) [![](images/ValidatableOptionsFactory.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/ValidatableOptionsFactory.png) however I got to conclusion that there is no point to do validation in a runtime, and the integration test might be a better choice. I came up with following code (I am assuming that all configuration options are stored in the same assembly, as this is convention in my project)
+This method works fine (although probably needs smarter `TOptions` filter)
 
-```csharp
+[![](images/ValidatableOptionsFactory.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/ValidatableOptionsFactory.png)
+
+however I got to conclusion that there is no point to do validation in a runtime, and the integration test might be a better choice.
+I came up with following code (I am assuming that all configuration options are stored in the same assembly, as this is convention in my project)
+
+```csharp wrap=false
 public class OptionsTests
 {
-    private readonly Lazy _webHost = new Lazy(Program.BuildWebHost(null));
+    private readonly Lazy<IWebHost> _webHost = new Lazy<IWebHost>(Program.BuildWebHost(null));
 
     // this test will fail as not every option in assembly is configured
     [Fact]
@@ -173,7 +181,11 @@ public class OptionsTests
         return IsAssignableToGenericType(baseType, genericType);
     }
 }
-
 ```
 
-Running the test shows that `NotificationOptions` was not configured [![](images/Test.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/Test.png) Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCoreMakeSureYouInitializedYourIOptionsOfT)
+Running the test shows that `NotificationOptions` was not configured
+
+
+[![](images/Test.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-make-sure-your-ioptions-is-initialized/Test.png)
+
+Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/AspNetCoreMakeSureYouInitializedYourIOptionsOfT)

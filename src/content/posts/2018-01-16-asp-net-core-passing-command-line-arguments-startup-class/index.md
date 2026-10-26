@@ -9,11 +9,14 @@ tags:
 
 ### 1\. Introduction
 
-I usually pass configuration to my web API via JSON files, but recently I needed to pass them also via command-line arguments. As the solution for `ASP.NET Core 2.x` is quite different than for `ASP.NET Core 1.x` I decided to describe both methods in here.
+I usually pass configuration to my web `API` via `JSON` files, but recently I needed to pass them also via command-line arguments.
+As the solution for `ASP.NET Core 2.x` is quite different than for `ASP.NET Core 1.x` I decided to describe both methods in here.
 
 ### 2\. ASP.NET Core 2.x
 
-For the newest version of `ASP.NET Core`, the solution is pretty straightforward as `IConfiguration` is injected by default to the `Startup` class. All we have to do is to add `CommandLineConfigurationSource` to `IConfigurationBuilder` when configuring `IWebHost`. `CommandLineConfigurationSource` is part of the `Microsoft.Extensions.Configuration.CommandLine` package and can be easily used by `AddCommandLine` extension method
+For the newest version of `ASP.NET Core`, the solution is pretty straightforward as `IConfiguration` is injected by default to the `Startup` class.
+All we have to do is to add `CommandLineConfigurationSource` to `IConfigurationBuilder` when configuring `IWebHost`.
+`CommandLineConfigurationSource` is part of the `Microsoft.Extensions.Configuration.CommandLine` package and can be easily used by `AddCommandLine` extension method
 
 ```csharp
 public class Program
@@ -35,12 +38,11 @@ public class Program
 	               .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 	         config.AddEnvironmentVariables();
 	         config.AddCommandLine(args);
-	     }).UseStartup()
+	     }).UseStartup<Startup>()
 	       .Build();
         return webHost;
     }
 }
-
 ```
 
 Now we can access our command-line arguments just like any other configuration
@@ -66,7 +68,7 @@ public class Startup
     {
         loggerFactory.AddConsole();
         loggerFactory.AddDebug();
-        applicationLifetime.ApplicationStarted.Register(() => loggerFactory.CreateLogger().LogInformation("CommandLine argument {0}: ", _configuration["usecustomschema"]));
+        applicationLifetime.ApplicationStarted.Register(() => loggerFactory.CreateLogger<Startup>().LogInformation("CommandLine argument {0}: ", _configuration["usecustomschema"]));
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -75,7 +77,6 @@ public class Startup
         app.UseMvc();
     }
 }
-
 ```
 
 [![](images/AspNetCore2CommandLineArgument-1.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-passing-command-line-arguments-to-startup-class/AspNetCore2CommandLineArgument-1.png)
@@ -94,14 +95,13 @@ public class Program
              .UseContentRoot(Directory.GetCurrentDirectory())
              UseIISIntegration()
              .ConfigureServices(serviceCollection =>
-                 serviceCollection.AddSingleton(new ConfigurationBuilder().AddCommandLine(args).Build()))
-             .UseStartup()
+                 serviceCollection.AddSingleton<IConfiguration>(new ConfigurationBuilder().AddCommandLine(args).Build()))
+             .UseStartup<Startup>()
              .Build();
 
           host.Run();
     }
 }
-
 ```
 
 Having our service registered now we can easily access `IConfiguration` object in our application
@@ -122,7 +122,7 @@ public class Startup
         loggerFactory.AddConsole();
         loggerFactory.AddDebug();
         applicationLifetime.ApplicationStarted.Register(() =>
-                loggerFactory.CreateLogger().LogInformation("CommandLine argument {0}: ", configuration["usecustomschema"]));
+                loggerFactory.CreateLogger<Startup>().LogInformation("CommandLine argument {0}: ", configuration["usecustomschema"]));
 
         if (hostingEnvironment.IsDevelopment())
         {
@@ -132,7 +132,6 @@ public class Startup
         app.UseMvc();
     }
 }
-
 ```
 
 [![](images/AspNetCoreCommandLineArgument-1.png)](//tpodolak.com/blog/wp-content/uploads/2018/01/asp-net-core-passing-command-line-arguments-to-startup-class/AspNetCoreCommandLineArgument-1.png)

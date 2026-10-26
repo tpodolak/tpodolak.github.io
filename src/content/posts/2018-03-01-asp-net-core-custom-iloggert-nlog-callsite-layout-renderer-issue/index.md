@@ -10,23 +10,25 @@ tags:
 
 ### 1\. Introduction
 
-In my current project, we use `Microsoft.Extensions.Logging.ILogger<T>` default implementation as our logging mechanism. This basically comes with the `ASP.NET Core 2.0` package and it was working fine so far. However recently we decided to switch the default implementation with a custom one, due to the fact that we wanted to have some additional logic applied for all of the logging providers.
+In my current project, we use `Microsoft.Extensions.Logging.ILogger<T>` default implementation as our logging mechanism.
+This basically comes with the `ASP.NET Core 2.0` package and it was working fine so far.
+However recently we decided to switch the default implementation with a custom one, due to the fact that we wanted to have some additional logic applied for all of the logging providers.
 
 ### 2\. Implementation
 
 The custom implementation itself is very similar to the original one, we came up with something like that
 
 ```csharp
-public class Logger : ILogger
+public class Logger<T> : ILogger<T>
 {
     private readonly ILogger _logger;
 
     public Logger(ILoggerFactory loggerFactory)
     {
-        _logger = loggerFactory.CreateLogger();
+        _logger = loggerFactory.CreateLogger<T>();
     }
 
-    public void Log(LogLevel, EventId, TState state, Exception, Func formatter)
+    public void Log<TState>(LogLevel, EventId, TState state, Exception, Func<TState, Exception, string> formatter)
     {
         string Formatter(TState innserState, Exception innerException)
         {
@@ -43,40 +45,40 @@ public class Logger : ILogger
         return _logger.IsEnabled(logLevel);
     }
 
-    public IDisposable BeginScope(TState state)
+    public IDisposable BeginScope<TState>(TState state)
     {
         return _logger.BeginScope(state);
     }
 }
-
 ```
 
 and we replaced the default logger with this code
 
 ```csharp
 services.Replace(new ServiceDescriptor(typeof(ILogger<>), typeof(Logger.Logger<>), ServiceLifetime.Singleton));
-
 ```
 
-As you can see we basically wanted to add information from custom exceptions to the message. Due to the fact that this is added in here, we don’t have to modify all of our existing logging providers.
+As you can see we basically wanted to add information from custom exceptions to the message.
+Due to the fact that this is added in here, we don’t have to modify all of our existing logging providers.
 
 ### 3\. `NLog` call site renderer issue
 
-Once we run the application all of the providers were working fine and were producing expected output apart from `NLog` provider. Originally `NLog` provider for the following code
+Once we run the application all of the providers were working fine and were producing expected output apart from `NLog` provider.
+Originally `NLog` provider for the following code
 
 ```csharp
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<ValuesController> _logger;
 
-    public ValuesController(ILogger logger)
+    public ValuesController(ILogger<ValuesController> logger)
     {
         _logger = logger;
     }
 
     [HttpGet]
-    public IEnumerable Get()
+    public IEnumerable<string> Get()
     {
         _logger.LogTrace("Get method called trace");
         _logger.LogWarning("Get method called warning");
@@ -86,7 +88,6 @@ public class ValuesController : Controller
         return new string[] {"value1", "value2"};
     }
 }
-
 ```
 
 was producing this output
@@ -109,7 +110,11 @@ TimeStamp=2018-02-28 20:17:27.5202 Callsite=AspNetCoreCustomLoggerAndNLogCallsit
 
 ```
 
-After some digging, it turned out that the issue lies in the (indirect)configuration of `NLog's` [callsite layout renderer](https://github.com/NLog/NLog/wiki/Callsite-layout-renderer). Long story short, when you add `NLog` provider to your logger providers, under the hood it adds `Microsoft.Extensions.Logging.Abstractions` assembly(among others) to something called hidden assembly collection. Once the `NLog` tries to figure out what is the caller member name, it crawls the stack trace to find a method name. If the method in current frame comes from a hidden assembly, logger skips it and continues iteration. As we changed the `Logger<T>` to our custom one, it is no longer part of `Microsoft.Extensions.Logging.Abstractions` assembly, so the `NLog` reports `Log` method from our custom logger as a caller member name.
+After some digging, it turned out that the issue lies in the (indirect)configuration of `NLog's` [callsite layout renderer](https://github.com/NLog/NLog/wiki/Callsite-layout-renderer).
+Long story short, when you add `NLog` provider to your logger providers, under the hood it adds `Microsoft.Extensions.Logging.Abstractions` assembly(among others) to something called hidden assembly collection.
+Once the `NLog` tries to figure out what is the caller member name, it crawls the stack trace to find a method name.
+If the method in current frame comes from a hidden assembly, logger skips it and continues iteration.
+As we changed the `Logger<T>` to our custom one, it is no longer part of `Microsoft.Extensions.Logging.Abstractions` assembly, so the `NLog` reports `Log` method from our custom logger as a caller member name.
 
 ### 4\. The fix
 
