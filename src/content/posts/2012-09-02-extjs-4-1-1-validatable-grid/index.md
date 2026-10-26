@@ -16,7 +16,9 @@ tags:
   - "validation"
 ---
 
-In this post I will present a simple plugin to `Ext.panel.Grid` which displays validation errors on a grid. The validation mechanism is based on the model validation - useful feature of `Extjs` framework. Let's start from creating a simple model:
+In this post I will present a simple plugin to `Ext.panel.Grid` which displays validation errors on a grid.
+The validation mechanism is based on the model validation - useful feature of `Extjs` framework.
+Let's start from creating a simple model:
 
 ```javascript
 Ext.define('CustomerModel', {
@@ -30,7 +32,13 @@ Ext.define('CustomerModel', {
 });
 ```
 
-As we can see, this model has a `validation` field where we can define a validation mechanism for every field in our model. In this example the `lastname` field is required, I use build in Extjs validator of the `presence` type. More build-in validation types might be found [here](http://www.sencha.com/learn/using-validations-and-associations-in-sencha-touch). Of course, it is possible to define custom validation types, simple example can be found on [Stackoverflow](http://stackoverflow.com/questions/7414115/how-to-add-a-custom-validation-rule-to-a-model-in-sencha-touch)Having defined model validation, let's create `ValidatableGrid`plugin. The main function of `ValidatableGrid` plugin is function called `validate` which is attached to grid component. This function looks this way;
+As we can see, this model has a `validation` field where we can define a validation mechanism for every field in our model.
+In this example the `lastname` field is required, I use build in Extjs validator of the `presence` type.
+More build-in validation types might be found [here](http://www.sencha.com/learn/using-validations-and-associations-in-sencha-touch).
+Of course, it is possible to define custom validation types, simple example can be found on [Stackoverflow](http://stackoverflow.com/questions/7414115/how-to-add-a-custom-validation-rule-to-a-model-in-sencha-touch).
+Having defined model validation, let's create `ValidatableGrid`plugin.
+The main function of `ValidatableGrid` plugin is function called `validate` which is attached to grid component.
+This function looks this way;
 
 ```javascript
 validate: function(){

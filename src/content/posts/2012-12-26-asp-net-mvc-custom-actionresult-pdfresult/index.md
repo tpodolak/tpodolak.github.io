@@ -15,7 +15,9 @@ tags:
 
 ### 1\. Introduction
 
-In the company I'm currently working for, it is a common practice to use `Devexpress` `XtraReports` to create all kind of reports. Usually these reports are embedded into html page and used along with DevexpressReportViewer. However, lately I have been asked to open a report as a `PDF` file, without putting a viewer into a html page.
+In the company I'm currently working for, it is a common practice to use `Devexpress` `XtraReports` to create all kind of reports.
+Usually these reports are embedded into html page and used along with `DevexpressReportViewer`.
+However, lately I have been asked to open a report as a `PDF` file, without putting a viewer into a html page.
 
 ### 2\. First approach
 
@@ -36,11 +38,15 @@ public void ExportToPdf()
 }
 ```
 
-In the first step I made a new instance of a devexpress report(`TestReport`), then I called a method `CreateDocument` which is responsible for creating a content of report. Having prepared the report, I could use the `ExportToPdf` function which creates a stream in a `PDF` format. In the last step, I cleared Response property and added an array of bytes into it. I also had to change `Response.ContentType` to `application/pdf` in order to inform a browser that I'm sending a `PDF` file.
+In the first step I made a new instance of a devexpress report(`TestReport`), then I called a method `CreateDocument` which is responsible for creating a content of report.
+Having prepared the report, I could use the `ExportToPdf` function which creates a stream in a `PDF` format.
+In the last step, I cleared Response property and added an array of bytes into it.
+I also had to change `Response.ContentType` to `application/pdf` in order to inform a browser that I'm sending a `PDF` file.
 
 ### 3\. Second approach - custom ActionResult
 
-The solution presented above works fine, however, I wanted to create something more reusable, that is why I decided to create a custom `ActionResult` -  `PDFActionResult`. In order to create my own `ActionResult`, I created a `PDFActionResult` class which inherits from an abstract ActionResult class.
+The solution presented above works fine, however, I wanted to create something more reusable, that is why I decided to create a custom `ActionResult` -  `PDFActionResult`.
+In order to create my own `ActionResult`, I created a `PDFActionResult` class which inherits from an abstract ActionResult class.
 
 ```csharp
 public class PDFActionResult : ActionResult
@@ -73,7 +79,8 @@ public class PDFActionResult : ActionResult
 }
 ```
 
-As you can see, all logic from the `ExportToPdf` action was transferred to the `PDFActionResult` class. Now, all you have to do to return `PDF` from `DevexpressReport` is to return the `PDFActionResult` from your controller action.
+As you can see, all logic from the `ExportToPdf` action was transferred to the `PDFActionResult` class.
+Now, all you have to do to return `PDF` from `DevexpressReport` is to return the `PDFActionResult` from your controller action.
 
 ```csharp
 public PDFActionResult ExportToPdfUsingCustomResult()

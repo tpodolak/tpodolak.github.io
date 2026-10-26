@@ -10,7 +10,13 @@ tags:
   - "crawler"
 ---
 
-An application which I'm currently developing has quite complicated authorization system. That is why, we can not use role based authorization, and basically every developer is obliged to call appropriate security check method in every controller action he or she writes. As You probably know it is quite easy to forget about that, therefore I decided to write a test which would check whether all controller's action invokes this security critical function. After hours of searching for some anchor point, I came across this [article](https://devblogs.microsoft.com/haibo_luo/system-reflection-based-ilreader.aspx) in which author creates so called "reflection based ILReader". `ILReader` is a class which allows You to iterate over IL instructions of every object of type `RuntimeMethodInfo` or `RuntimeConstructorInfo` .One of these instructions is `InlineMethodInstruction` which indicates method call. That is why, in order to get all methods which are called by given method, we have to simply select all instructions of type `InlineMethodInstruction`
+An application which I'm currently developing has quite complicated authorization system.
+That is why, we can not use role based authorization, and basically every developer is obliged to call appropriate security check method in every controller action he or she writes.
+As You probably know it is quite easy to forget about that, therefore I decided to write a test which would check whether all controller's action invokes this security critical function.
+After hours of searching for some anchor point, I came across this [article](https://devblogs.microsoft.com/haibo_luo/system-reflection-based-ilreader.aspx) in which author creates so called "reflection based ILReader".
+`ILReader` is a class which allows You to iterate over IL instructions of every object of type `RuntimeMethodInfo` or `RuntimeConstructorInfo`.
+One of these instructions is `InlineMethodInstruction` which indicates method call.
+That is why, in order to get all methods which are called by given method, we have to simply select all instructions of type `InlineMethodInstruction`
 
 ```csharp
 public static class MethodInvokerCrawler
@@ -48,7 +54,7 @@ public static class MethodInvokerCrawler
 }
 ```
 
-Please notice, that I limited recursion depth to methods from user defined namespace, otherwise we would end up iterating over .NET's native functions.
+Please notice, that I limited recursion depth to methods from user defined namespace, otherwise we would end up iterating over `.NET's` native functions.
 
 Now it is time to show some results. Here is a sample program which demonstrate possibilities of `MethodInvokerCrawler` class
 

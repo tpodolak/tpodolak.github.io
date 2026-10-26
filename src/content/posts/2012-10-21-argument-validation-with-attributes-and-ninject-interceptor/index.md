@@ -21,7 +21,8 @@ tags:
 
 ### 1\. Introduction
 
-It is a common practice to validate function arguments before running actual code. Usually validation looks like that:
+It is a common practice to validate function arguments before running actual code.
+Usually validation looks like that:
 
 ```csharp
 public  void Update(Car entity)
@@ -31,7 +32,8 @@ public  void Update(Car entity)
 }
 ```
 
-There is nothing wrong with this code, however we have to repeat this piece of code in every function. Of course we could create some helper class for argument validation and call approperiate validation function before launching rest of the code
+There is nothing wrong with this code, however we have to repeat this piece of code in every function.
+Of course we could create some helper class for argument validation and call approperiate validation function before launching rest of the code
 
 ```csharp
 public static class ValidationHelper
@@ -50,7 +52,8 @@ public  void Update(Car entity)
 }
 ```
 
-However I was searching for more universal way for argument validation. That is why, I decided to try function interceptors and attributes.
+However I was searching for more universal way for argument validation.
+That is why, I decided to try function interceptors and attributes.
 
 ### 2\. Creating validation attributes
 
@@ -79,7 +82,8 @@ public class NotNullAttribute : ArgumentValidationAttribute
 
 ### 3\. Using IInterceptor interface
 
-That was an easy part, now it's necessary to somehow intercept function execution and run attribute validation. In `.NET` there is no build-in mechanism to do that,that is why I'll use extension for `Ninject` - `Ninject Interception`.
+That was an easy part, now it's necessary to somehow intercept function execution and run attribute validation.
+In `.NET` there is no build-in mechanism to do that,that is why I'll use extension for `Ninject` - `Ninject Interception`.
 First of all we have to add to our project three dll's
 
 - `Ninject`
@@ -104,11 +108,15 @@ public class ValidationInterceptor : IInterceptor
 }
 ```
 
-As You can see `ValidationInterceptor` implements interface `IInterceptor`which belongs to `Ninject.Extensions.Interception`. This interface has one method `Intercept` which is called before function from registered component is called. In this function I iterate over all function attributes of type ArgumentValidationAttribute and call `ValidateArgument` function. If validation passess function `invocation.Proceed()` is called, which continues execution of original function.
+As You can see `ValidationInterceptor` implements interface `IInterceptor`which belongs to `Ninject.Extensions.Interception`.
+This interface has one method `Intercept` which is called before function from registered component is called.
+In this function I iterate over all function attributes of type ArgumentValidationAttribute and call `ValidateArgument` function.
+If validation passess function `invocation.Proceed()` is called, which continues execution of original function.
 
 ### 4\. Example of usage
 
-In order to take advantage of benefits of function interceptors, we have to resolve objects from `Ninject` container. First of all I'll create some examplorary classes
+In order to take advantage of benefits of function interceptors, we have to resolve objects from `Ninject` container.
+First of all I'll create some examplorary classes
 
 ```csharp
 public interface IRepository<T> where T:class
@@ -160,7 +168,9 @@ public static class IOCContainer
 }
 ```
 
-Please, notice that registration of `CarRepository` was used with option `Intercept().With()`. Thanks to this configuration, everytime we call method from `CarRepository`, `Intercept` method from `ValidaitionInterceptor` will be called first. Now, it is time to use our repository,we could do that this way
+Please, notice that registration of `CarRepository` was used with option `Intercept().With()`.
+Thanks to this configuration, everytime we call method from `CarRepository`, `Intercept` method from `ValidaitionInterceptor` will be called first.
+Now, it is time to use our repository,we could do that this way
 
 ```csharp
 class Program
@@ -181,7 +191,8 @@ Argument `entity` in method `Update` from interface `IRepository` was decorated 
 
 ### 5\. Validation of return value
 
-Using `IInterceptor` we could go one step further and also validate return value of method. In order to do that, we have to slightly modify `Intercept` method in `ValidaitionInterceptor` class.
+Using `IInterceptor` we could go one step further and also validate return value of method.
+In order to do that, we have to slightly modify `Intercept` method in `ValidaitionInterceptor` class.
 
 ```csharp
 public class ValidaitionInterceptor : IInterceptor
@@ -222,6 +233,8 @@ Since this moment, everytime function `GetAll` returns null, the `ArgumentNullEx
 
 ### 6\. Drawbacks
 
-Unfortunately using attributes for argument validation have some drawbacks. First of all, argument validation is based on function interceptors, and as I mentioned before only function, which are in objects, which are resolved from IoC container can be intercepted. What is more, interceptors allow us to intercept only functions marked as virtual or inhirited from interface.
+Unfortunately using attributes for argument validation have some drawbacks.
+First of all, argument validation is based on function interceptors, and as I mentioned before only function, which are in objects, which are resolved from IoC container can be intercepted.
+What is more, interceptors allow us to intercept only functions marked as virtual or inhirited from interface.
 
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/NInjectInterceptors)

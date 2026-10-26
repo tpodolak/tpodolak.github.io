@@ -13,7 +13,10 @@ tags:
   - "nhibernate"
 ---
 
-I think, that it is a common practice to store information about creation and modification date of entities. However keeping appropriate columns up to date manually is error prone. We must remember that every time we modify entity, we also have to change its modification date. Fortunately thanks to event listeners, `NHibernate` can do all of this boring stuff for us. Let's start from creating class which implements two interfaces:
+I think, that it is a common practice to store information about creation and modification date of entities.
+However keeping appropriate columns up to date manually is error prone. We must remember that every time we modify entity, we also have to change its modification date.
+Fortunately thanks to event listeners, `NHibernate` can do all of this boring stuff for us.
+Let's start from creating class which implements two interfaces:
 
 - `IPreInsertEventListener`
 - `IPreUpdateEventListener`
@@ -33,7 +36,9 @@ public class NHListener : IPreInsertEventListener, IPreUpdateEventListener
 }
 ```
 
-As You probably guessed `OnPreInsert` method is invoked before insert, and `OnPreUpdate` is called before update of entity. Having prepared the basic skeleton of class, it is time to configure `NHibernate` to use our event listeners. The basic configuration is taken from my previous post about `NHibernate` [automappings](http://tpodolak.com/blog/2013/03/25/fluent-nhibernate-automappings), so I will only extend it by appending event listeners
+As You probably guessed `OnPreInsert` method is invoked before insert, and `OnPreUpdate` is called before update of entity.
+Having prepared the basic skeleton of class, it is time to configure `NHibernate` to use our event listeners.
+The basic configuration is taken from my previous post about `NHibernate` [automappings](http://tpodolak.com/blog/2013/03/25/fluent-nhibernate-automappings), so I will only extend it by appending event listeners
 
 ```csharp
 Fluently.Configure().Database(
@@ -48,7 +53,9 @@ Fluently.Configure().Database(
                     .BuildSessionFactory();
 ```
 
-Now we can put some logic into `OnPreInsert` and `OnPreUpdate` functions. First of all we have to somehow identify entities which hold information about creation and modification time. In order to do that I created simple interface `IDateInfo`
+Now we can put some logic into `OnPreInsert` and `OnPreUpdate` functions.
+First of all we have to somehow identify entities which hold information about creation and modification time.
+In order to do that I created simple interface `IDateInfo`
 
 ```csharp
 public interface IDateInfo
@@ -91,7 +98,10 @@ Unfortunately at this moment saving entity (which implements `IDateInfo` interfa
 
 [![Exception](images/Exception.png)](http://tpodolak.com/blog/wp-content/uploads/2013/08/nhibarnate-using-event-listeners-to-set-entity-modification-date/Exception.png)
 
-Despite the fact that we set values of `ModificationDate` and `CreationDate` properties , `NHiberante` seems not to notice that. That is why we have to manually update values of `State` object from `PreInsertEvent` and `PreUpdateEvent`. According to the documentation `State` object from class `PreInsertEvent` holds values which should be inserted and `State` object from class `PreUpdateEvent` holds values which should be updated. Function which update values of state object might look like that
+Despite the fact that we set values of `ModificationDate` and `CreationDate` properties , `NHiberante` seems not to notice that.
+That is why we have to manually update values of `State` object from `PreInsertEvent` and `PreUpdateEvent`.
+According to the documentation `State` object from class `PreInsertEvent` holds values which should be inserted and `State` object from class `PreUpdateEvent` holds values which should be updated.
+Function which update values of state object might look like that
 
 ```csharp
 private void SetState(IEntityPersister persister, object[] state, string propertyName, object value)
@@ -161,6 +171,7 @@ namespace DataAccessLayer
 }
 ```
 
-As You can see, after setting values of `IDateInfo` I also call function `SetState` and update state of appropriate properties. From now everything works fine and our entities can be saved without problems.
+As You can see, after setting values of `IDateInfo` I also call function `SetState` and update state of appropriate properties.
+From now everything works fine and our entities can be saved without problems.
 
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/NHibernateEventListener)

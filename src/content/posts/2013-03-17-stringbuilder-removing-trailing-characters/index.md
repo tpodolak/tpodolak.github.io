@@ -17,7 +17,8 @@ Today just quick tip about `StringBuilder` I used to remove last character(s) fr
  builder.Remove(builder.Length - 1, 1);
 ```
 
-However, recently I've came accross even simpler solution. You just need to lessen the `Length` property of StringBuilder, in order to get rid of last characters
+However, recently I've came accross even simpler solution.
+You just need to lessen the `Length` property of StringBuilder, in order to get rid of last characters
 
 ```csharp
 StringBuilder builder = new StringBuilder("some long text with comma,");

@@ -13,7 +13,11 @@ tags:
   - "vertical-header"
 ---
 
-A while ago I wrote an article where I described how to create a plugin, which can flip header of `Ext.panel.Grid` vertically. I've been using this plugin for a couple of months in a company I work for, however in the last week it turned out that this extension does not work for grid with [locked columns](http://dev.sencha.com/deploy/ext-4.0.0/examples/grid/locking-grid.html). After digging into `Extjs` source code I found out that when You use locked columns, the grid is created as a combination of two grids: `normalGrid` and `lockedGrid`. Therefore it is necessary to apply vertical-header plugin to these two grids separately. In order to do that, I improved this extension to detect if grid has locked columns or not. The main change is in `init` function which now looks that way
+A while ago I wrote an article where I described how to create a plugin, which can flip header of `Ext.panel.Grid` vertically.
+I've been using this plugin for a couple of months in a company I work for, however in the last week it turned out that this extension does not work for grid with [locked columns](http://dev.sencha.com/deploy/ext-4.0.0/examples/grid/locking-grid.html).
+After digging into `Extjs` source code I found out that when You use locked columns, the grid is created as a combination of two grids: `normalGrid` and `lockedGrid`.
+Therefore it is necessary to apply vertical-header plugin to these two grids separately. In order to do that, I improved this extension to detect if grid has locked columns or not.
+The main change is in `init` function which now looks that way
 
 ```javascript
 init: function (grid) {
@@ -49,7 +53,8 @@ isLocked: function () {
 }
 ```
 
-Afterward I do create two instances of vertical-header plugin and initialize them with appropriate partial grid (`lockedGrid` or `normalGrid`). Entire code listing is presented below
+Afterward I do create two instances of vertical-header plugin and initialize them with appropriate partial grid (`lockedGrid` or `normalGrid`).
+Entire code listing is presented below
 
 ```javascript
 Ext.define('GeneralLearning.ux.VerticalHeader', {

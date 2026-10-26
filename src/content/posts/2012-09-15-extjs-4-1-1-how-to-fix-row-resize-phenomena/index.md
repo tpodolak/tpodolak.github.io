@@ -11,7 +11,9 @@ tags:
   - "resize"
 ---
 
-Recently I've encountered annoying problem with `Extjs` grid. After hiding columns with long wrapped text, height of rows was dramatically increased. Here are some screens presenting this particular situation. Grid with all columns shown
+Recently I've encountered annoying problem with `Extjs` grid.
+After hiding columns with long wrapped text, height of rows was dramatically increased.
+Here are some screens presenting this particular situation. Grid with all columns shown
 
 [![problembeforeshow](images/problembeforeshow.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/09/extjs-4-1-1-how-to-fix-row-resize-phenomena/problembeforeshow.jpg)
 
@@ -78,7 +80,9 @@ Ext.onReady(function () {
     });
 ```
 
-After some digging, it turned out that `Extjs` hides columns by setting their width to 0px. In order to solve this problem and preverse text wrap in cells, I implemented small workaround. Let's start from creating `CSS` class which disables word wrapping in grid cells.
+After some digging, it turned out that `Extjs` hides columns by setting their width to `0px`.
+In order to solve this problem and preverse text wrap in cells, I implemented small workaround.
+Let's start from creating `CSS` class which disables word wrapping in grid cells.
 
 ```css
 .noWrap .x-grid-cell-inner {white-space: nowrap;}

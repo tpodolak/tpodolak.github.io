@@ -13,7 +13,8 @@ tags:
   - "inotifypropertychanged"
 ---
 
-I think almost every .NET developer is familiar with `INotifyPropertyChanged` interface. Typical implementation of this interface looks more or less like that:
+I think almost every `.NET` developer is familiar with `INotifyPropertyChanged` interface.
+Typical implementation of this interface looks more or less like that:
 
 ```csharp
 public class NotifyPropertyBase : INotifyPropertyChanged
@@ -51,7 +52,9 @@ public int MyProperty
 }
 ```
 
-However, with `.NET 4.5` we can even get rid of lambda expressions itself. Everything thanks to [CallerMemberNameAttribute](http://msdn.microsoft.com/pl-pl/library/system.runtime.compilerservices.callermembernameattribute\(v=vs.110\).aspx), which provides us information about caller of given method. Now we can rewrite `NotifyPropertyBase` class as follows
+However, with `.NET 4.5` we can even get rid of lambda expressions itself.
+Everything thanks to [CallerMemberNameAttribute](http://msdn.microsoft.com/pl-pl/library/system.runtime.compilerservices.callermembernameattribute\(v=vs.110\).aspx), which provides us information about caller of given method.
+Now we can rewrite `NotifyPropertyBase` class as follows
 
 ```csharp
 public class NotifyPropertyBase : INotifyPropertyChanged

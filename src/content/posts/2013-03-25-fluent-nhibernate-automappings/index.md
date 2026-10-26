@@ -15,11 +15,13 @@ tags:
 
 ### 1\. Introduction
 
-Writing mappings for models in large application is quite boring task. Fortunatelly, `Fluent NHibernate` provides possibility for automatic mapping creation - so called automappings.
+Writing mappings for models in large application is quite boring task.
+Fortunatelly, `Fluent NHibernate` provides possibility for automatic mapping creation - so called automappings.
 
 ### 2\. Creating database and model
 
-In order to show you, how to configure automappings in `Fluent NHibernate`, let's create simple database along with model classes. The database structure is presented in the picture below.
+In order to show you, how to configure automappings in `Fluent NHibernate`, let's create simple database along with model classes.
+The database structure is presented in the picture below.
 
 [![DBDiagram](images/DBDiagram.png)](http://tpodolak.com/blog/wp-content/uploads/2013/03/fluent-nhibernate-automappings/DBDiagram.png)
 
@@ -61,11 +63,16 @@ var factory = Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.Connect
                       .BuildSessionFactory();
 ```
 
-As You can see I used the static `AutoMap.AssemblyOf` method. This method takes a generic type parameter from which `Fluent NHibernate` can deduce which assembly to look in for mappable entities. From now all classes defined in the assemlby of `Project` are mapped using build-in convention.
+As You can see I used the static `AutoMap.AssemblyOf` method.
+This method takes a generic type parameter from which `Fluent NHibernate` can deduce which assembly to look in for mappable entities.
+From now all classes defined in the assemlby of `Project` are mapped using build-in convention.
 
 ### 4\. Mapping only specified classes
 
-Mapping all classes from specyfic assembly may not be very useful. That is why, we need to "tell" `Automapper` which classes should be mapped. It can be achieved by creating custom configuration class which implements `IAutomappingConfiguration` interface or which is subclass of `DefaultAutomappingConfiguration`. `IAutomappingConfiguration` interface has quite a lot of functions, that is why I decided to craete class which inherits from `DefaultAutomappingConfiguration` and override only one method - `ShouldMap`
+Mapping all classes from specyfic assembly may not be very useful.
+That is why, we need to "tell" `Automapper` which classes should be mapped.
+It can be achieved by creating custom configuration class which implements `IAutomappingConfiguration` interface or which is subclass of `DefaultAutomappingConfiguration`.
+`IAutomappingConfiguration` interface has quite a lot of functions, that is why I decided to craete class which inherits from `DefaultAutomappingConfiguration` and override only one method - `ShouldMap`
 
 ```csharp
 public class AutomappingConfiguration : DefaultAutomappingConfiguration
@@ -77,7 +84,8 @@ public class AutomappingConfiguration : DefaultAutomappingConfiguration
 }
 ```
 
-As You can see by overriding `ShouldMap` function,I specified that only classes which inherit from `ModelBase` class should be mapped. To use our new configuration, we need to pass an instance of it to `AutoMap` setup
+As You can see by overriding `ShouldMap` function,I specified that only classes which inherit from `ModelBase` class should be mapped.
+To use our new configuration, we need to pass an instance of it to `AutoMap` setup
 
 ```csharp
 var factory = Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString("YourConnectionString"))
@@ -87,7 +95,9 @@ var factory = Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.Connect
 
 ### 5\. Defining custom conventions
 
-It is rather obvious that default automapping conventions may not come along with our database naming conventions. Fortunately we can create custom conventions(which override default ones), and pass them to AutoMap configuration. Here are examples of conventions I use `IClassConvention` - gives us access to properties and functions which allow us to change a default table name format for our entities.
+It is rather obvious that default automapping conventions may not come along with our database naming conventions.
+Fortunately we can create custom conventions(which override default ones), and pass them to AutoMap configuration.
+Here are examples of conventions I use `IClassConvention` - gives us access to properties and functions which allow us to change a default table name format for our entities.
 
 ```csharp
 public class DefaultTableNameConvention : IClassConvention
@@ -170,7 +180,8 @@ Fluently.Configure()
 
 ### 6\. Overriding mappings
 
-Sometimes it is necessary to slightly modify entity mapping. It can be achieved by creating class which implements `IAutoMappingOverride` interface
+Sometimes it is necessary to slightly modify entity mapping.
+It can be achieved by creating class which implements `IAutoMappingOverride` interface
 
 ```csharp
 public class ProjectMapping: IAutoMappingOverride<Project>
@@ -182,7 +193,8 @@ public class ProjectMapping: IAutoMappingOverride<Project>
 }
 ```
 
-`Override` method gives us access to all actions known from fluent mappings. After creating class map, we have to call function `UseOverridesFromAssemblyOf` in our automapping configuration
+`Override` method gives us access to all actions known from fluent mappings.
+After creating class map, we have to call function `UseOverridesFromAssemblyOf` in our automapping configuration
 
 ```csharp
 var factory = Fluently.Configure()

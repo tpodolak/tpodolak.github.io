@@ -11,7 +11,9 @@ tags:
   - "xtemplate"
 ---
 
-I've recently been asked to create `ComboBox` with custom styled `drop-down` list. Colors of items of drop-dow list should be picked based on values of record bounded to given item. After reading some post on Extjs forum, I decided to overwrite default template of `drop-down` list.
+I've recently been asked to create `ComboBox` with custom styled `drop-down` list.
+Colors of items of drop-dow list should be picked based on values of record bounded to given item.
+After reading some post on Extjs forum, I decided to overwrite default template of `drop-down` list.
 
 ```javascript
 Ext.create('Ext.XTemplate',
@@ -25,7 +27,11 @@ Ext.create('Ext.XTemplate',
     )
 ```
 
-As You can see I decided to use `XTemplate`, which (to the contrary to `Template`) allows to call user defined function. Function `getClass` from `XTemplate` will be called for each element in ComboBox's store. The result of this function will be inserted into class attribute of `div` element, which is resposible for displaying single item in drop-down list. Please notice, that in order to maintain ability to select items from `drop-down` list, it is necessary to specify `x-boundlist-item` class in template. Here is example of usage
+As You can see I decided to use `XTemplate`, which (to the contrary to `Template`) allows to call user defined function.
+Function `getClass` from `XTemplate` will be called for each element in ComboBox's store.
+The result of this function will be inserted into class attribute of `div` element, which is resposible for displaying single item in drop-down list.
+Please notice, that in order to maintain ability to select items from `drop-down` list, it is necessary to specify `x-boundlist-item` class in template.
+Here is example of usage
 
 ```css
 div.x-highlighted-item {

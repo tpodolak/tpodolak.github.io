@@ -13,7 +13,10 @@ tags:
   - "vertical-header"
 ---
 
-`Extjs` doesn't provide us with any build-in mechanism for flipping text vertically in grid's header. Fortunately we can achieve this effect by using a mixture of `CSS` rules and some javascript code. In order to make code more reusable, I'll write it as a plugin for grid. Let's start from creating `CSS` rules responsible for text rotation
+`Extjs` doesn't provide us with any build-in mechanism for flipping text vertically in grid's header.
+Fortunately we can achieve this effect by using a mixture of `CSS` rules and some javascript code.
+In order to make code more reusable, I'll write it as a plugin for grid.
+Let's start from creating `CSS` rules responsible for text rotation
 
 ```css
 .v-vertical-header-grid .x-column-header  .x-column-header-text {
@@ -28,7 +31,9 @@ tags:
 }
 ```
 
-`.x-column-header .x-column-header-text` is a selector for header text in every `Extjs` grid. It is obvious that we want only certain grids to have vertical headers, that is why I extended selector with additional custom class `.v-vertical-header-grid`. Having `CSS` class prepared, now we can write actual plugin.
+`.x-column-header .x-column-header-text` is a selector for header text in every `Extjs` grid.
+It is obvious that we want only certain grids to have vertical headers, that is why I extended selector with additional custom class `.v-vertical-header-grid`.
+Having `CSS` class prepared, now we can write actual plugin.
 
 ```javascript
 Ext.define('GeneralLearning.ux.VerticalHeader', {
@@ -71,7 +76,12 @@ Ext.define('GeneralLearning.ux.VerticalHeader', {
 });
 ```
 
-At the very beginning `.v-vertical-header-grid` class is added to the grid. Thanks to this, `CSS` selector created in the first step is able to select text in header. At this point text is rotated, however it can't fit into header - its size didn't change. That is why in function `handleAfterLayout` I manually measure text height using `Ext.util.TextMetrics` and change height of header.Solution presented above works fine in IE10, Opera, Firefox and Chrome. There were some problems in IE9, however extending `CSS` class with these rules
+At the very beginning `.v-vertical-header-grid` class is added to the grid.
+Thanks to this, `CSS` selector created in the first step is able to select text in header.
+At this point text is rotated, however it can't fit into header - its size didn't change.
+That is why in function `handleAfterLayout` I manually measure text height using `Ext.util.TextMetrics` and change height of header.
+Solution presented above works fine in `IE10`, `Opera`, `Firefox` and `Chrome`.
+There were some problems in `IE9`, however extending `CSS` class with these rules
 
 ```css
 .v-vertical-header-grid .x-column-header {
@@ -91,4 +101,7 @@ did the trick. Here is the result
 [![vertical header](images/result.png)](http://tpodolak.com/blog/wp-content/uploads/2013/06/extjs-vertical-header-in-grid/result.png)
 
 Source code for this post can be found [here](https://github.com/tpodolak/Blog/tree/master/ExtjsVerticalGridHeader)  
-**There is a problem with this plugin and locked columns, please see the updated version of this plugin [here](http://tpodolak.com/blog/2013/11/10/extjs-vertical-header-in-grid-and-locked-columns)**
+
+> [!WARNING]
+> There is a problem with this plugin and locked columns, please see the updated version of this plugin [here](http://tpodolak.com/blog/2013/11/10/extjs-vertical-header-in-grid-and-locked-columns) 
+

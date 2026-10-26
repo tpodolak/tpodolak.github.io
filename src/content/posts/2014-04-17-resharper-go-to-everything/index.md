@@ -11,7 +11,8 @@ tags:
   - "resharper"
 ---
 
-In `Resharper 8` `JetBrains` introduced new command called `Go to Everything`. You can use it by hitting the `CTRL + N` keys (`CTRL + T` with `Visual Studio` keyboard shortcuts layout) This command is basically combination of three features known from previous versions of Resharper, namely: `Go to Class`, `Go to Type` and `Go to Symbol`. Most common usage of this functionality is just to search classes, properties or functions.
+In `Resharper 8` `JetBrains` introduced new command called `Go to Everything`. You can use it by hitting the `CTRL + N` keys (`CTRL + T` with `Visual Studio` keyboard shortcuts layout) This command is basically combination of three features known from previous versions of Resharper, namely: `Go to Class`, `Go to Type` and `Go to Symbol`.
+Most common usage of this functionality is just to search classes, properties or functions.
 
 [![Go to Everything](images/GoToType.png)](http://tpodolak.com/blog/wp-content/uploads/2014/04/resharper-go-to-everything/GoToType.png)
 
