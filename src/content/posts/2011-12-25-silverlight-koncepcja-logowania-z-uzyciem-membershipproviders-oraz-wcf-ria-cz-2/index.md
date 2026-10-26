@@ -42,7 +42,8 @@ else
 }
 ```
 
-`WebContext` jest to klasa generowana automatycznie przy buildowaniu solucji. Jej kod powinniśmy odnaleźć w katalogu `Generated_Code` po stronie klienta.
+`WebContext` jest to klasa generowana automatycznie przy buildowaniu solucji.
+Jej kod powinniśmy odnaleźć w katalogu `Generated_Code` po stronie klienta.
 Klasa ta posiada właściwość Current, która zwraca obecny context zarejestrowany w kolekcji `ApplicationLifetimeObjects`.
 Okno logowania zostało zaimplementowane jako `ChildWindow`. Jego kod może wyglądać w następujący sposób
 ```xml
@@ -175,7 +176,8 @@ Modyfikujemy zatem sekcję podsekcję providers z sekcji membership na następuj
 ```
 
 Mając w kolekcji wszystkie nasze providery pozostaje nam się zastanowić, w jaki sposób raz używać `GoogleMembershpProvidera`, a innym razem `SqlMembershipProvidera`.
-Ja zrobiłem to w następujący sposób. Najpierw utworzyłem enuma, w którym przechowuje "nazwy" moich providerów
+Ja zrobiłem to w następujący sposób.
+Najpierw utworzyłem enuma, w którym przechowuje "nazwy" moich providerów
 
 ```csharp
 public enum AccountType
@@ -186,7 +188,8 @@ public enum AccountType
 }
 ```
 
-Następnie wykorzystałem parametr customData interfejsu `IAuthentication`. Po stronie klienta w funkcji logowania po prostu przesyłam typ konta do którego się loguję.
+Następnie wykorzystałem parametr customData interfejsu `IAuthentication`.
+Po stronie klienta w funkcji logowania po prostu przesyłam typ konta do którego się loguję.
 Wygląda to w ten sposób:
 
 ```csharp showLineNumbers=false wrap=false
@@ -231,7 +234,8 @@ Nie udało mi się użyć biblioteki `dotNetOpenAuth`, gdyż z tego co widzę lo
 Niestety taka operacja nie jest dozwolona w `Silverlighcie` (`Silverlight` nie wspiera cross-domain policy).
 Ponadto wykorzystanie tej biblioteki po stronie serwera również nie przyniosło oczekiwanych rezultatów.
 Ostatecznie zatem skorzystałem z opisu znajdującego się na stronie [Googla](http://code.google.com/intl/pl-PL/apis/accounts/docs/AuthForInstalledApps.html#Using).
-Czyli po prostu spreparowałem odpowiedni `HTTPS Post Request`. Funkcja `ValidateUser` z `GoogleMembershipProvidera` wygląda zatem następująco
+Czyli po prostu spreparowałem odpowiedni `HTTPS Post Request`.
+Funkcja `ValidateUser` z `GoogleMembershipProvidera` wygląda zatem następująco
 
 ```csharp
 public override bool ValidateUser(string username, string password)

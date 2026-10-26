@@ -30,19 +30,23 @@ Zacznijmy od przygotowania plików zasobów. Podobnie jak w poprzednim wpisie ut
 - `Localization.pl-PL.resx`
 - `Localization.en-US.resx`
 
-W plikach tych będziemy przechowywać nasze tłumaczenia. Następnie stwórzmy klasę Translator, która będzie dziedziczyła po klasie MarkupExtension.Do klasy tej dodajmy właściwość
+W plikach tych będziemy przechowywać nasze tłumaczenia.
+Następnie stwórzmy klasę Translator, która będzie dziedziczyła po klasie MarkupExtension.
+Do klasy tej dodajmy właściwość
 
 ```csharp
 public string Key { get; set; }
 ```
 
-,która będzie przechowywać klucz dzięki któremu z pliku zasobów wyciągniemy tekst w odpowiednim języku. W kolejnym kroku musimy przeciążyć funkcję
+, która będzie przechowywać klucz dzięki któremu z pliku zasobów wyciągniemy tekst w odpowiednim języku.
+W kolejnym kroku musimy przeciążyć funkcję
 
 ```csharp
 public abstract object ProvideValue(IServiceProvider serviceProvider)
 ```
 
-tak aby dostarczyła nam ona przetłumaczony tekst.W moim pierwszym podejściu funkcja ta wyglądała w następujący sposób
+tak aby dostarczyła nam ona przetłumaczony tekst.
+W moim pierwszym podejściu funkcja ta wyglądała w następujący sposób
 
 ```csharp
 public override object ProvideValue(IServiceProvider serviceProvider)
@@ -57,7 +61,8 @@ Wadami takiego rozwiązania było:
 - duża liczba tworzonych obiektów - przy każdym tłumaczeniu tworzyłem nowy obiekt Localization(), który prawdopodobnie może być dość ciężkim obiektem (zwłaszcza gdy będzie przechowywał dużo tłumaczonego tekstu)
 - brak możliwości dynamicznej zmiany języka
 
-Ostatecznie zatem zrezygnowałem z przedstawionej wyżej opcji i zdecydowałem się na metodę odrobinę bardziej zaawansowaną. Po pierwsze utworzyłem klasę TranslationManager
+Ostatecznie zatem zrezygnowałem z przedstawionej wyżej opcji i zdecydowałem się na metodę odrobinę bardziej zaawansowaną.
+Po pierwsze utworzyłem klasę `TranslationManager`
 
 ```csharp
 public class TranslationManager
@@ -117,7 +122,8 @@ public event Action<CultureInfo> LanguageChanged
 ```
 
 które ma za zadanie poinformować `UI` o potrzebie odświeżenia zbindowanych elementów. W jaki sposób się to odbywa?
-Wszystko zawdzięczamy interfejsowi `INotifyPropertyChanged` oraz bindingom. Funkcja `ProvideValue` została zmodyfikowana w następujący sposób
+Wszystko zawdzięczamy interfejsowi `INotifyPropertyChanged` oraz bindingom.
+Funkcja `ProvideValue` została zmodyfikowana w następujący sposób
 
 ```csharp
 public override object ProvideValue(IServiceProvider serviceProvider)
@@ -130,7 +136,8 @@ public override object ProvideValue(IServiceProvider serviceProvider)
 W funkcji tej tworze binding, który binduje się do właściwości `Value` obiektu `TranslationItem`.
 `TranslationItem` jest to prosty obiekt który udostępnia właściwość `Value` zwracającą przetłumaczony tekst.
 Dodatkowo obiekt ten podpina się do zdarzenia `LanguageChanged` z klasy `TranslationManager`.
-W przypadku gdy ktoś zmieni język aplikacji, odpalone zostanie zdarzenie `NotifyPropertyChanged`, które poinformuje widok o potrzebie odświeżenia odpowiednich elementów. Klasa TranslationItem wygląda zatem w następujący sposób
+W przypadku gdy ktoś zmieni język aplikacji, odpalone zostanie zdarzenie `NotifyPropertyChanged`, które poinformuje widok o potrzebie odświeżenia odpowiednich elementów.
+Klasa TranslationItem wygląda zatem w następujący sposób
 
 ```csharp
 public sealed class TranslationItem : INotifyPropertyChanged, IDisposable

@@ -17,11 +17,13 @@ tags:
   - "wcf"
 ---
 
-W tym wpisie postaram się krótko przedstawić blok bezpieczeństwa (`Security Block`) z biblioteki `Microsoft Enterprise Library`. Biblioteki tej użyjemy do sprawdzania rol i reguł dostępu do funkcji serwisu `WCF`.
+W tym wpisie postaram się krótko przedstawić blok bezpieczeństwa (`Security Block`) z biblioteki `Microsoft Enterprise Library`.
+Biblioteki tej użyjemy do sprawdzania rol i reguł dostępu do funkcji serwisu `WCF`.
 Najpierw oczywiście musimy pobrać bibliotekę `Microsoft Enterprise Library`, znajduje się ona pod tym [adresem](http://www.microsoft.com/download/en/details.aspx?id=15104).
 Biblioteka ta jest również dostępna z poziomu `NuGeta`, jednakże instalacja poprzez ten plugin dorzuca do projektu tylko dll-ki.
 W pierwszym przypadku natomiast oprócz dll-ek zostaje również zainstalowane bardzo wygodne narzędzie ułatwiające konfigurację różnych modułów biblioteki.
-Mając zainstalowane wszystkie potrzebne komponenty możemy przystąpić do działania. Zacznijmy od zmodyfikowania pliku `Web.config`, tak aby umożliwić naszemu systemowi korzystanie z ról - a tak właściwie aby umożliwić edycję, tworzenie, usuwanie oraz przypisywanie ról użytkownikom.
+Mając zainstalowane wszystkie potrzebne komponenty możemy przystąpić do działania.
+Zacznijmy od zmodyfikowania pliku `Web.config`, tak aby umożliwić naszemu systemowi korzystanie z ról - a tak właściwie aby umożliwić edycję, tworzenie, usuwanie oraz przypisywanie ról użytkownikom.
 W sekcji `<system.web>` dorzucamy następujące wpisy
 ```xml
 <roleManager enabled="true" defaultProvider="SqlProvider">
@@ -42,7 +44,8 @@ Wybieramy opcję `ASP.NET Configuration` z menu `Project`, następnie na stronie
 [![admintool](images/admintool.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/01/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-3-microsoft-enterprise-library-security-block/admintool.jpg) 
 
 W kolejnym kroku dodajemy role - klikamy w `Create or Manage roles`, a w stronie, która się otworzy wpisujemy nazwę roli np. `Developer`.
-Postępując w podobny sposób dodajmy jeszcze role `Admin`. Następnie tworzymy użytkownika - klikamy w `Create user`, a następnie wypełniamy pola podobnie jak na załączonym poniżej screenie
+Postępując w podobny sposób dodajmy jeszcze role `Admin`.
+Następnie tworzymy użytkownika - klikamy w `Create user`, a następnie wypełniamy pola podobnie jak na załączonym poniżej screenie
 
 [![admintoolpass](images/admintoolpass.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/01/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-3-microsoft-enterprise-library-security-block/admintoolpass.jpg)
 
@@ -66,7 +69,8 @@ W tym celu, po pierwsze modyfikujemy funkcję logowania.
  }
 ```
 
-Jak widać, przy tworzeniu użytkownika dodatkowo pobieramy z bazy danych jego wszystkie role. Statyczna funkcja `GetRolesForUser` pobiera role przy pomocy domyślnego `RoleProvidera`.
+Jak widać, przy tworzeniu użytkownika dodatkowo pobieramy z bazy danych jego wszystkie role.
+Statyczna funkcja `GetRolesForUser` pobiera role przy pomocy domyślnego `RoleProvidera`.
 Dodajmy teraz do naszego `DataAccesService-u` dwie funkcje.
 
 - `OnlyAdminCanDownloadThis`
@@ -87,17 +91,21 @@ W oknie które się otworzy wybieramy `Add Security Settings` z menu `Blocks`.
 
 [![addsecurity](images/addsecurity.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/01/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-3-microsoft-enterprise-library-security-block/addsecurity.jpg)
 
-W głównym oknie aplikacji pojawi się nowy element - `Security Settings`. Klikamy na znak `+` obok `Authorization Providers`, następnie z rozwiniętego menu przechodzimy na `Add Authorization Providers` i ostatecznie klikamy na `Add Authorization Rule Provider`
+W głównym oknie aplikacji pojawi się nowy element - `Security Settings`.
+Klikamy na znak `+` obok `Authorization Providers`, następnie z rozwiniętego menu przechodzimy na `Add Authorization Providers` i ostatecznie klikamy na `Add Authorization Rule Provider`
 
 [![authorization](images/authorization.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/01/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-3-microsoft-enterprise-library-security-block/authorization.jpg)
 
-W ten sposób dodaliśmy domyślny `Rule Provider`, teraz możemy stworzyć reguły dostępu do naszej aplikacji. W tym celu musimy kliknąć w lewy dolny róg pola `Authorization Rule Provider`, a następnie z menu, które się pojawi wybrać `Add Authorization Rule`
+W ten sposób dodaliśmy domyślny `Rule Provider`, teraz możemy stworzyć reguły dostępu do naszej aplikacji.
+W tym celu musimy kliknąć w lewy dolny róg pola `Authorization Rule Provider`, a następnie z menu, które się pojawi wybrać `Add Authorization Rule`
 
 [![rule](images/rule.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/01/silverlight-koncepcja-logowania-z-uzyciem-membershipproviders-oraz-wcf-ria-cz-3-microsoft-enterprise-library-security-block/rule.jpg)
 
 W oknie aplikacji pojawi się nowy element - `Authorization Rule`, nadajmy mu nazwę `DevelopersOnly`, a następnie zdefiniujmy tzw. `Rule expression`.
-`Rule expression` jest warunek jaki musi zostać spełniony, aby użytkownik uzyskał dostęp do części aplikacji chronionej przez regułę `DevelopersOnly`. Wyrażenie to możemy wpisać ręcznie, lub poprzez prosty kreator - dostępny jest on pod przyciskiem `...`.
-Stwórzmy więc regułę, która pozwoli tylko użytkownikom typu Developer oraz oczywiście adminowi mieć dostęp do jakieś części aplikacji. Otwórzmy zatem `Rule Expression Editor` (dostępny on jest pod przyciskiem `...`), kliknijmy na przycisk `Role`, wpiszmy `Developer`, następnie kliknijmy w przycisk `OR`, wpiszmy `Admin`.
+`Rule expression` jest warunek jaki musi zostać spełniony, aby użytkownik uzyskał dostęp do części aplikacji chronionej przez regułę `DevelopersOnly`.
+Wyrażenie to możemy wpisać ręcznie, lub poprzez prosty kreator - dostępny jest on pod przyciskiem `...`.
+Stwórzmy więc regułę, która pozwoli tylko użytkownikom typu Developer oraz oczywiście adminowi mieć dostęp do jakieś części aplikacji.
+Otwórzmy zatem `Rule Expression Editor` (dostępny on jest pod przyciskiem `...`), kliknijmy na przycisk `Role`, wpiszmy `Developer`, następnie kliknijmy w przycisk `OR`, wpiszmy `Admin`.
 Możemy również wpisać następujące wyrażenie ręcznie
 
 ```text showLineNumbers=false

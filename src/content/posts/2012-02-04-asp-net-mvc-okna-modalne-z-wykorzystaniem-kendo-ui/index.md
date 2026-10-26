@@ -11,11 +11,17 @@ tags:
   - "mvc"
 ---
 
-Ostatnimi czasy w pracy eksperymentujemy z `ASP.NET MVC`. Jednym z problemów na jakie natknąłem się poznając tą technologię było utworzenie okien modalnych. Po niezbyt owocnej walce z kontrolkami ze stajni Devexpressa postanowiliśmy, że skorzystamy z darmowej biblioteki `Kendo UI` napisanej w `jQuery`. Wspomnianą wcześniej bibliotekę możemy znaleźć pod adresem http://www.kendoui.com/get-kendo-ui.aspx. Aby uzyskać dostęp do plików należy zarejestrować się w systemie - oczywiście rejestracja jest darmowa. Po zassaniu wszystkich plików kopiujemy zawartość katalogu "source" do naszego projektu `MVC`. W moim przypadku utworzyłem katalog `Kendo` w katalogu `Content` i tam umieściłem zawartość katalogu `source`.
+Ostatnimi czasy w pracy eksperymentujemy z `ASP.NET MVC`. Jednym z problemów na jakie natknąłem się poznając tą technologię było utworzenie okien modalnych.
+Po niezbyt owocnej walce z kontrolkami ze stajni Devexpressa postanowiliśmy, że skorzystamy z darmowej biblioteki `Kendo UI` napisanej w `jQuery`.
+Wspomnianą wcześniej bibliotekę możemy znaleźć pod adresem http://www.kendoui.com/get-kendo-ui.aspx.
+Aby uzyskać dostęp do plików należy zarejestrować się w systemie - oczywiście rejestracja jest darmowa.
+Po zassaniu wszystkich plików kopiujemy zawartość katalogu "source" do naszego projektu `MVC`.
+W moim przypadku utworzyłem katalog `Kendo` w katalogu `Content` i tam umieściłem zawartość katalogu `source`.
 
 [![Structure](images/Structure.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/02/asp-net-mvc-okna-modalne-z-wykorzystaniem-kendo-ui/Structure.jpg)
 
-Mając wszystkie pliki w komplecie musimy wskazać naszej aplikacji aby zaczęła z nich korzystać. Dodajmy zatem w pliku `_Layout.cshtml` następujące elementy
+Mając wszystkie pliki w komplecie musimy wskazać naszej aplikacji aby zaczęła z nich korzystać.
+Dodajmy zatem w pliku `_Layout.cshtml` następujące elementy
 
 ```html
 <script src="@Url.Content("~/Content/Kendo/js/jquery.min.js")" type="text/javascript"></script>
@@ -36,7 +42,13 @@ Mając wszystkie pliki w komplecie musimy wskazać naszej aplikacji aby zaczęł
 <script src="@Url.Content("~/Content/Kendo/js/kendo.window.js")" type="text/javascript"></script>
 ```
 
-Przejdźmy teraz do najważniejszej części, a mianowicie do tworzenia okna modalnego. Biblioteka `Kendo UI` udostępnia nam funkcję `kendoWindow`, dzięki której jesteśmy w stanie utworzyć okno modalne. Okno to jednak nie ma w sobie żadnej zawartości - nie posiada nawet przycisków typu `Zapisz` oraz `Anuluj`. Utworzenie i załadowanie zawartości okna oraz reakcja na kliknięcia w potencjalne przyciski musi zostać obsłużona przez nas. Zacznijmy zatem od utworzenia zawartości okna. Załóżmy, że okno, które za chwilę stworzymy będzie służyło do dodawania nowego produktu do bazy danych. Klasa produkt jest bardzo prostą klasą prezentującą się w następujący sposób:
+Przejdźmy teraz do najważniejszej części, a mianowicie do tworzenia okna modalnego.
+Biblioteka `Kendo UI` udostępnia nam funkcję `kendoWindow`, dzięki której jesteśmy w stanie utworzyć okno modalne.
+Okno to jednak nie ma w sobie żadnej zawartości - nie posiada nawet przycisków typu `Zapisz` oraz `Anuluj`.
+Utworzenie i załadowanie zawartości okna oraz reakcja na kliknięcia w potencjalne przyciski musi zostać obsłużona przez nas.
+Zacznijmy zatem od utworzenia zawartości okna.
+Załóżmy, że okno, które za chwilę stworzymy będzie służyło do dodawania nowego produktu do bazy danych.
+Klasa produkt jest bardzo prostą klasą prezentującą się w następujący sposób:
 
 ```csharp
 public class Product
@@ -58,7 +70,8 @@ public PartialViewResult AddProduct()
 }
 ```
 
-W celu dodania widoku klikamy `PPM` na nazwę funkcji i wybieramy opcję `Add View`. W otwartym oknie zaznaczmy opcję `Create Strongly Typed View`, a w comboboxie wpisujemy `Product`.
+W celu dodania widoku klikamy `PPM` na nazwę funkcji i wybieramy opcję `Add View`.
+W otwartym oknie zaznaczmy opcję `Create Strongly Typed View`, a w comboboxie wpisujemy `Product`.
 Ponadto zaznaczamy checkboxa `Create as a partial view`.
 
 [![addcontroller](images/addcontroller.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/02/asp-net-mvc-okna-modalne-z-wykorzystaniem-kendo-ui/addcontroller.jpg)
@@ -94,7 +107,9 @@ Dodajmy teraz na naszej stronie głównej linka, który wywoła nasze okno modal
 @Html.ActionLink("Dodaj produkt", "AddProduct", "Home", null, new { id = "addProduct" })
 ```
 
-Przyszedł teraz czas na najważniejszą część wpisu, a mianowicie na wykorzystaniu `jQuery` oraz `kendoWindow` do pokazania okna edycji/dodawania produktu. Najpierw podpinamy się do zdarzenia(dodajemy handler) `click` utworzonego przed chwilą odnośnika. W funkcji obsługującej zdarzenie click musimy utworzyć okno,wypełnić jego zawartość oraz pokazać okno.
+Przyszedł teraz czas na najważniejszą część wpisu, a mianowicie na wykorzystaniu `jQuery` oraz `kendoWindow` do pokazania okna edycji/dodawania produktu.
+Najpierw podpinamy się do zdarzenia(dodajemy handler) `click` utworzonego przed chwilą odnośnika.
+W funkcji obsługującej zdarzenie click musimy utworzyć okno, wypełnić jego zawartość oraz pokazać okno.
 
 ```javascript
 $(document).ready(function () {

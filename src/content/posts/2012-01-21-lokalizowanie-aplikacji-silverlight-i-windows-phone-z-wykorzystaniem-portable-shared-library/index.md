@@ -59,7 +59,8 @@ Zatem w jaki sposób wykorzystać nasz mechanizm tłumaczący? Rozwiązania są 
 - Zmodyfikować plik `Localization.Designer.cs` i ustawić konstruktor domyślny na publiczny. Takie rozwiązanie jednak nie jest eleganckie, gdyż za każdym razem gdy dodamy nowy wpis do pliku `Localization.resx` kod w pliku `Localization.Designer.cs` zostanie przegenerowany.
 - Drugim sposobem jest stworzenie klasy pośredniczącej, która będzie w sobie trzymała instancję obiektu `Localization`, oraz dodanie obiektu tej klasy pośredniczącej do zasobów aplikacji
 
-Jako, że podejście drugi jest według mnie dużo lepsze to postaram się je teraz przedstawić. Do projektu `SharedPortableClasses` dodajmy klasę `LocalizationProxy.cs`.
+Jako, że podejście drugi jest według mnie dużo lepsze to postaram się je teraz przedstawić.
+Do projektu `SharedPortableClasses` dodajmy klasę `LocalizationProxy.cs`.
 
 ```csharp
 public class LocalizationProxy : INotifyPropertyChanged
@@ -109,7 +110,8 @@ W moim przypadku będzie to wyglądać w następujący sposób:
 [![CSProjCultures](images/CSProjCultures.jpg)](http://tpodolak.com/blog/wp-content/uploads/2012/01/lokalizowanie-aplikacji-silverlight-i-windows-phone-z-wykorzystaniem-portable-shared-library/CSProjCultures.jpg)
 
 Jak widać moja aplikacja będzie wspierała język angielski oraz język polski.
-Mając już wszystko gotowe przystąpmy do tworzenia interfejsu. Zmodyfikujmy plik `MainPage.xaml` tak aby wyglądał w następujący sposób
+Mając już wszystko gotowe przystąpmy do tworzenia interfejsu.
+Zmodyfikujmy plik `MainPage.xaml` tak aby wyglądał w następujący sposób
 ```xml
 <UserControl x:Class="LocalizationSolution.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -130,8 +132,10 @@ Mając już wszystko gotowe przystąpmy do tworzenia interfejsu. Zmodyfikujmy pl
 </UserControl>
 ```
 
-Widok ten jest bardzo prosty. Posada on dwa przyciski służące do zmiany aktualnego języka oraz labelkę, na której dany tekst będzie się pojawiać.
-Najciekawszą rzeczą w tym kodzie jest sposób wyświetlania tłumaczonego tekstu. Jak widać do właściwości `Text` elementu typu `TextBlok` nie jest przypisywana wartość stała, ale używany jest binding
+Widok ten jest bardzo prosty.
+Posada on dwa przyciski służące do zmiany aktualnego języka oraz labelkę, na której dany tekst będzie się pojawiać.
+Najciekawszą rzeczą w tym kodzie jest sposób wyświetlania tłumaczonego tekstu.
+Jak widać do właściwości `Text` elementu typu `TextBlok` nie jest przypisywana wartość stała, ale używany jest binding
 
 ```csharp
 Text="{Binding Source={StaticResource LocalizationProxy},Path=LocalizationManager.Title,Mode=TwoWay}"
@@ -150,7 +154,8 @@ public static string Title
 }
 ```
 
-Właściwość tak zwraca nam tekst w odpowiednim języku. Sam mechanizm zwracania tekstu dla wybranego przez nas języka jest już dostarczony z `Frameworkiem`.
+Właściwość tak zwraca nam tekst w odpowiednim języku.
+Sam mechanizm zwracania tekstu dla wybranego przez nas języka jest już dostarczony z `Frameworkiem`.
 Tekst wyświetlany w aplikacji będzie w takim języku/kulturze jaka zostania przypisana do właściwości `Thread.CurrentThread.CurrentUICulture`.
 Możemy to w łatwy sposób sprawdzić zmieniając dynamicznie kulture wątku. Stwórzmy nową klasę i nazwijmy ją `MainPageViewModel`.
 Wygląda ona w następujący sposób
@@ -199,7 +204,8 @@ public partial class MainPage : UserControl
 ```
 
 Dzięki wykorzystaniu komend po naciśnięciu przycisku `Polski` zostanie odpalana komenda `PolishLangugeCommand`, która z kolei odpali anonimową funkcję do niej przypisaną.
-W funkcji tej zmienimy kulturę wątku na `pl-PL`. Ważnym elementem jest tutaj funkcja `ResetResources`, która znajduje się w klasie `LocalizationProxy`.
+W funkcji tej zmienimy kulturę wątku na `pl-PL`.
+Ważnym elementem jest tutaj funkcja `ResetResources`, która znajduje się w klasie `LocalizationProxy`.
 Funkcja ta informuje widok (poprzez zdarzenie `NotifyPropertyChanged`), że należy odświeżyć wszystkie elementy, które zostały zbindowane do właściwości `LocalizationManager`.
 
 Postępując w analogiczny sposób możemy stworzyć aplikację `WindowsPhone`, która będzie wykorzystywałą nasz mechanizm tłumaczący.
