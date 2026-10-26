@@ -116,6 +116,21 @@
         max-width: 100%;
         overflow-x: auto;
         margin: 1em 0;
+    } 
+
+    table tbody tr:nth-child(even) {
+        background-color: var(--btn-plain-bg-hover);
     }
-    
-}
+
+    p:has(img) {
+        text-align: center;
+    }
+
+    p:has(img) > a {
+        display: inline-block;
+    }
+
+    p:has(img) img {
+        display: inline-block;
+        max-width: 100%;
+    }}
