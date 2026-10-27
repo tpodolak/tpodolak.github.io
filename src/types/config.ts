@@ -104,3 +104,22 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export type GiscusConfig = {
+	// Values below come from https://giscus.app
+	repo: string; // "owner/repo"
+	repoId: string;
+	category: string;
+	categoryId: string;
+	mapping: "pathname" | "url" | "title" | "og:title" | "specific";
+	strict: boolean;
+	reactionsEnabled: boolean;
+	inputPosition: "top" | "bottom";
+	lang: string;
+	lazyLoad: boolean;
+	// Giscus theme names used for the site's light and dark mode
+	theme: {
+		light: string;
+		dark: string;
+	};
+};
