@@ -1,8 +1,8 @@
 ---
 title: "ASP.NET Core MemoryCache - GetOrCreate calls factory method multiple times"
 published: 2017-12-13T21:57:20.000Z
-categories: 
-  - "asp-net-core"
+categories:
+  - "web-development"
 tags: 
   - "asp-net-core"
 ---

@@ -1,8 +1,8 @@
 ---
 title: "Finding typos with ReSharper Command Line Tools, ReSpeller and Cake"
 published: 2017-10-27T08:06:04.000Z
-categories: 
-  - "cake"
+categories:
+  - "developer-tools"
 tags: 
   - "cake"
   - "resharper"

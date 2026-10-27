@@ -1,8 +1,8 @@
 ---
 title: "Running ASP.NET Core together with Nancy"
 published: 2020-04-20T08:00:44.000Z
-categories: 
-  - "asp-net-core"
+categories:
+  - "web-development"
 tags: 
   - "asp-net-core"
   - "nancy"

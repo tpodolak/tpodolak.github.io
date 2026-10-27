@@ -1,8 +1,8 @@
 ---
 title: "NSubstitute.Analyzers 1.0.0 released"
 published: 2018-10-24T09:00:51.000Z
-categories: 
-  - "net"
+categories:
+  - "testing"
 tags: 
   - "nsubstitute"
   - "nsubstitute-analyzers"

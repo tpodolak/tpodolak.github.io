@@ -1,11 +1,8 @@
 ---
 title: "WinJS - AuthenticateAndContinue and \"remote procedure call failed\" exception"
 published: 2015-02-19T22:11:00.000Z
-categories: 
-  - "authenticateandcontinue"
-  - "authorization"
-  - "javascript"
-  - "winjs"
+categories:
+  - "web-development"
 tags: 
   - "javascript"
   - "winjs"

@@ -1,11 +1,8 @@
 ---
 title: "Prism - CommandBehaviors"
 published: 2011-11-29T20:20:00.000Z
-categories: 
-  - "commandbehaviors"
-  - "prism"
-  - "silverlight"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "prism"
   - "silverlight"

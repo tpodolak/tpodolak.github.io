@@ -1,14 +1,8 @@
 ---
 title: "Argument validation with attributes and Ninject interceptor"
 published: 2012-10-21T15:13:00.000Z
-categories: 
-  - "net"
-  - "attributes"
-  - "c"
-  - "interceptor"
-  - "ninject"
-  - "ninject-extensions"
-  - "validation"
+categories:
+  - "dotnet"
 tags: 
   - "dotnet"
   - "attributes"

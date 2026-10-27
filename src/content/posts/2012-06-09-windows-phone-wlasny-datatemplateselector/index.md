@@ -1,9 +1,8 @@
 ---
 title: "Windows Phone - własny DataTemplateSelector"
 published: 2012-06-09T22:55:00.000Z
-categories: 
-  - "datatemplate"
-  - "windows-phone"
+categories:
+  - "dotnet"
 tags: 
   - "data-template"
   - "windows-phone"

@@ -1,8 +1,8 @@
 ---
 title: "Getting started with Elastic Stack"
 published: 2016-11-02T19:38:24.000Z
-categories: 
-  - "elasticstack"
+categories:
+  - "logging"
 tags: 
   - "elasticsearch"
   - "kibana"

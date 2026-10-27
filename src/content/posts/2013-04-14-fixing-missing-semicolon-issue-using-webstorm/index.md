@@ -1,10 +1,8 @@
 ---
 title: "Fixing missing semicolon issue using WebStorm"
 published: 2013-04-14T11:44:00.000Z
-categories: 
-  - "javascript"
-  - "jslint"
-  - "webstorm"
+categories:
+  - "developer-tools"
 tags: 
   - "javascript"
   - "jslint"

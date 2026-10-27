@@ -1,16 +1,11 @@
 ---
 title: "Windows Phone - skinnable application"
 published: 2012-07-20T08:38:00.000Z
-categories: 
-  - "c"
-  - "silverlight"
-  - "skins"
-  - "themes"
-  - "windows-phone"
+categories:
+  - "dotnet"
 tags: 
   - "csharp"
   - "silverlight"
-  - "skins"
   - "themes"
   - "windows-phone"
 ---

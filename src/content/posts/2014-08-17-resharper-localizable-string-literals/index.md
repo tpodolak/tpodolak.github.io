@@ -1,11 +1,8 @@
 ---
 title: "Resharper - localizable string literals"
 published: 2014-08-17T13:17:00.000Z
-categories: 
-  - "globalization"
-  - "localization"
-  - "r"
-  - "resharper"
+categories:
+  - "developer-tools"
 tags: 
   - "globalization"
   - "localization"

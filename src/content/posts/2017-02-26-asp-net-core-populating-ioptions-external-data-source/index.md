@@ -1,8 +1,8 @@
 ---
 title: "Asp.NET Core - populating IOptions<T> from external data source"
 published: 2017-02-26T22:56:52.000Z
-categories: 
-  - "asp-net-core"
+categories:
+  - "web-development"
 tags: 
   - "asp-net-core"
 ---

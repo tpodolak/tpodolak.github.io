@@ -1,10 +1,8 @@
 ---
 title: "Lokalizowanie aplikacji Silverlight i Windows Phone z wykorzystaniem Portable Shared Library"
 published: 2012-01-21T11:32:00.000Z
-categories: 
-  - "localization"
-  - "silverlight"
-  - "windows-phone"
+categories:
+  - "dotnet"
 tags: 
   - "localization"
   - "silverlight"

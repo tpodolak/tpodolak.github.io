@@ -1,8 +1,8 @@
 ---
 title: "XUnit - sharing test data across assembly"
 published: 2017-02-19T14:02:19.000Z
-categories: 
-  - "xunit"
+categories:
+  - "testing"
 tags: 
   - "xunit"
 ---

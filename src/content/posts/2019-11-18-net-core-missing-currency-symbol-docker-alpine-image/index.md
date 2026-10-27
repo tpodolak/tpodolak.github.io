@@ -1,8 +1,8 @@
 ---
 title: ".NET Core - missing currency symbol in docker alpine image"
 published: 2019-11-18T13:54:32.000Z
-categories: 
-  - "net-core"
+categories:
+  - "devops"
 tags: 
   - "docker"
 ---

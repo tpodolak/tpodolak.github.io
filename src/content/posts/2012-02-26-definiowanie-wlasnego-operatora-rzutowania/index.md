@@ -1,8 +1,8 @@
 ---
 title: "Definiowanie własnego operatora rzutowania"
 published: 2012-02-26T21:54:00.000Z
-categories: 
-  - "csharp"
+categories:
+  - "dotnet"
 tags: 
   - "operator"
 ---

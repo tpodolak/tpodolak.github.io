@@ -1,8 +1,8 @@
 ---
 title: "Announcing NSubstitute.Analyzers (beta)"
 published: 2018-06-11T08:06:20.000Z
-categories: 
-  - "net"
+categories:
+  - "testing"
 tags: 
   - "nsubstitute"
   - "nsubstitute-analyzers"

@@ -1,8 +1,8 @@
 ---
 title: "Logstash - reading logs from RabbitMQ"
 published: 2016-11-17T13:53:07.000Z
-categories: 
-  - "elasticstack"
+categories:
+  - "logging"
 tags: 
   - "elasticsearch"
   - "kibana"

@@ -1,8 +1,8 @@
 ---
 title: "Null-propagation operator and conditional statements"
 published: 2017-12-17T15:23:23.000Z
-categories: 
-  - "c"
+categories:
+  - "dotnet"
 tags: 
   - "csharp"
 ---

@@ -1,13 +1,8 @@
 ---
 title: "Interactivity oraz Interaction"
 published: 2011-11-29T21:01:00.000Z
-categories: 
-  - "behavior"
-  - "interaction"
-  - "interactivity"
-  - "prism"
-  - "silverlight"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "behavior"
   - "interaction"

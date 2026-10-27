@@ -1,8 +1,8 @@
 ---
 title: "Generating PDB files with Resharper"
 published: 2016-07-17T10:40:59.000Z
-categories: 
-  - "resharper"
+categories:
+  - "developer-tools"
 tags: 
   - "resharper"
 ---

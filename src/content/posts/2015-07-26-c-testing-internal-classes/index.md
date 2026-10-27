@@ -1,10 +1,8 @@
 ---
 title: "C# - testing internal classes"
 published: 2015-07-26T09:23:00.000Z
-categories: 
-  - "net"
-  - "c"
-  - "unittest"
+categories:
+  - "testing"
 tags: 
   - "dotnet"
   - "csharp"

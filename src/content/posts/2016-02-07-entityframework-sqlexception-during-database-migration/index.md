@@ -1,10 +1,8 @@
 ---
 title: "EntityFramework - SQLException during database migration"
 published: 2016-02-07T13:10:54.000Z
-categories: 
-  - "ef"
-  - "entity-framework"
-  - "migration"
+categories:
+  - "databases"
 tags: 
   - "entity-framework"
   - "migration"

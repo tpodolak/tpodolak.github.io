@@ -1,12 +1,8 @@
 ---
 title: "Tworzenie bootstrappera aplikacji przy użyciu CaliburnMicro"
 published: 2012-05-07T19:24:00.000Z
-categories: 
-  - "caliburnmicro"
-  - "mvvm"
-  - "silverlight5"
-  - "windows-phone"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "caliburn-micro"
   - "mvvm"

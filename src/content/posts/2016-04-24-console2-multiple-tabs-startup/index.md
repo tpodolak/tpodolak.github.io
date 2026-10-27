@@ -1,8 +1,8 @@
 ---
 title: "Console2 - multiple tabs on startup"
 published: 2016-04-24T12:26:04.000Z
-categories: 
-  - "console2"
+categories:
+  - "developer-tools"
 tags: 
   - "console2"
 ---

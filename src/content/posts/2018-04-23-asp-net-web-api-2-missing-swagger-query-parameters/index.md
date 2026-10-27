@@ -1,8 +1,8 @@
 ---
 title: "ASP.NET Web API 2 - missing swagger query parameters"
 published: 2018-04-23T08:00:27.000Z
-categories: 
-  - "asp-net-web-api"
+categories:
+  - "web-development"
 tags: 
   - "asp-net-web-api"
   - "swagger"

@@ -1,11 +1,8 @@
 ---
 title: "Windows Phone - wyświetlanie błędów walidacji"
 published: 2012-06-09T22:55:00.000Z
-categories: 
-  - "datatemplate"
-  - "validation"
-  - "walidacja"
-  - "windows-phone"
+categories:
+  - "dotnet"
 tags: 
   - "data-template"
   - "validation"

@@ -1,12 +1,8 @@
 ---
 title: "Prism - Komendy"
 published: 2011-11-29T19:33:00.000Z
-categories: 
-  - "compositecommand"
-  - "delegatecommand"
-  - "prism"
-  - "silverlight"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "prism"
   - "silverlight"

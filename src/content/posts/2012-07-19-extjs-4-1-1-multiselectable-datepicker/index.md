@@ -1,10 +1,8 @@
 ---
 title: "Extjs 4.1.1 - multiselectable datepicker"
 published: 2012-07-19T21:31:00.000Z
-categories: 
-  - "datepicker"
-  - "extjs-4-1-1"
-  - "javascript"
+categories:
+  - "web-development"
 tags: 
   - "datepicker"
   - "extjs"

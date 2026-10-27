@@ -1,12 +1,8 @@
 ---
 title: "Walidacja"
 published: 2011-11-28T19:03:00.000Z
-categories: 
-  - "idataerrorinfo"
-  - "inotifyerrorinfo"
-  - "silverlight"
-  - "walidacja"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "silverlight"
   - "validation"

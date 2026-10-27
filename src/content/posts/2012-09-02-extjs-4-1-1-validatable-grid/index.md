@@ -1,13 +1,8 @@
 ---
 title: "Extjs 4.1.1 - validatable grid"
 published: 2012-09-02T14:08:00.000Z
-categories: 
-  - "ext-panel-grid"
-  - "extjs-4-1-1"
-  - "grid"
-  - "plugin"
-  - "plugins"
-  - "validation"
+categories:
+  - "web-development"
 tags: 
   - "grid"
   - "extjs"

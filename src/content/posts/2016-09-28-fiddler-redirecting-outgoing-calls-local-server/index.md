@@ -1,8 +1,8 @@
 ---
 title: "Fiddler - request redirection"
 published: 2016-09-28T20:25:12.000Z
-categories: 
-  - "fiddler"
+categories:
+  - "developer-tools"
 tags: 
   - "fiddler"
 ---

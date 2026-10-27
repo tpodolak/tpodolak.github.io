@@ -1,8 +1,8 @@
 ---
 title: "Visual Studio - restoring default exception window"
 published: 2016-10-25T19:22:33.000Z
-categories: 
-  - "visual-studio"
+categories:
+  - "developer-tools"
 tags: 
   - "visual-studio"
 ---

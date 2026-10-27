@@ -1,11 +1,8 @@
 ---
 title: "ASP.NET MVC - Custom ActionResult - PDFResult"
 published: 2012-12-26T15:01:00.000Z
-categories: 
-  - "actionresult"
-  - "asp-net-mvc"
-  - "customactionresult"
-  - "pdfacionresult"
+categories:
+  - "web-development"
 tags: 
   - "asp-net-mvc"
   - "pdf"

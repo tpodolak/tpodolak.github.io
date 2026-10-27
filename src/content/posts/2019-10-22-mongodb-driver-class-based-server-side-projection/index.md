@@ -1,8 +1,8 @@
 ---
 title: "MongoDB.Driver - class-based server side projection"
 published: 2019-10-22T08:00:31.000Z
-categories: 
-  - "mongodb"
+categories:
+  - "databases"
 tags: 
   - "mongodb"
   - "nosql"

@@ -1,11 +1,8 @@
 ---
 title: "NHibarnate - using event listeners to set entity modification date"
 published: 2013-08-24T23:04:00.000Z
-categories: 
-  - "c"
-  - "eventlisteners"
-  - "fluentnhibernate"
-  - "nhibernate"
+categories:
+  - "databases"
 tags: 
   - "csharp"
   - "fluent-nhibernate"

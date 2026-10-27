@@ -1,9 +1,8 @@
 ---
 title: "C# - dynamic type can be useful"
 published: 2015-05-16T09:29:00.000Z
-categories: 
-  - "c"
-  - "dynamic"
+categories:
+  - "dotnet"
 tags: 
   - "dotnet-framework-4-0"
   - "csharp"

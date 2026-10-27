@@ -1,11 +1,8 @@
 ---
 title: "Trigery - Triggers"
 published: 2011-11-28T17:20:00.000Z
-categories: 
-  - "datatrigger"
-  - "trigery"
-  - "triggers"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "triggers"
   - "wpf"

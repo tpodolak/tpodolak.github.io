@@ -1,9 +1,8 @@
 ---
 title: "NHhibernate - multiple queries in one roundtrip to server"
 published: 2014-04-27T22:14:00.000Z
-categories: 
-  - "c"
-  - "nhibernate"
+categories:
+  - "databases"
 tags: 
   - "csharp"
   - "nhibernate"

@@ -1,9 +1,8 @@
 ---
 title: "Using async/await with IAsyncResult pattern"
 published: 2016-02-12T17:45:14.000Z
-categories: 
-  - "async-await"
-  - "iasyncresult"
+categories:
+  - "dotnet"
 tags: 
   - "async-await"
 ---

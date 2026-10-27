@@ -1,11 +1,8 @@
 ---
 title: "Commands - czyli interakcja widoku z ViewModelem cz.1"
 published: 2011-11-27T15:21:00.000Z
-categories: 
-  - "bindingcommand"
-  - "commands"
-  - "viewmodel"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "commands"
   - "viewmodel"

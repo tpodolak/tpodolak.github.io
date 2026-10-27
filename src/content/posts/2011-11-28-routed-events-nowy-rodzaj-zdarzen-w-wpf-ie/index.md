@@ -1,12 +1,8 @@
 ---
 title: "Routed Events - nowy rodzaj zdarzeń w WPF-ie"
 published: 2011-11-28T18:20:00.000Z
-categories: 
-  - "bubbling"
-  - "events"
-  - "routedevent"
-  - "tunelling"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "wpf"
 ---

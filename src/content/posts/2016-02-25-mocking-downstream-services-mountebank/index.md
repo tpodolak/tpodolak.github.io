@@ -1,8 +1,7 @@
 ---
 title: "Mocking downstream services with Mountebank"
 published: 2016-02-25T20:44:35.000Z
-categories: 
-  - "mountebank"
+categories:
   - "testing"
 tags: 
   - "mountebank"

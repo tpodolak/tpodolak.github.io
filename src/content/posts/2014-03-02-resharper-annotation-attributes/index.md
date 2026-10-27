@@ -1,11 +1,8 @@
 ---
 title: "Resharper - annotation attributes"
 published: 2014-03-02T16:39:00.000Z
-categories: 
-  - "attributes"
-  - "c"
-  - "r"
-  - "resharper"
+categories:
+  - "developer-tools"
 tags: 
   - "attributes"
   - "csharp"

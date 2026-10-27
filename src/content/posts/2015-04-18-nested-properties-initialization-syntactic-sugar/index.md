@@ -1,9 +1,8 @@
 ---
 title: "Nested properties initialization - syntactic sugar"
 published: 2015-04-18T19:11:00.000Z
-categories: 
-  - "net"
-  - "c"
+categories:
+  - "dotnet"
 tags: 
   - "dotnet"
   - "csharp"

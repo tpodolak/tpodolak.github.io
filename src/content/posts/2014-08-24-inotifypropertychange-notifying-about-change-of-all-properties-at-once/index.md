@@ -1,11 +1,8 @@
 ---
 title: "INotifyPropertyChange - notifying about change of all properties at once"
 published: 2014-08-24T09:40:00.000Z
-categories: 
-  - "inotifypropertychanged"
-  - "mvvm"
-  - "silverlight"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "inotifypropertychanged"
   - "mvvm"

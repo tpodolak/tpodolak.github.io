@@ -1,10 +1,8 @@
 ---
 title: "Resharper - \"Go to Everything\""
 published: 2014-04-17T19:50:00.000Z
-categories: 
-  - "c"
-  - "r"
-  - "resharper"
+categories:
+  - "developer-tools"
 tags: 
   - "csharp"
   - "resharper"

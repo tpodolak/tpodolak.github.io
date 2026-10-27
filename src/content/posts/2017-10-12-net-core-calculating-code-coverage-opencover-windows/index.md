@@ -1,8 +1,8 @@
 ---
 title: ".NET Core - calculating code coverage with OpenCover (on Windows)"
 published: 2017-10-12T08:00:27.000Z
-categories: 
-  - "net-core"
+categories:
+  - "testing"
 tags: 
   - "opencover"
 ---

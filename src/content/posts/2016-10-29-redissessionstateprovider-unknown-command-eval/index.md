@@ -1,10 +1,8 @@
 ---
 title: "RedisSessionStateProvider - unknown command 'EVAL'"
 published: 2016-10-29T18:33:27.000Z
-categories: 
-  - "net"
-  - "asp-net-mvc"
-  - "redis"
+categories:
+  - "databases"
 tags: 
   - "dotnet"
   - "asp-net-mvc"

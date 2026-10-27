@@ -1,15 +1,11 @@
 ---
 title: "Extjs - vertical header in grid and locked columns"
 published: 2013-11-10T21:09:00.000Z
-categories: 
-  - "ext-panel-grid"
-  - "extjs-4-2"
-  - "plugin"
-  - "vertical-header"
+categories:
+  - "web-development"
 tags: 
   - "grid"
   - "extjs"
-  - "vertical-header"
 ---
 
 A while ago I wrote an article where I described how to create a plugin, which can flip header of `Ext.panel.Grid` vertically.

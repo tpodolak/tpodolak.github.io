@@ -1,12 +1,8 @@
 ---
 title: "Commands - czyli interakcja widoku z ViewModelem cz.2"
 published: 2011-11-27T16:05:00.000Z
-categories: 
-  - "commands"
-  - "commanmanager"
-  - "icommand"
-  - "silverlight"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "commands"
   - "silverlight"

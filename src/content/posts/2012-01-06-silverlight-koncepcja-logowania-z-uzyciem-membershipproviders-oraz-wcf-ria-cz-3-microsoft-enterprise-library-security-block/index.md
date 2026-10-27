@@ -1,13 +1,8 @@
 ---
 title: "Silverlight - koncepcja logowania z użyciem MembershipProviders oraz WCF RIA cz.3 - Microsoft Enterprise Library Security Block"
 published: 2012-01-06T13:47:00.000Z
-categories: 
-  - "authentication"
-  - "enterprise-library"
-  - "roles"
-  - "security-block"
-  - "silverlight"
-  - "wcf"
+categories:
+  - "dotnet"
 tags: 
   - "authentication"
   - "enterprise-library"

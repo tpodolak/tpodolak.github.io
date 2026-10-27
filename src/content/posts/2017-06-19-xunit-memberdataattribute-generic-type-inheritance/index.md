@@ -1,8 +1,8 @@
 ---
 title: "XUnit - MemberDataAttribute and generic type inheritance"
 published: 2017-06-19T20:21:14.000Z
-categories: 
-  - "xunit"
+categories:
+  - "testing"
 tags: 
   - "xunit"
 ---

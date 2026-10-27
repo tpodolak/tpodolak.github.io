@@ -1,9 +1,8 @@
 ---
 title: "Abusing collection initializers"
 published: 2016-02-01T18:03:10.000Z
-categories: 
-  - "net"
-  - "net-4-0"
+categories:
+  - "dotnet"
 tags: 
   - "dotnet"
   - "dotnet-framework-4-0"

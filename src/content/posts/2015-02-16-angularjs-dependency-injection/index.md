@@ -1,10 +1,8 @@
 ---
 title: "AngularJS - dependency injection"
 published: 2015-02-16T19:39:00.000Z
-categories: 
-  - "angularjs"
-  - "gulp"
-  - "javascript"
+categories:
+  - "web-development"
 tags: 
   - "angularjs"
   - "gulp"

@@ -1,8 +1,8 @@
 ---
 title: "Cake - Data at the root level is invalid"
 published: 2016-09-08T20:55:01.000Z
-categories: 
-  - "cake"
+categories:
+  - "developer-tools"
 tags: 
   - "cake"
 ---

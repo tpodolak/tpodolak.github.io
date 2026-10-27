@@ -1,8 +1,8 @@
 ---
 title: "ASP.NET Core - adding controllers directly from integration tests"
 published: 2020-06-22T08:00:12.000Z
-categories: 
-  - "asp-net-core"
+categories:
+  - "testing"
 tags: 
   - "asp-net-core"
   - "testing"

@@ -1,8 +1,8 @@
 ---
 title: "Debugging cake scripts"
 published: 2016-07-10T09:03:08.000Z
-categories: 
-  - "cake"
+categories:
+  - "developer-tools"
 tags: 
   - "cake"
 ---

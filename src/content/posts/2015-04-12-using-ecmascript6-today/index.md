@@ -1,11 +1,8 @@
 ---
 title: "Using ECMAScript6 today"
 published: 2015-04-12T10:48:00.000Z
-categories: 
-  - "babel"
-  - "ecmascript6"
-  - "javascript"
-  - "traceur"
+categories:
+  - "web-development"
 tags: 
   - "babel"
   - "ecmascript-6"

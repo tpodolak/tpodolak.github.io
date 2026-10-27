@@ -1,10 +1,8 @@
 ---
 title: "How to check if one function calls another function"
 published: 2013-12-01T18:12:00.000Z
-categories: 
-  - "c"
-  - "crawler"
-  - "function"
+categories:
+  - "dotnet"
 tags: 
   - "csharp"
 ---

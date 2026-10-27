@@ -1,8 +1,8 @@
 ---
 title: "Intercepting browser requests with Postman"
 published: 2016-07-24T22:39:19.000Z
-categories: 
-  - "postman"
+categories:
+  - "developer-tools"
 tags: 
   - "postman"
 ---

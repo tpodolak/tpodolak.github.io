@@ -1,13 +1,10 @@
 ---
 title: "Extjs - Changing style of items in dropdownlist"
 published: 2013-03-19T18:58:00.000Z
-categories: 
-  - "extjs-4-1-1"
-  - "template"
-  - "xtemplate"
+categories:
+  - "web-development"
 tags: 
   - "extjs"
-  - "template"
 ---
 
 I've recently been asked to create `ComboBox` with custom styled `drop-down` list.

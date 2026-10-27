@@ -1,11 +1,8 @@
 ---
 title: "Lokalizowanie aplikacji WPF oraz Silverlight 5 przy użyciu MarkupExtension"
 published: 2012-01-21T11:24:00.000Z
-categories: 
-  - "localization"
-  - "markupextension"
-  - "silverlight5"
-  - "wpf"
+categories:
+  - "dotnet"
 tags: 
   - "localization"
   - "silverlight"

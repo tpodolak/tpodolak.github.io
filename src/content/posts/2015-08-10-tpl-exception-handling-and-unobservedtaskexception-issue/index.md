@@ -1,11 +1,8 @@
 ---
 title: "TPL - exception handling and UnobservedTaskException issue"
 published: 2015-08-10T19:12:00.000Z
-categories: 
-  - "net-4-0"
-  - "net-4-5"
-  - "tpl"
-  - "unobservedtaskexception"
+categories:
+  - "dotnet"
 tags: 
   - "dotnet-framework-4-0"
   - "dotnet-framework-4-5"

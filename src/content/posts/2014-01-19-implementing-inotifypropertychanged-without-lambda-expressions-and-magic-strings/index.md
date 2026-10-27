@@ -1,11 +1,8 @@
 ---
 title: "Implementing INotifyPropertyChanged without lambda expressions and \"magic\" strings"
 published: 2014-01-19T20:31:00.000Z
-categories: 
-  - "net-4-5"
-  - "c"
-  - "callermembername"
-  - "inotifypropertychanged"
+categories:
+  - "dotnet"
 tags: 
   - "dotnet-framework-4-5"
   - "csharp"

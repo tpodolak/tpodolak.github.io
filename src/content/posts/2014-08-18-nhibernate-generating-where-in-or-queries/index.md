@@ -1,13 +1,8 @@
 ---
 title: "NHibernate - generating WHERE IN … OR … queries"
 published: 2014-08-18T10:08:00.000Z
-categories: 
-  - "net"
-  - "c"
-  - "disjunction"
-  - "nhibernate"
-  - "queryover"
-  - "restrictions"
+categories:
+  - "databases"
 tags: 
   - "dotnet"
   - "csharp"

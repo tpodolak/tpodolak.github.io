@@ -1,9 +1,8 @@
 ---
 title: "T-SQL - executing query multiple times"
 published: 2014-10-27T21:56:00.000Z
-categories: 
-  - "sql"
-  - "t-sql"
+categories:
+  - "databases"
 tags: 
   - "sql"
   - "t-sql"

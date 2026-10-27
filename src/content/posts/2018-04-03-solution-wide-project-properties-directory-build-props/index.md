@@ -1,10 +1,9 @@
 ---
 title: "Solution-wide project properties with Directory.Build.props"
 published: 2018-04-03T08:00:14.000Z
-categories: 
-  - "net"
-tags: 
+categories:
   - "dotnet"
+tags: 
   - "msbuild"
 ---
 

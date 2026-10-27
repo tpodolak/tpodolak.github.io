@@ -1,10 +1,8 @@
 ---
 title: "Easy way to suppress code analysis warnings"
 published: 2015-08-10T19:12:00.000Z
-categories: 
-  - "net"
-  - "c"
-  - "code-analysis"
+categories:
+  - "developer-tools"
 tags: 
   - "dotnet"
   - "csharp"

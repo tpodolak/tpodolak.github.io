@@ -1,9 +1,8 @@
 ---
 title: "MVVM i okna modalne"
 published: 2011-11-30T17:10:00.000Z
-categories: 
-  - "modalwindow"
-  - "mvvm"
+categories:
+  - "dotnet"
 tags: 
   - "modal-window"
   - "mvvm"
