@@ -109,8 +109,8 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 export const giscusConfig: GiscusConfig = {
 	repo: "tpodolak/blog-comments",
 	repoId: "R_kgDOVZPiBw",
-	category: "Announcements",
-	categoryId: "DIC_kwDOVZPiB84DJvot",
+	category: "General",
+	categoryId: "DIC_kwDOVZPiB84DJvou",
 	mapping: "specific",
 	strict: true,
 	reactionsEnabled: true,
