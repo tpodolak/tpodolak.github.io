@@ -1,4 +1,6 @@
 <script lang="ts">
+const _props: { class?: string } = $props();
+
 import { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants.ts";
 import Icon from "@iconify/svelte";
 import {
