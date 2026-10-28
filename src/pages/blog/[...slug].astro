@@ -15,7 +15,7 @@ import PostMetadata from "../../components/PostMeta.astro";
 import ShareLinks from "../../components/ShareLinks.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
-import {render} from "astro:content"
+import { render } from "astro:content";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -26,10 +26,10 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await render(entry)
+const { Content, headings } = await render(entry);
 const postUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 
-const { remarkPluginFrontmatter } = await render(entry)
+const { remarkPluginFrontmatter } = await render(entry);
 
 const jsonLd = {
 	"@context": "https://schema.org",

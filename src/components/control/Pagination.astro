@@ -47,7 +47,7 @@ if (r === page.lastPage - 2) pages.push(page.lastPage - 1);
 if (r < page.lastPage) pages.push(page.lastPage);
 
 const getPageUrl = (p: number, location: string) => {
-	const normalizedLocation = location	
+	const normalizedLocation = location
 		.replace(/^\/+/, "") // Remove one or more leading slashes.
 		.replace(/\/+$/, ""); // Remove one or more trailing slashes.
 

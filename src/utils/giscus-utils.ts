@@ -55,7 +55,9 @@ function mountGiscus(): void {
 /** Pushes the current site theme to an already rendered giscus iframe. */
 function syncGiscusTheme(): void {
 	const container = getContainer();
-	const frame = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+	const frame = document.querySelector<HTMLIFrameElement>(
+		"iframe.giscus-frame",
+	);
 	if (!container || !frame?.contentWindow) {
 		return;
 	}
