@@ -3,6 +3,7 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import { url } from "@utils/url-utils.ts";
+import { OverlayScrollbars } from "overlayscrollbars";
 import { onMount } from "svelte";
 import type { SearchResult } from "@/global";
 
@@ -30,6 +31,36 @@ const fakeResult: SearchResult[] = [
 		excerpt: "Try running <mark>npm build && npm preview</mark> instead.",
 	},
 ];
+
+// Close the panel regardless of viewport size and reset the search state.
+const closePanel = () => {
+	document.getElementById("search-panel")?.classList.add("float-panel-closed");
+	// Reset after the click has bubbled to swup (it needs the clicked <a> to still
+	// be in the DOM) and after the panel's fade-out transition has finished.
+	setTimeout(() => {
+		keywordDesktop = "";
+		keywordMobile = "";
+		result = [];
+	}, 300);
+};
+
+// Svelte action: give the results list the same overlay scrollbar as the rest of the site.
+const overlayScroll = (node: HTMLElement) => {
+	const instance = OverlayScrollbars(node, {
+		overflow: { x: "hidden" },
+		scrollbars: {
+			theme: "scrollbar-base scrollbar-auto",
+			autoHide: "leave",
+			autoHideDelay: 500,
+			autoHideSuspend: false,
+		},
+	});
+	return {
+		destroy() {
+			instance.destroy();
+		},
+	};
+};
 
 const togglePanel = () => {
 	const panel = document.getElementById("search-panel");
@@ -172,8 +203,9 @@ top-20 left-4 right-4 md:!top-[4.75rem] md:left-0 md:right-0 shadow-2xl rounded-
     </div>
 
     <!-- search results -->
+    <div class="search-results" use:overlayScroll>
     {#each result as item}
-        <a href={item.url}
+        <a href={item.url} on:click={closePanel}
            class="transition first-of-type:mt-2 group block
        rounded-xl text-lg px-3 py-2 hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]">
             <div class="transition text-90 inline-flex font-bold group-hover:text-[var(--primary)]">
@@ -184,14 +216,15 @@ top-20 left-4 right-4 md:!top-[4.75rem] md:left-0 md:right-0 shadow-2xl rounded-
             </div>
         </a>
     {/each}
+    </div>
 </div>
 
 <style>
   input:focus {
     outline: 0;
   }
-  .search-panel {
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
+  .search-results {
+    max-height: calc(100vh - 11rem);
+    overflow-wrap: anywhere;
   }
 </style>

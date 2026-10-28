@@ -27,7 +27,10 @@
         @apply -translate-y-1 opacity-0 pointer-events-none
     }
     .search-panel mark {
-        @apply bg-transparent text-[var(--primary)]
+        /* @apply bg-transparent text-[var(--primary)] */
+        @apply rounded px-1 py-px font-semibold text-[var(--deep-text)] bg-black/15 dark:bg-white/25 dark:text-white;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
     }
 
     .btn-card {
