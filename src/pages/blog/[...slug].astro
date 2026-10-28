@@ -1,4 +1,5 @@
 ---
+import { render } from "astro:content";
 import path from "node:path";
 import Comments from "@components/Comments.astro";
 import License from "@components/misc/License.astro";
@@ -15,7 +16,6 @@ import PostMetadata from "../../components/PostMeta.astro";
 import ShareLinks from "../../components/ShareLinks.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
-import { render } from "astro:content";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
