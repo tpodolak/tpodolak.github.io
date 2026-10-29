@@ -82,7 +82,7 @@
     }
 
     .text-90 {
-        @apply text-black/90 dark:text-white/90
+        @apply text-black/75 dark:text-white/90
     }
     .text-75 {
         @apply text-black/75 dark:text-white/75
