@@ -2,6 +2,8 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { getCategoryUrl } from "@utils/url-utils.ts";
+import type { GetStaticPathsOptions } from "astro";
+import { PAGE_SIZE } from "../constants/constants";
 
 // // Retrieve posts and sort them by publication date
 async function getRawSortedPosts() {
@@ -111,4 +113,9 @@ export async function getCategoryList(): Promise<Category[]> {
 		});
 	}
 	return ret;
+}
+
+export async function getPostListingPaths({ paginate }: GetStaticPathsOptions) {
+	const allBlogPosts = await getSortedPosts();
+	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
 }

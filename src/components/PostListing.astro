@@ -1,0 +1,11 @@
+---
+import Pagination from "../components/control/Pagination.astro";
+import PostPage from "../components/PostPage.astro";
+
+const { page } = Astro.props;
+
+const len = page.data.length;
+---
+
+<PostPage page={page}></PostPage>
+<Pagination class="mx-auto onload-animation" page={page} location="blog" style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
