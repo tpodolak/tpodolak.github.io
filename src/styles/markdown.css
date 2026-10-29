@@ -134,3 +134,12 @@
         display: inline-block;
         max-width: 100%;
     }}
+
+/* Softer, cool-toned typography for dark mode. */
+.dark .custom-md {
+    color: oklch(0.78 0.012 var(--hue));
+}
+
+.dark .custom-md :is(h1, h2, h3, h4, h5, h6, strong, b) {
+    color: oklch(0.87 0.012 var(--hue));
+}
