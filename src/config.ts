@@ -116,7 +116,7 @@ export const giscusConfig: GiscusConfig = {
 	reactionsEnabled: true,
 	inputPosition: "top",
 	lang: "en",
-	lazyLoad: true,
+	lazyLoad: false,
 	theme: {
 		light: "light",
 		dark: "dark",

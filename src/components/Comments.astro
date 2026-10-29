@@ -26,7 +26,7 @@ const term = Astro.props.term;
 		data-reactions-enabled={giscusConfig.reactionsEnabled ? "1" : "0"}
 		data-input-position={giscusConfig.inputPosition}
 		data-lang={giscusConfig.lang}
-		data-loading={giscusConfig.lazyLoad ? "lazy" : undefined}
+		data-loading={giscusConfig.lazyLoad ? "lazy" : "eager"}
 		data-theme-light={giscusConfig.theme.light}
 		data-theme-dark={giscusConfig.theme.dark}
 	></div>
