@@ -41,8 +41,8 @@ export const siteConfig: SiteConfig = {
 };
 
 export const navBarConfig: NavBarConfig = {
-	links: [LinkPreset.Archive],
-	socialLinks: [
+	menuLinks: [LinkPreset.Archive],
+	barLinks: [
 		{
 			name: "Twitter",
 			icon: "fa6-brands:twitter",
@@ -65,6 +65,8 @@ export const navBarConfig: NavBarConfig = {
 			name: "RSS",
 			icon: "fa6-solid:rss",
 			url: "/rss.xml",
+			external: false,
+			clientSideNavigation: false,
 		},
 	],
 };

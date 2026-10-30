@@ -53,15 +53,17 @@ export type NavBarLink = {
 	name: string;
 	url: string;
 	external?: boolean;
+	/** Defaults to true. Set to false for links that must be a full browser navigation, e.g. feeds or file downloads. */
+	clientSideNavigation?: boolean;
 };
 
-export type NavBarSocialLink = NavBarLink & {
+export type NavBarIconLink = NavBarLink & {
 	icon: string;
 };
 
 export type NavBarConfig = {
-	links: (NavBarLink | LinkPreset)[];
-	socialLinks: NavBarSocialLink[];
+	menuLinks: (NavBarLink | LinkPreset)[];
+	barLinks: NavBarIconLink[];
 };
 
 export type ProfileConfig = {

@@ -11,7 +11,7 @@ import NavMenuPanel from "./widget/NavMenuPanel.astro";
 
 const className = Astro.props.class;
 
-let links: NavBarLink[] = navBarConfig.links.map(
+let menuLinks: NavBarLink[] = navBarConfig.menuLinks.map(
 	(item: NavBarLink | LinkPreset): NavBarLink => {
 		if (typeof item === "number") {
 			return LinkPresets[item];
@@ -19,8 +19,6 @@ let links: NavBarLink[] = navBarConfig.links.map(
 		return item;
 	},
 );
-
-let socialLinks = navBarConfig.socialLinks;
 ---
 <div id="navbar" class="z-50 onload-animation">
     <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div> <!-- used for onload animation -->
@@ -32,11 +30,12 @@ let socialLinks = navBarConfig.socialLinks;
                 <Icon name="material-symbols:home-outline-rounded" class="text-[1.75rem] mb-1 mr-2" />
                 {siteConfig.title}
             </a>
-            <nav class="flex items-center justify-center" aria-label="Social links">
-                {socialLinks.map((link) => (
+            <nav class="flex items-center justify-center" aria-label="Profile and feed links">
+                {navBarConfig.barLinks.map((link) => (
                     <a
                         aria-label={link.name}
                         href={link.external ? link.url : url(link.url)}
+                        data-no-swup={link.clientSideNavigation === false ? "" : undefined}
                         target={link.external ? "_blank" : null}
                         rel={link.external ? "noopener noreferrer" : null}
                         class="btn-plain scale-animation rounded-lg h-9 w-9 active:scale-90"
@@ -71,7 +70,7 @@ let socialLinks = navBarConfig.socialLinks;
 
             </div>
         </div>
-        <NavMenuPanel links={links}></NavMenuPanel>
+        <NavMenuPanel links={menuLinks}></NavMenuPanel>
         <DisplaySettings client:only="svelte"></DisplaySettings>
     </div>
 </div>
