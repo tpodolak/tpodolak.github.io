@@ -41,6 +41,9 @@ jobs:
       - name: Biome (format + lint)
         run: pnpm exec biome ci ./src
 
+      - name: Type-check (tsc)
+        run: pnpm run type-check
+
       - name: Check for errors
         run: pnpm check
 

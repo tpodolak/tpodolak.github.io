@@ -36,6 +36,7 @@ const postsCollection = defineCollection({
 			category: data.category ?? data.categories[0] ?? "",
 		})),
 });
-export const collections = {
+
+export const collections: { posts: typeof postsCollection } = {
 	posts: postsCollection,
 };

@@ -6,7 +6,7 @@ import type { GetStaticPathsOptions } from "astro";
 import { PAGE_SIZE } from "../constants/constants";
 
 // // Retrieve posts and sort them by publication date
-async function getRawSortedPosts() {
+async function getRawSortedPosts(): Promise<CollectionEntry<"posts">[]> {
 	const allBlogPosts = await getCollection("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
@@ -19,7 +19,7 @@ async function getRawSortedPosts() {
 	return sorted;
 }
 
-export async function getSortedPosts() {
+export async function getSortedPosts(): Promise<CollectionEntry<"posts">[]> {
 	const sorted = await getRawSortedPosts();
 
 	for (let i = 1; i < sorted.length; i++) {
@@ -115,7 +115,7 @@ export async function getCategoryList(): Promise<Category[]> {
 	return ret;
 }
 
-export async function getPostListingPaths({ paginate }: GetStaticPathsOptions) {
+export async function getPostListingPaths({ paginate }: GetStaticPathsOptions): Promise<ReturnType<typeof paginate>> {
 	const allBlogPosts = await getSortedPosts();
 	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
 }

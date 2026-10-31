@@ -9,10 +9,10 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "type-check": "tsc --noEmit --isolatedDeclarations",
+    "type-check": "tsc --noEmit",
     "new-post": "node scripts/new-post.js",
-    "format": "biome format --write ./src",
-    "lint": "biome check --write ./src",
+    "format": "biome format --write ./src ./tests",
+    "lint": "biome check --write ./src ./tests",
     "test": "pnpm run test:ui",
     "test:ui": "playwright test",
     "preinstall": "npx only-allow pnpm"
