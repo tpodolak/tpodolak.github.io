@@ -115,7 +115,9 @@ export async function getCategoryList(): Promise<Category[]> {
 	return ret;
 }
 
-export async function getPostListingPaths({ paginate }: GetStaticPathsOptions): Promise<ReturnType<typeof paginate>> {
+export async function getPostListingPaths({
+	paginate,
+}: GetStaticPathsOptions): Promise<ReturnType<typeof paginate>> {
 	const allBlogPosts = await getSortedPosts();
 	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
 }
