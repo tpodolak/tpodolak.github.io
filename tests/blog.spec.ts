@@ -162,6 +162,25 @@ test.describe('Blog - Navbar Navigation', () => {
     await expect(rssLink).not.toHaveAttribute('target', '_blank');
   });
 
+  test('RSS link loads valid RSS feed', async ({ page }) => {
+    const rssLink = page.locator('#navbar a[href="/rss.xml"]');
+
+    await expect(rssLink).toBeVisible();
+
+    await rssLink.click();
+    await page.waitForLoadState('networkidle');
+
+    await expect(page).toHaveURL(/\/rss\.xml/);
+
+    const contentType = await page.evaluate(() => document.contentType);
+    expect(contentType).toMatch(/xml/);
+
+    const pageContent = await page.locator('body').textContent();
+    expect(pageContent).toContain('<rss');
+    expect(pageContent).toContain('<channel>');
+    expect(pageContent).toContain('<item>');
+  });
+
   test('Archive link in menu panel navigates to archive page', async ({ page }) => {
     const menuButton = page.locator('#nav-more-switch, #nav-menu-switch').first();
 
@@ -508,12 +527,18 @@ test.describe('Blog - Archive Page Highlighting', () => {
     await page.waitForLoadState('networkidle');
     await waitForSwupTransition(page);
 
-    const categoriesWidget = page.locator('#categories');
+    const categoriesWidget = page.locator('widget-layout[data-id="categories"]');
     await expect(categoriesWidget).toBeVisible();
 
-    const showMoreButton = page.locator('#categories button:has-text("Show more"), #categories button:has-text("Show all")');
-    const activeLink = page.locator('#categories filter-links a[data-active]');
-    await expect(activeLink.first()).toHaveAttribute('data-active');
+    const categoryWrapper = categoriesWidget.locator('.collapse-wrapper');
+    await expect(categoryWrapper).toHaveClass(/collapsed/);
+
+    const expandButton = categoriesWidget.locator('.expand-btn button');
+    await expect(expandButton).toBeVisible();
+
+    await expandButton.click();
+
+    await expect(categoryWrapper).not.toHaveClass(/collapsed/);
   });
 
   test('Tags list expands when collapsed and tag is selected', async ({ page }) => {
@@ -528,11 +553,17 @@ test.describe('Blog - Archive Page Highlighting', () => {
     await page.waitForLoadState('networkidle');
     await waitForSwupTransition(page);
 
-    const tagsWidget = page.locator('#tags');
+    const tagsWidget = page.locator('widget-layout[data-id="tags"]');
     await expect(tagsWidget).toBeVisible();
 
-    const showMoreButton = page.locator('#tags button:has-text("Show more"), #tags button:has-text("Show all")');
-    const activeLink = page.locator('#tags filter-links a[data-active]');
-    await expect(activeLink.first()).toHaveAttribute('data-active');
+    const tagWrapper = tagsWidget.locator('.collapse-wrapper');
+    await expect(tagWrapper).toHaveClass(/collapsed/);
+
+    const expandButton = tagsWidget.locator('.expand-btn button');
+    await expect(expandButton).toBeVisible();
+
+    await expandButton.click();
+
+    await expect(tagWrapper).not.toHaveClass(/collapsed/);
   });
 });
