@@ -1,10 +1,104 @@
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
-// Helper to wait for swup page transition to complete
 async function waitForSwupTransition(page: Page): Promise<void> {
   await expect(page.locator('html')).not.toHaveClass(/is-changing/, { timeout: 10000 });
 }
+
+async function expectCursor(page: Page, selector: string, expectedCursor: string) {
+  const element = page.locator(selector).first();
+  await element.hover();
+  const cursor = await element.evaluate((el) => window.getComputedStyle(el).cursor);
+  expect(cursor).toBe(expectedCursor);
+}
+
+test.describe('Blog - Cursor Styles', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/blog/');
+    await page.waitForLoadState('networkidle');
+    await waitForSwupTransition(page);
+  });
+
+  test('Navbar links show pointer cursor on hover', async ({ page }) => {
+    await expectCursor(page, '#navbar a[href="/blog/"]', 'pointer');
+    await expectCursor(page, '#navbar a[href="https://twitter.com/tpodolak1"]', 'pointer');
+    await expectCursor(page, '#navbar a[href="https://github.com/tpodolak"]', 'pointer');
+    await expectCursor(page, '#navbar a[href="https://www.linkedin.com/pub/tomasz-podolak/3b/7a5/672"]', 'pointer');
+    await expectCursor(page, '#navbar a[href="/rss.xml"]', 'pointer');
+    await expectCursor(page, '#search-switch', 'pointer');
+    await expectCursor(page, '#scheme-switch', 'pointer');
+  });
+
+  test('Pagination links show pointer cursor on hover', async ({ page }) => {
+    const pagination = page.locator('main .flex.flex-row.gap-3.justify-center').first();
+    await expect(pagination).toBeVisible();
+
+    // Target first non-disabled pagination link (skip prev button which is disabled on first page)
+    const pageLinks = pagination.locator('a.btn-card:not(.disabled)');
+    await expect(pageLinks.first()).toBeVisible();
+
+    await expectCursor(page, 'main .flex.flex-row.gap-3.justify-center a.btn-card:not(.disabled)', 'pointer');
+  });
+
+  test('Post links on blog listing show pointer cursor on hover', async ({ page }) => {
+    const firstPostLink = page.locator('main .card-base a[href^="/blog/"]').first();
+    await expect(firstPostLink).toBeVisible();
+    await expectCursor(page, 'main .card-base a[href^="/blog/"]', 'pointer');
+  });
+
+  test('Menu panel links show pointer cursor on hover', async ({ page }) => {
+    const menuButton = page.locator('#nav-more-switch, #nav-menu-switch').first();
+    await menuButton.click();
+
+    const menuPanel = page.locator('#nav-menu-panel');
+    await expect(menuPanel).toBeVisible();
+
+    await expectCursor(page, '#nav-menu-panel a[href="/blog/archive/"]', 'pointer');
+  });
+
+  test('Category and tag links show pointer cursor on hover', async ({ page }) => {
+    await page.goto('/blog/archive/');
+    await page.waitForLoadState('networkidle');
+    await waitForSwupTransition(page);
+
+    const categoryLink = page.locator('#categories filter-links a').first();
+    await expect(categoryLink).toBeVisible();
+    await expectCursor(page, '#categories filter-links a', 'pointer');
+
+    const tagLink = page.locator('#tags filter-links a').first();
+    await expect(tagLink).toBeVisible();
+    await expectCursor(page, '#tags filter-links a', 'pointer');
+  });
+
+  test('Archive filter links show pointer cursor on hover', async ({ page }) => {
+    await page.goto('/blog/archive/');
+    await page.waitForLoadState('networkidle');
+    await waitForSwupTransition(page);
+
+    await expectCursor(page, '#archive-filters a[href*="category="]', 'pointer');
+    await expectCursor(page, '#archive-filters a[href*="tag="]', 'pointer');
+  });
+
+  test('Post meta category/tag links show pointer cursor on hover', async ({ page }) => {
+    await page.goto('/blog/');
+    await page.waitForLoadState('networkidle');
+    await waitForSwupTransition(page);
+
+    const firstPostLink = page.locator('main .card-base a[href^="/blog/"]').first();
+    await firstPostLink.click();
+    await page.waitForLoadState('networkidle');
+    await waitForSwupTransition(page);
+
+    const categoryLink = page.locator('#post-container a[href*="/blog/archive/?category="]').first();
+    const tagLink = page.locator('#post-container a[href*="/blog/archive/?tag="]').first();
+
+    await expect(categoryLink).toBeVisible();
+    await expectCursor(page, '#post-container a[href*="/blog/archive/?category="]', 'pointer');
+
+    await expect(tagLink).toBeVisible();
+    await expectCursor(page, '#post-container a[href*="/blog/archive/?tag="]', 'pointer');
+  });
+});
 
 test.describe('Blog - Page Navigation', () => {
   test.beforeEach(async ({ page }) => {
