@@ -1,4 +1,4 @@
-name: Deploy blog to GitHub Pages
+name: CI/CD
 
 on:
   push:
@@ -38,7 +38,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Fails on unformatted code or lint errors, never rewrites files
       - name: Biome (format + lint)
         run: pnpm exec biome ci ./src
 
@@ -48,7 +47,7 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Run Playwright tests
+      - name: Run tests
         run: pnpm test
 
       - name: Upload Pages artifact

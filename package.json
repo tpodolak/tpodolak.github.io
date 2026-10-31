@@ -13,9 +13,8 @@
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",
     "lint": "biome check --write ./src",
-    "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed",
+    "test": "pnpm run test:ui",
+    "test:ui": "playwright test",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
