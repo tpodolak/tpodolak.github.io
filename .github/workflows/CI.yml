@@ -1,4 +1,4 @@
-name: Deploy blog to GitHub Pages
+name: CI/CD
 
 on:
   push:
@@ -38,15 +38,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Fails on unformatted code or lint errors, never rewrites files
       - name: Biome (format + lint)
         run: pnpm exec biome ci ./src
+
+      - name: Type-check (tsc)
+        run: pnpm run type-check
 
       - name: Check for errors
         run: pnpm check
 
       - name: Build
         run: pnpm build
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run tests
+        run: pnpm test
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

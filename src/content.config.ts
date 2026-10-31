@@ -36,6 +36,7 @@ const postsCollection = defineCollection({
 			category: data.category ?? data.categories[0] ?? "",
 		})),
 });
+
 export const collections = {
 	posts: postsCollection,
 };
