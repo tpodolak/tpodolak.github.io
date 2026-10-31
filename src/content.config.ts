@@ -37,6 +37,6 @@ const postsCollection = defineCollection({
 		})),
 });
 
-export const collections: { posts: typeof postsCollection } = {
+export const collections = {
 	posts: postsCollection,
 };
