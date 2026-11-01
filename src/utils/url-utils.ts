@@ -47,8 +47,8 @@ export function url(path: string): string {
 export function getRevisionHistoryUrl(
 	filePath: string | undefined,
 	githubRepository: string | undefined,
-): string | null {
-	if (!filePath || !githubRepository) return null;
+): string | undefined {
+	if (!filePath || !githubRepository) return undefined;
 	const branch = "main";
 
 	const dir = dirname(filePath);
