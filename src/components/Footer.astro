@@ -25,7 +25,7 @@ const commitUrl: string | null =
         {
         commitSha && (
         <div>
-            Version: { commitUrl ? <a class="transition link text-(--primary) font-medium" target="_blank" href=commitUrl>{commitShaShort}</a> : commitShaShort  }
+            Version: { commitUrl ? <a class="transition link text-(--primary) font-medium" target="_blank" href={commitUrl}>{commitShaShort}</a> : commitShaShort  }
         </div>
         )
         }
