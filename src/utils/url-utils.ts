@@ -1,3 +1,4 @@
+import { dirname } from "node:path/posix";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 
@@ -41,4 +42,15 @@ export function getDir(path: string): string {
 
 export function url(path: string): string {
 	return joinUrl("", import.meta.env.BASE_URL, path);
+}
+
+export function getRevisionHistoryUrl(
+	filePath: string | undefined,
+	githubRepository: string | undefined,
+): string | null {
+	if (!filePath || !githubRepository) return null;
+	const branch = "main";
+
+	const dir = dirname(filePath);
+	return `https://github.com/${githubRepository}/commits/${branch}/${encodeURI(dir)}`;
 }

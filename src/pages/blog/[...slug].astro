@@ -9,7 +9,11 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPosts } from "@utils/content-utils";
-import { getDir, getPostUrlBySlug } from "@utils/url-utils";
+import {
+	getDir,
+	getPostUrlBySlug,
+	getRevisionHistoryUrl,
+} from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
@@ -32,15 +36,10 @@ const postUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 
 const { remarkPluginFrontmatter } = await render(entry);
 
-let revisionHistoryUrl: string | undefined;
-if (entry.filePath && import.meta.env.GITHUB_REPOSITORY) {
-	const repo = import.meta.env.GITHUB_REPOSITORY;
-	const branch = "main";
-	if (entry.filePath) {
-		const dir = dirname(entry.filePath);
-		revisionHistoryUrl = `https://github.com/${repo}/commits/${branch}/${encodeURI(dir)}`;
-	}
-}
+const revisionHistoryUrl = getRevisionHistoryUrl(
+	entry.filePath,
+	import.meta.env.GITHUB_REPOSITORY,
+);
 
 const jsonLd = {
 	"@context": "https://schema.org",
