@@ -21,10 +21,10 @@ let menuLinks: NavBarLink[] = navBarConfig.menuLinks.map(
 );
 ---
 <div id="navbar" class="z-50 onload-animation">
-    <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div> <!-- used for onload animation -->
+    <div class="absolute h-8 left-0 right-0 -top-8 bg-(--card-bg) transition"></div> <!-- used for onload animation -->
     <div class:list={[
         className,
-        "card-base !overflow-visible max-w-[var(--page-width)] !rounded-t-none mx-auto"]}>
+        "card-base overflow-visible! max-w-(--page-width) rounded-t-none! mx-auto"]}>
         <div class="h-[4.5rem] grid grid-cols-[1fr_auto_1fr] items-center px-4">
             <a href={url('/blog/')} class="btn-plain scale-animation justify-self-start rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
                 <Icon name="material-symbols:home-outline-rounded" class="text-[1.75rem] mb-1 mr-2" />
@@ -58,13 +58,13 @@ let menuLinks: NavBarLink[] = navBarConfig.menuLinks.map(
                 <LightDarkSwitch client:only="svelte"></LightDarkSwitch>
 
                 <!-- Nav Menu dekstop -->
-                <button aria-label="Menu" name="Nav Menu" class="!hidden md:!flex btn-plain scale-animation rounded-lg h-11 w-11 items-center justify-center active:scale-90" id="nav-more-switch">
+                <button aria-label="Menu" name="Nav Menu" class="hidden! md:flex! btn-plain scale-animation rounded-lg h-11 w-11 items-center justify-center active:scale-90" id="nav-more-switch">
                     <Icon name="material-symbols:more-horiz" class="text-[1.5rem]"
                     />
                 </button>
 
                 <!-- Nav Menu mobile -->
-                <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch">
+                <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:hidden!" id="nav-menu-switch">
                     <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
                 </button>
 

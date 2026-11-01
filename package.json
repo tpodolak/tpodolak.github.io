@@ -60,8 +60,13 @@
     "sanitize-html": "^2.18.1",
     "sharp": "^0.35.5",
     "stylus": "^0.64.0",
+<<<<<<< HEAD
     "svelte": "^5.57.3",
     "tailwindcss": "^3.4.19",
+=======
+    "svelte": "^5.39.8",
+    "tailwindcss": "^4.3.3",
+>>>>>>> 08b07627 (tailwind autoupgrade)
     "typescript": "^5.9.3",
     "unist-util-visit": "^5.0.0"
   },
