@@ -71,7 +71,7 @@ let menuLinks: NavBarLink[] = navBarConfig.menuLinks.map(
             </div>
         </div>
         <NavMenuPanel links={menuLinks}></NavMenuPanel>
-        <DisplaySettings client:only="svelte"></DisplaySettings>
+        { !siteConfig.themeColor.fixed && <DisplaySettings client:only="svelte"></DisplaySettings> }
     </div>
 </div>
 
