@@ -1,4 +1,5 @@
-@import "./main.css";
+@reference "./global.css"
+import "./main.css";
 
 .custom-md {
     h1 {

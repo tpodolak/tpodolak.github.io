@@ -2,6 +2,7 @@
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import "../styles/global.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
@@ -165,6 +166,7 @@ const bannerOffset =
 	'banner-height': `${BANNER_HEIGHT}vh`,
 }}>
 @tailwind components;
+@reference "../styles/global.css"
 @layer components {
 	.enable-banner.is-home #banner-wrapper {
 		@apply h-(--banner-height-home) translate-y-(--banner-height-extend)
