@@ -63,8 +63,7 @@
 }
 
 @utility btn-plain {
-  @apply transition relative flex items-center justify-center bg-none text-(--primary);
-  cursor:pointer;
+  @apply transition relative flex items-center justify-center bg-none text-(--primary) cursor-pointer;
   &:not(.scale-animation) {
     @apply hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active);
   }
