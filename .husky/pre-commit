@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 # Run biome check with auto-fix on staged files only
-pnpm exec biome check --write --staged --no-errors-on-unmatched --diagnostic-level=warn
+pnpm exec biome check --write --staged --no-errors-on-unmatched --diagnostic-level=error
