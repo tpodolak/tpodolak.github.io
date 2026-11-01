@@ -8,7 +8,11 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPosts } from "@utils/content-utils";
-import { getDir, getPostUrlBySlug } from "@utils/url-utils";
+import {
+	getDir,
+	getPostUrlBySlug,
+	getRevisionHistoryUrl,
+} from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
@@ -30,6 +34,11 @@ const { Content, headings } = await render(entry);
 const postUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 
 const { remarkPluginFrontmatter } = await render(entry);
+
+const revisionHistoryUrl = getRevisionHistoryUrl(
+	entry.filePath,
+	import.meta.env.GITHUB_REPOSITORY,
+);
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -95,6 +104,7 @@ const jsonLd = {
                         updated={entry.data.updated}
                         tags={entry.data.tags}
                         category={entry.data.category}
+                        revisionHistoryUrl={revisionHistoryUrl}
                 ></PostMetadata>
                 {!entry.data.image && <div class="border-(--line-divider) border-dashed border-b mb-5"></div>}
             </div>

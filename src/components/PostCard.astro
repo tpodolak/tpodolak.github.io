@@ -4,6 +4,7 @@ import { render } from "astro:content";
 import { Icon } from "astro-icon/components";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
+import { getRevisionHistoryUrl } from "../utils/url-utils";
 import PostMetadata from "./PostMeta.astro";
 
 interface Props {
@@ -36,6 +37,11 @@ const className = Astro.props.class;
 const coverWidth = "28%";
 
 const { remarkPluginFrontmatter } = await render(entry);
+
+const revisionHistoryUrl = getRevisionHistoryUrl(
+	entry.filePath,
+	import.meta.env.GITHUB_REPOSITORY,
+);
 ---
 <div class:list={["card-base flex flex-col-reverse md:flex-col w-full rounded-(--radius-large) overflow-hidden relative", className]} style={style}>
     <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative w-full" ]}>
@@ -52,7 +58,7 @@ const { remarkPluginFrontmatter } = await render(entry);
         </a>
 
         <!-- metadata -->
-        <PostMetadata published={published} updated={updated} tags={tags} category={category} hideTagsForMobile={true} hideUpdateDate={true} class="mb-4"></PostMetadata>
+        <PostMetadata published={published} updated={updated} tags={tags} category={category} hideTagsForMobile={true} hideUpdateDate={true} class="mb-4" revisionHistoryUrl={revisionHistoryUrl}></PostMetadata>
 
         <!-- description -->
         <div class:list={["transition text-75 mb-3.5 pr-4", {"line-clamp-5 md:line-clamp-5": !description}]}>
