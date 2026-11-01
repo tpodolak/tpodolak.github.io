@@ -38,8 +38,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Biome (format + lint)
-        run: pnpm exec biome ci ./src
+      - name: Biome ci
+        run: pnpm exec biome ci
 
       - name: Type-check (tsc)
         run: pnpm run type-check
