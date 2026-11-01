@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/test";
 import type { Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 async function waitForSwupTransition(page: Page): Promise<void> {
 	await expect(page.locator("html")).not.toHaveClass(/is-changing/, {

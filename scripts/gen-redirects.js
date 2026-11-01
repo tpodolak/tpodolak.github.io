@@ -4,7 +4,8 @@ const xml = readFileSync(process.argv[2] ?? "export.xml", "utf8");
 const redirects = {};
 
 for (const item of xml.split("<item>").slice(1)) {
-	if (!/<wp:post_type><!\[CDATA\[post\]\]><\/wp:post_type>/.test(item)) continue;
+	if (!/<wp:post_type><!\[CDATA\[post\]\]><\/wp:post_type>/.test(item))
+		continue;
 	if (!/<wp:status><!\[CDATA\[publish\]\]><\/wp:status>/.test(item)) continue;
 
 	const link = item.match(/<link>(.*?)<\/link>/)?.[1];

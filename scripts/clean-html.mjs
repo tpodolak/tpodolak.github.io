@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const args = process.argv.slice(2);
@@ -6,10 +6,24 @@ const write = args.includes("--write");
 const root = args.find((a) => !a.startsWith("--")) ?? "../src/content/posts";
 
 const NAMED = {
-	amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: "\u00a0",
-	ndash: "–", mdash: "—", hellip: "…", lsquo: "‘", rsquo: "’",
-	ldquo: "“", rdquo: "”", laquo: "«", raquo: "»",
-	copy: "©", reg: "®", trade: "™",
+	amp: "&",
+	lt: "<",
+	gt: ">",
+	quot: '"',
+	apos: "'",
+	nbsp: "\u00a0",
+	ndash: "–",
+	mdash: "—",
+	hellip: "…",
+	lsquo: "‘",
+	rsquo: "’",
+	ldquo: "“",
+	rdquo: "”",
+	laquo: "«",
+	raquo: "»",
+	copy: "©",
+	reg: "®",
+	trade: "™",
 };
 
 // Single pass, so "&amp;lt;" becomes "&lt;" and is not decoded twice
@@ -17,7 +31,9 @@ function decode(s) {
 	return s.replace(/&(#x[0-9a-f]+|#\d+|[a-z][a-z0-9]*);/gi, (all, e) => {
 		if (e[0] === "#") {
 			const code =
-				e[1].toLowerCase() === "x" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+				e[1].toLowerCase() === "x"
+					? Number.parseInt(e.slice(2), 16)
+					: Number.parseInt(e.slice(1), 10);
 			try {
 				return String.fromCodePoint(code);
 			} catch {

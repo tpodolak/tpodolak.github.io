@@ -11,11 +11,12 @@
     "astro": "astro",
     "type-check": "tsc --noEmit",
     "new-post": "node scripts/new-post.js",
-    "format": "biome format --write ./src ./tests",
-    "lint": "biome check --write ./src ./tests",
+    "format": "biome format --write",
+    "lint": "biome check --write",
     "test": "pnpm run test:ui",
     "test:ui": "playwright test",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
@@ -73,6 +74,7 @@
     "@types/markdown-it": "^14.1.2",
     "@types/mdast": "^4.0.4",
     "@types/sanitize-html": "^2.16.0",
+    "husky": "^9.1.7",
     "postcss-import": "^16.1.1",
     "postcss-nesting": "^13.0.2"
   },
