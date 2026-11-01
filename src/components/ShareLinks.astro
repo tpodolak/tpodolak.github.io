@@ -56,7 +56,7 @@ const shareLinks = [
 ];
 ---
 
-<section aria-label="Share this post" class="mt-8 border-t-[1px] border-dashed border-[var(--line-divider)] pt-5 onload-animation">
+<section aria-label="Share this post" class="mt-8 border-t border-dashed border-(--line-divider) pt-5 onload-animation">
         <div class="flex justify-center">
 		<div class="flex flex-wrap items-center justify-center gap-2">
 			{shareLinks.map((social) => (
@@ -66,7 +66,7 @@ const shareLinks = [
 					aria-label={social.label}
 					target={social.external === false ? undefined : "_blank"}
 					rel={social.external === false ? undefined : "noopener noreferrer"}
-					class="flex size-9 items-center justify-center rounded-lg border border-black/10 text-black/60 transition hover:border-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] hover:text-[var(--primary)] dark:border-white/10 dark:text-white/60 dark:hover:text-[var(--primary)]"
+					class="flex size-9 items-center justify-center rounded-lg border border-black/10 text-black/60 transition hover:border-(--primary) hover:bg-(--btn-plain-bg-hover) hover:text-(--primary) dark:border-white/10 dark:text-white/60 dark:hover:text-(--primary)"
 				>
 					<Icon name={social.icon} class="text-lg" />
 					<span class="sr-only">{social.name}</span>
