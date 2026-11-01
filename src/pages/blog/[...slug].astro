@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content";
 import path from "node:path";
+import { dirname } from "node:path/posix";
 import Comments from "@components/Comments.astro";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
@@ -33,10 +34,12 @@ const { remarkPluginFrontmatter } = await render(entry);
 
 let revisionHistoryUrl: string | undefined;
 if (entry.filePath && import.meta.env.GITHUB_REPOSITORY) {
-	const dirPath = entry.filePath.includes("/")
-		? entry.filePath.substring(0, entry.filePath.lastIndexOf("/"))
-		: "";
-	revisionHistoryUrl = `https://github.com/${import.meta.env.GITHUB_REPOSITORY}/commits/main/${dirPath}`;
+	const repo = import.meta.env.GITHUB_REPOSITORY;
+	const branch = "main";
+	if (entry.filePath) {
+		const dir = dirname(entry.filePath);
+		revisionHistoryUrl = `https://github.com/${repo}/commits/${branch}/${encodeURI(dir)}`;
+	}
 }
 
 const jsonLd = {
