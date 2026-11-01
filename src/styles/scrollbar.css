@@ -1,4 +1,4 @@
-@reference "./main.css"
+@reference "./main.css";
 
 .scrollbar-base.os-scrollbar {
     @apply transition-all;

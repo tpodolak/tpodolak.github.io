@@ -1,4 +1,4 @@
-@reference "./main.css"
+@reference "./main.css";
 
 .custom-md {
     h1 {
@@ -140,7 +140,8 @@
     p:has(img) img {
         display: inline-block;
         max-width: 100%;
-    }}
+    }
+}
 
 /* Softer, cool-toned typography for dark mode. */
 .dark .custom-md {
