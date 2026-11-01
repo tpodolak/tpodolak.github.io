@@ -31,6 +31,14 @@ const postUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 
 const { remarkPluginFrontmatter } = await render(entry);
 
+let revisionHistoryUrl: string | undefined;
+if (entry.filePath && import.meta.env.GITHUB_REPOSITORY) {
+	const dirPath = entry.filePath.includes("/")
+		? entry.filePath.substring(0, entry.filePath.lastIndexOf("/"))
+		: "";
+	revisionHistoryUrl = `https://github.com/${import.meta.env.GITHUB_REPOSITORY}/commits/main/${dirPath}`;
+}
+
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "BlogPosting",
@@ -95,6 +103,7 @@ const jsonLd = {
                         updated={entry.data.updated}
                         tags={entry.data.tags}
                         category={entry.data.category}
+                        revisionHistoryUrl={revisionHistoryUrl}
                 ></PostMetadata>
                 {!entry.data.image && <div class="border-(--line-divider) border-dashed border-b mb-5"></div>}
             </div>
