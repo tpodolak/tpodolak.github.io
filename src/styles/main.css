@@ -1,6 +1,6 @@
-@reference "./global.css"
-
 @plugin '@tailwindcss/typography';
+
+@reference "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -146,10 +146,6 @@
   &.btn-regular-dark {
     @apply bg-[oklch(0.75_0_var(--hue))] dark:bg-[oklch(0.75_0_var(--hue))];
   }
-}
-
-@layer components {
-  @reference "tailwindcss";
 }
 
 @layer components {

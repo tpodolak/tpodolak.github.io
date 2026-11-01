@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@import "./main.css";
+@import "./expressive-code.css";
+@import "./markdown.css";
+@import "./photoswipe.css";
+@import "./scrollbar.css";
+@import "./transition.css";
