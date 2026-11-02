@@ -20,17 +20,7 @@ html.is-animating .transition-swup-fade {
     }
 }
 
-/*
- * Main components
- *
- * Post pages: the whole #content-wrapper is the single animated unit; nothing inside it
- * (title, meta, article body, comments, footer) has its own onload animation, so there are
- * no nested fades and no per-element stagger.
- *
- * Do NOT change the keyframes/fill-mode of .onload-animation: the persistent `transform` it
- * leaves on #navbar is what makes #navbar the containing block of the position:fixed
- * #nav-menu-panel (and the search panel). Changing it moves those menus.
- */
+/* Main components */
 .onload-animation {
     opacity: 0;
     animation: 300ms fade-in-up;
