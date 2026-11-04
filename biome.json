@@ -11,6 +11,7 @@
 			"**",
 			"!**/src/**/*.css",
 			"!**/src/public",
+			"!**/src/content/posts",
 			"!**/dist",
 			"!**/node_modules",
 			"!**/.husky",
