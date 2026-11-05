@@ -277,6 +277,108 @@ test.describe("Blog - Post Navigation", () => {
 		const posts = page.locator("main .card-base");
 		await expect(posts.first()).toBeVisible({ timeout: 10000 });
 	});
+
+	test.describe("Next/Previous Post Navigation", () => {
+		test.beforeEach(async ({ page }) => {
+			await page.goto("/blog/running-asp-net-core-together-nancy/");
+			await page.waitForLoadState("networkidle");
+			await waitForSwupTransition(page);
+		});
+
+		test("Next post link (left arrow) is visible and has correct title", async ({
+			page,
+		}) => {
+			const nextLink = page
+				.locator(
+					'a[href="/blog/asp-net-core-adding-controllers-directly-integration-tests/"]',
+				)
+				.first();
+
+			await expect(nextLink).toBeVisible();
+			await expect(nextLink).toHaveAttribute(
+				"href",
+				"/blog/asp-net-core-adding-controllers-directly-integration-tests/",
+			);
+
+			await expect(nextLink).toContainText(
+				"ASP.NET Core - adding controllers directly from integration tests",
+			);
+		});
+
+		test("Previous post link (right arrow) is visible and has correct title", async ({
+			page,
+		}) => {
+			const prevLink = page
+				.locator(
+					'a[href="/blog/introduce-substitute-refactoring-comes-nsubstitute-analyzers/"]',
+				)
+				.first();
+
+			await expect(prevLink).toBeVisible();
+			await expect(prevLink).toHaveAttribute(
+				"href",
+				"/blog/introduce-substitute-refactoring-comes-nsubstitute-analyzers/",
+			);
+
+			await expect(prevLink).toContainText(
+				"Introduce substitute refactoring comes to NSubstitute.Analyzers",
+			);
+		});
+
+		test("Clicking next post link navigates to newer post", async ({
+			page,
+		}) => {
+			const nextLink = page
+				.locator(
+					'a[href="/blog/asp-net-core-adding-controllers-directly-integration-tests/"]',
+				)
+				.first();
+
+			await expect(nextLink).toBeVisible();
+
+			const expectedUrl = await nextLink.getAttribute("href");
+			await nextLink.click();
+			await page.waitForLoadState("networkidle");
+			await waitForSwupTransition(page);
+
+			await expect(page).toHaveURL(
+				new RegExp(expectedUrl!.replace(/\//g, "\\/")),
+			);
+
+			const postTitle = page.locator('[data-pagefind-meta="title"]');
+			await expect(postTitle).toBeVisible();
+			await expect(postTitle).toContainText(
+				"ASP.NET Core - adding controllers directly from integration tests",
+			);
+		});
+
+		test("Clicking previous post link navigates to older post", async ({
+			page,
+		}) => {
+			const prevLink = page
+				.locator(
+					'a[href="/blog/introduce-substitute-refactoring-comes-nsubstitute-analyzers/"]',
+				)
+				.first();
+
+			await expect(prevLink).toBeVisible();
+
+			const expectedUrl = await prevLink.getAttribute("href");
+			await prevLink.click();
+			await page.waitForLoadState("networkidle");
+			await waitForSwupTransition(page);
+
+			await expect(page).toHaveURL(
+				new RegExp(expectedUrl!.replace(/\//g, "\\/")),
+			);
+
+			const postTitle = page.locator('[data-pagefind-meta="title"]');
+			await expect(postTitle).toBeVisible();
+			await expect(postTitle).toContainText(
+				"Introduce substitute refactoring comes to NSubstitute.Analyzers",
+			);
+		});
+	});
 });
 
 test.describe("Blog - Navbar Navigation", () => {
